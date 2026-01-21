@@ -562,15 +562,12 @@
 
     <!-- Footer Pagination -->
     <div class="d-flex justify-content-between align-items-center footer-pagination">
-        <div class="text-muted fw-bold">Hiển thị 1-10 của 127 bản ghi</div>
+        <div class="text-muted fw-bold">Hiển thị 1-10 của 20 bản ghi</div>
         <nav>
             <ul class="pagination pagination-sm">
                 <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-angle-left"></i></a></li>
                 <li class="page-item active"><a class="page-link" href="#">1</a></li>
                 <li class="page-item"><a class="page-link" href="#">2</a></li>
-                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                <li class="page-item"><a class="page-link" href="#">...</a></li>
-                <li class="page-item"><a class="page-link" href="#">13</a></li>
                 <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angle-right"></i></a></li>
             </ul>
         </nav>
@@ -593,75 +590,147 @@
         }
 
         const data = [
+            // Page 1
             {
-                time: "14/01/2026 14:54:37", partner: "20260114145431", order: "1100013338", vtcId: "", 
+                time: "14/01/2026 14:54:37", partner: "20260114145431", order: "1100013338", vtcId: "POR3bd28af1ea02f", 
                 transCode: "PG-1000001104", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0981234567", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909", 
+                merchant: "0963465816", subMerchant: "0981234567", name: "Nguyễn Văn A", bankAcc: "", amount: "10,000", bankTrans: "797909", 
                 executor: "hangnm", successTime: "14/01/2026 14:57:19", merchType: "", gateway: "ZaloPay", 
                 status: "Thành công", actionType: "view"
             },
             {
                 time: "14/01/2026 16:44:21", partner: "20260114164155", order: "1100013339", vtcId: "POR3bd28af1ea02f", 
-                transCode: "PG-0", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", 
+                transCode: "PG-1000001105", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "", name: "Trần Thị B", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", 
                 executor: "System", successTime: "14/01/2026 17:30:11", merchType: "", gateway: "NCB", 
                 status: "Hủy", actionType: "none"
             },
             {
-                time: "14/01/2026 17:11:19", partner: "20260114171111", order: "1100013340", vtcId: "", 
+                time: "14/01/2026 17:11:19", partner: "20260114171111", order: "1100013340", vtcId: "POR3bd28af1ea02g", 
                 transCode: "PG-1000001106", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0912345678", name: "", bankAcc: "", amount: "10,000", bankTrans: "7979091", 
+                merchant: "0963465816", subMerchant: "0912345678", name: "Lê Văn C", bankAcc: "", amount: "20,000", bankTrans: "7979091", 
                 executor: "hangnm", successTime: "14/01/2026 17:12:47", merchType: "", gateway: "ZaloPay", 
                 status: "Thành công", actionType: "view"
             },
             {
-                time: "14/01/2026 17:26:56", partner: "20260114172651", order: "1100013342", vtcId: "", 
-                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0977654321", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                time: "14/01/2026 17:26:56", partner: "20260114172651", order: "1100013342", vtcId: "POR3bd28af1ea02h", 
+                transCode: "PG-1000001107", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "0977654321", name: "", bankAcc: "", amount: "15,000", bankTrans: "", 
                 executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
-                time: "14/01/2026 17:27:16", partner: "20260114172711", order: "1100013343", vtcId: "", 
-                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                time: "14/01/2026 17:27:16", partner: "20260114172711", order: "1100013343", vtcId: "POR3bd28af1ea02i", 
+                transCode: "PG-1000001108", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "30,000", bankTrans: "", 
                 executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
-                time: "14/01/2026 17:29:23", partner: "20260114172625", order: "1100013344", vtcId: "", 
-                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                time: "14/01/2026 17:29:23", partner: "20260114172625", order: "1100013344", vtcId: "POR3bd28af1ea02j", 
+                transCode: "PG-1000001109", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
                 merchant: "0963465816", subMerchant: "0999888777", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
                 executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
-                time: "14/01/2026 17:29:49", partner: "20260114172910", order: "1100013345", vtcId: "", 
-                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                time: "14/01/2026 17:29:49", partner: "20260114172910", order: "1100013345", vtcId: "POR3bd28af1ea02k", 
+                transCode: "PG-1000001110", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "", name: "Phạm Văn D", bankAcc: "", amount: "50,000", bankTrans: "", 
                 executor: "System", successTime: "14/01/2026 17:40:06", merchType: "", gateway: "ZaloPay", 
                 status: "Hủy", actionType: "none"
             },
             {
                 time: "14/01/2026 17:33:06", partner: "20260114173256", order: "1100013346", vtcId: "POR76e672d8d6014", 
-                transCode: "PG-0", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", subMerchant: "0966555444", name: "", bankAcc: "1100013346", amount: "10,000", bankTrans: "1100013346", 
+                transCode: "PG-1000001111", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "0966555444", name: "", bankAcc: "1100013346", amount: "100,000", bankTrans: "1100013346", 
                 executor: "", successTime: "---", merchType: "", gateway: "NCB", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
-                time: "14/01/2026 17:38:54", partner: "20260114173849", order: "1100013347", vtcId: "", 
-                transCode: "PG-1000001108", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909133", 
+                time: "14/01/2026 17:38:54", partner: "20260114173849", order: "1100013347", vtcId: "POR3bd28af1ea02l", 
+                transCode: "PG-1000001112", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "", name: "Hoàng Thị E", bankAcc: "", amount: "10,000", bankTrans: "797909133", 
                 executor: "hangnm", successTime: "14/01/2026 17:48:30", merchType: "", gateway: "ZaloPay", 
                 status: "Đã hoàn tiền", actionType: "none"
             },
             {
                 time: "14/01/2026 17:41:03", partner: "20260114174056", order: "1100013348", vtcId: "PORccc938006ef18", 
-                transCode: "PG-1000001110", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", subMerchant: "0911222333", name: "", bankAcc: "1100013348", amount: "10,000", bankTrans: "1100013348", 
+                transCode: "PG-1000001113", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "0911222333", name: "", bankAcc: "1100013348", amount: "25,000", bankTrans: "1100013348", 
                 executor: "hangnm", successTime: "14/01/2026 17:41:53", merchType: "", gateway: "NCB", 
                 status: "Thành công", actionType: "view"
+            },
+            // Page 2 (New Data)
+            {
+                time: "14/01/2026 17:45:10", partner: "20260114174510", order: "1100013349", vtcId: "PORccc938006ef19", 
+                transCode: "PG-1000001114", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "", name: "Đặng Văn F", bankAcc: "1100013349", amount: "500,000", bankTrans: "1100013349", 
+                executor: "System", successTime: "14/01/2026 17:46:00", merchType: "", gateway: "NCB", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 18:00:00", partner: "20260114180000", order: "1100013350", vtcId: "PORccc938006ef20", 
+                transCode: "PG-1000001115", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "0933444555", name: "", bankAcc: "", amount: "10,000", bankTrans: "888999", 
+                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 18:15:30", partner: "20260114181530", order: "1100013351", vtcId: "PORccc938006ef21", 
+                transCode: "PG-1000001116", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "", name: "Bùi Thị G", bankAcc: "1100013351", amount: "150,000", bankTrans: "1100013351", 
+                executor: "hangnm", successTime: "14/01/2026 18:20:10", merchType: "", gateway: "NCB", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 18:30:45", partner: "20260114183045", order: "1100013352", vtcId: "PORccc938006ef22", 
+                transCode: "PG-1000001117", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "0909000111", name: "", bankAcc: "", amount: "200,000", bankTrans: "", 
+                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 18:45:00", partner: "20260114184500", order: "1100013353", vtcId: "PORccc938006ef23", 
+                transCode: "PG-1000001118", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "", name: "Vũ Văn H", bankAcc: "1100013353", amount: "10,000", bankTrans: "", 
+                executor: "System", successTime: "14/01/2026 19:00:05", merchType: "", gateway: "NCB", 
+                status: "Hủy", actionType: "none"
+            },
+            {
+                time: "14/01/2026 19:00:10", partner: "20260114190010", order: "1100013354", vtcId: "PORccc938006ef24", 
+                transCode: "PG-1000001119", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "0912223334", name: "", bankAcc: "", amount: "60,000", bankTrans: "777888", 
+                executor: "hangnm", successTime: "14/01/2026 19:05:00", merchType: "", gateway: "ZaloPay", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 19:15:20", partner: "20260114191520", order: "1100013355", vtcId: "PORccc938006ef25", 
+                transCode: "PG-1000001120", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "", name: "Đỗ Thị K", bankAcc: "1100013355", amount: "80,000", bankTrans: "1100013355", 
+                executor: "hangnm", successTime: "14/01/2026 19:16:10", merchType: "", gateway: "NCB", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 19:30:30", partner: "20260114193030", order: "1100013356", vtcId: "PORccc938006ef26", 
+                transCode: "PG-1000001121", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "0988777666", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 19:45:40", partner: "20260114194540", order: "1100013357", vtcId: "PORccc938006ef27", 
+                transCode: "PG-1000001122", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", subMerchant: "", name: "Ngô Văn L", bankAcc: "1100013357", amount: "1,200,000", bankTrans: "1100013357", 
+                executor: "hangnm", successTime: "14/01/2026 19:50:00", merchType: "", gateway: "NCB", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 20:00:50", partner: "20260114200050", order: "1100013358", vtcId: "PORccc938006ef28", 
+                transCode: "PG-1000001123", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", subMerchant: "0966111222", name: "", bankAcc: "", amount: "10,000", bankTrans: "555666", 
+                executor: "hangnm", successTime: "14/01/2026 20:10:00", merchType: "", gateway: "ZaloPay", 
+                status: "Đã hoàn tiền", actionType: "none"
             }
         ];
 
