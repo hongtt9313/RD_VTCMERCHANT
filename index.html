@@ -21,6 +21,35 @@
             font-size: 13px;
         }
 
+        /* Highlight Styles for New Fields */
+        .highlight-new-field {
+            border: 2px dashed #dc3545 !important; /* Red dashed border */
+            background-color: #fff5f5 !important;
+        }
+        
+        .highlight-new-label {
+            color: #dc3545 !important;
+            font-weight: bold;
+            text-decoration: underline;
+            text-decoration-style: dashed;
+        }
+
+        .highlight-new-col-header {
+            background-color: #ffe6e6 !important;
+            color: #dc3545 !important;
+            border-bottom: 2px dashed #dc3545 !important;
+            border-left: 2px dashed #dc3545 !important;
+            border-right: 2px dashed #dc3545 !important;
+        }
+
+        .highlight-new-col-cell {
+            background-color: #fff5f5 !important;
+            border-left: 2px dashed #ffcccc !important;
+            border-right: 2px dashed #ffcccc !important;
+            color: #dc3545;
+            font-weight: 600;
+        }
+
         /* Top Navbar Responsive */
         .top-nav {
             background-color: #fff;
@@ -500,12 +529,12 @@
                     <input type="text" class="form-control">
                 </div>
                 
-                <!-- Item 3: TK Sub-Merchant -->
+                <!-- Item 3: TK Sub-Merchant (Highlighted) -->
                 <div class="col-lg-1 col-md-12 mb-1">
-                    <label class="filter-label"><i class="fa-solid fa-store"></i> Sub-Mer</label>
+                    <label class="filter-label highlight-new-label"><i class="fa-solid fa-store"></i> Sub-Mer</label>
                 </div>
                 <div class="col-lg-3 col-md-12 mb-2">
-                    <input type="text" class="form-control" placeholder="Nhập TK Sub-Merchant">
+                    <input type="text" class="form-control highlight-new-field" placeholder="Nhập TK Sub-Merchant">
                 </div>
             </div>
             
@@ -541,7 +570,8 @@
                     <th>Loại giao dịch</th>
                     <th>Ngân Hàng</th>
                     <th>TK Merchant</th>
-                    <th>TK Sub-Merchant</th>
+                    <!-- Highlighted Column Header -->
+                    <th class="highlight-new-col-header">TK Sub-Merchant</th>
                     <th>Tên đầy đủ</th>
                     <th>TK Ngân Hàng</th>
                     <th>Số Tiền</th>
@@ -767,7 +797,8 @@
                         <td>${row.type}</td>
                         <td>${row.bank}</td>
                         <td>${row.merchant}</td>
-                        <td>${row.subMerchant}</td>
+                        <!-- Highlighted Cell -->
+                        <td class="highlight-new-col-cell">${row.subMerchant}</td>
                         <td>${row.name}</td>
                         <td>${row.bankAcc}</td>
                         <td class="text-end fw-bold">${row.amount}</td>
