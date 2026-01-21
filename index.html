@@ -191,9 +191,28 @@
             color: #333;
             font-weight: bold;
             padding: 10px 8px;
-            position: sticky;
+            position: sticky; /* Note: sticky acts as relative for children */
             top: 0;
             z-index: 10;
+        }
+
+        /* RESIZER STYLES */
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            cursor: col-resize;
+            user-select: none;
+            height: 100%;
+            z-index: 20;
+            /* Invisible by default, area for grabbing */
+            background-color: transparent; 
+        }
+
+        .resizer:hover, .resizing {
+            background-color: #00a0e3; /* Blue highlight when hovering or dragging */
+            width: 4px; /* Slightly visible line */
         }
         
         .table-striped tbody tr:nth-of-type(odd) {
@@ -511,7 +530,7 @@
 
     <!-- Data Table -->
     <div class="table-responsive-custom">
-        <table class="table table-bordered table-striped table-hover align-middle">
+        <table id="mainTable" class="table table-bordered table-striped table-hover align-middle">
             <thead>
                 <tr>
                     <th>Thời gian</th>
@@ -522,6 +541,7 @@
                     <th>Loại giao dịch</th>
                     <th>Ngân Hàng</th>
                     <th>TK Merchant</th>
+                    <th>TK Sub-Merchant</th>
                     <th>Tên đầy đủ</th>
                     <th>TK Ngân Hàng</th>
                     <th>Số Tiền</th>
@@ -576,70 +596,70 @@
             {
                 time: "14/01/2026 14:54:37", partner: "20260114145431", order: "1100013338", vtcId: "", 
                 transCode: "PG-1000001104", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909", 
+                merchant: "0963465816", subMerchant: "0981234567", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909", 
                 executor: "hangnm", successTime: "14/01/2026 14:57:19", merchType: "", gateway: "ZaloPay", 
                 status: "Thành công", actionType: "view"
             },
             {
                 time: "14/01/2026 16:44:21", partner: "20260114164155", order: "1100013339", vtcId: "POR3bd28af1ea02f", 
                 transCode: "PG-0", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", name: "", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", 
+                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", 
                 executor: "System", successTime: "14/01/2026 17:30:11", merchType: "", gateway: "NCB", 
                 status: "Hủy", actionType: "none"
             },
             {
                 time: "14/01/2026 17:11:19", partner: "20260114171111", order: "1100013340", vtcId: "", 
                 transCode: "PG-1000001106", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "7979091", 
+                merchant: "0963465816", subMerchant: "0912345678", name: "", bankAcc: "", amount: "10,000", bankTrans: "7979091", 
                 executor: "hangnm", successTime: "14/01/2026 17:12:47", merchType: "", gateway: "ZaloPay", 
                 status: "Thành công", actionType: "view"
             },
             {
                 time: "14/01/2026 17:26:56", partner: "20260114172651", order: "1100013342", vtcId: "", 
                 transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                merchant: "0963465816", subMerchant: "0977654321", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
                 executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
                 time: "14/01/2026 17:27:16", partner: "20260114172711", order: "1100013343", vtcId: "", 
                 transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
                 executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
                 time: "14/01/2026 17:29:23", partner: "20260114172625", order: "1100013344", vtcId: "", 
                 transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                merchant: "0963465816", subMerchant: "0999888777", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
                 executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
                 time: "14/01/2026 17:29:49", partner: "20260114172910", order: "1100013345", vtcId: "", 
                 transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
                 executor: "System", successTime: "14/01/2026 17:40:06", merchType: "", gateway: "ZaloPay", 
                 status: "Hủy", actionType: "none"
             },
             {
                 time: "14/01/2026 17:33:06", partner: "20260114173256", order: "1100013346", vtcId: "POR76e672d8d6014", 
                 transCode: "PG-0", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", name: "", bankAcc: "1100013346", amount: "10,000", bankTrans: "1100013346", 
+                merchant: "0963465816", subMerchant: "0966555444", name: "", bankAcc: "1100013346", amount: "10,000", bankTrans: "1100013346", 
                 executor: "", successTime: "---", merchType: "", gateway: "NCB", 
                 status: "Khởi tạo", actionType: "approve"
             },
             {
                 time: "14/01/2026 17:38:54", partner: "20260114173849", order: "1100013347", vtcId: "", 
                 transCode: "PG-1000001108", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909133", 
+                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909133", 
                 executor: "hangnm", successTime: "14/01/2026 17:48:30", merchType: "", gateway: "ZaloPay", 
                 status: "Đã hoàn tiền", actionType: "none"
             },
             {
                 time: "14/01/2026 17:41:03", partner: "20260114174056", order: "1100013348", vtcId: "PORccc938006ef18", 
                 transCode: "PG-1000001110", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", name: "", bankAcc: "1100013348", amount: "10,000", bankTrans: "1100013348", 
+                merchant: "0963465816", subMerchant: "0911222333", name: "", bankAcc: "1100013348", amount: "10,000", bankTrans: "1100013348", 
                 executor: "hangnm", successTime: "14/01/2026 17:41:53", merchType: "", gateway: "NCB", 
                 status: "Thành công", actionType: "view"
             }
@@ -678,6 +698,7 @@
                         <td>${row.type}</td>
                         <td>${row.bank}</td>
                         <td>${row.merchant}</td>
+                        <td>${row.subMerchant}</td>
                         <td>${row.name}</td>
                         <td>${row.bankAcc}</td>
                         <td class="text-end fw-bold">${row.amount}</td>
@@ -693,6 +714,60 @@
             });
 
             tbody.innerHTML = html;
+            
+            // Re-initialize resize logic after render
+            initColumnResize();
+        }
+
+        function initColumnResize() {
+            const table = document.getElementById('mainTable');
+            const headers = table.querySelectorAll('th');
+            
+            // Remove existing resizers first to prevent duplicates if re-rendered
+            headers.forEach(th => {
+                const existingResizer = th.querySelector('.resizer');
+                if(existingResizer) existingResizer.remove();
+            });
+
+            headers.forEach((th) => {
+                // Skip the last column (Actions) to prevent sticky layout issues
+                if (th.cellIndex === headers.length - 1) return;
+
+                const resizer = document.createElement('div');
+                resizer.classList.add('resizer');
+                th.appendChild(resizer);
+                
+                let x = 0;
+                let w = 0;
+
+                const mouseDownHandler = function(e) {
+                    x = e.clientX;
+                    const styles = window.getComputedStyle(th);
+                    w = parseInt(styles.width, 10);
+
+                    document.addEventListener('mousemove', mouseMoveHandler);
+                    document.addEventListener('mouseup', mouseUpHandler);
+                    
+                    resizer.classList.add('resizing');
+                };
+
+                const mouseMoveHandler = function(e) {
+                    const dx = e.clientX - x;
+                    const newWidth = w + dx;
+                    if (newWidth > 30) { // Min width constraint
+                         th.style.width = `${newWidth}px`;
+                         th.style.minWidth = `${newWidth}px`;
+                    }
+                };
+
+                const mouseUpHandler = function() {
+                    document.removeEventListener('mousemove', mouseMoveHandler);
+                    document.removeEventListener('mouseup', mouseUpHandler);
+                    resizer.classList.remove('resizing');
+                };
+
+                resizer.addEventListener('mousedown', mouseDownHandler);
+            });
         }
 
         renderTable();
