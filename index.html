@@ -224,21 +224,22 @@
             background-color: #e2e6ea;
         }
 
+        /* UPDATED: Allow text wrapping globally */
+        .table {
+            font-size: 12px;
+            white-space: normal; /* Changed from nowrap to normal */
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+            word-wrap: break-word; /* Ensure long words break */
+        }
+
         .table-responsive-custom {
             padding: 0 15px;
             margin-bottom: 20px;
             width: 100%;
-            overflow-x: auto;
-            -webkit-overflow-scrolling: touch;
+            /* overflow-x: auto;  Removed to prevent scroll if we stack */
             position: relative;
-        }
-
-        .table {
-            font-size: 12px;
-            white-space: nowrap;
-            margin-bottom: 0;
-            border-collapse: separate;
-            border-spacing: 0;
         }
 
         .table thead th {
@@ -253,6 +254,12 @@
             position: sticky;
             top: 0;
             z-index: 10;
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
         }
 
         .sticky-col-right {
@@ -301,12 +308,6 @@
             background-color: #f9f9f9;
         }
 
-        .table td {
-            vertical-align: middle;
-            padding: 8px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
         .status-success { color: #28a745; font-weight: 500; }
         .status-cancel { color: #dc3545; }
         .status-init { color: #6c757d; font-style: italic;}
@@ -342,10 +343,76 @@
             display: none !important;
         }
 
+        /* Mobile Card View Styles */
         @media (max-width: 992px) {
             .filter-label { margin-bottom: 4px; }
             .col-form-container { margin-bottom: 10px; }
             .logo-text { font-size: 20px; }
+
+            /* Force Table to Card View */
+            .table-responsive-custom { overflow-x: hidden; } /* No scroll */
+            
+            .table, .table thead, .table tbody, .table th, .table td, .table tr { 
+                display: block; 
+            }
+            
+            .table thead tr { 
+                position: absolute;
+                top: -9999px;
+                left: -9999px;
+            }
+            
+            .table tr { 
+                border: 1px solid #ccc; 
+                margin-bottom: 15px; 
+                border-radius: 5px;
+                background-color: #fff;
+                box-shadow: 0 2px 4px rgba(0,0,0,0.05);
+            }
+            
+            .table td { 
+                border: none;
+                border-bottom: 1px solid #eee; 
+                position: relative;
+                padding-left: 50% !important; 
+                text-align: right !important;
+                white-space: normal !important; /* Allow wrapping in card view */
+                min-height: 35px;
+            }
+            
+            .table td:before { 
+                position: absolute;
+                top: 8px;
+                left: 10px;
+                width: 45%; 
+                padding-right: 10px; 
+                white-space: nowrap;
+                text-align: left;
+                font-weight: bold;
+                content: attr(data-label);
+                color: #0068ac;
+            }
+            
+            /* Remove sticky styles on mobile card view */
+            .sticky-col-right {
+                position: static !important;
+                box-shadow: none !important;
+                border-left: none !important;
+                background-color: transparent !important;
+            }
+            
+            /* Special handling for Action column */
+            .table td:last-child {
+                border-bottom: 0;
+                padding-left: 10px !important;
+                text-align: center !important;
+                background-color: #f8f9fa;
+            }
+            .table td:last-child:before {
+                display: none;
+            }
+            
+            .resizer { display: none; }
         }
 
         @media (max-width: 768px) {
@@ -379,8 +446,6 @@
             .filter-toggle-container { display: block; }
             .filter-content-wrapper { display: none; }
             .filter-content-wrapper.show { display: block; animation: slideDown 0.3s ease-out; }
-            
-            .table thead th { top: -1px; }
         }
 
         @keyframes slideDown {
