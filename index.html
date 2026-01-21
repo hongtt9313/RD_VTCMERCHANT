@@ -1,0 +1,711 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Duyệt Tiền Công Thanh Toán - VTC Pay Simulator</title>
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    
+    <style>
+        :root {
+            --vtc-blue: #0068ac;
+            --vtc-blue-dark: #005691;
+            --header-bg: #f8f9fa;
+            --table-header-bg: #e9ecef;
+        }
+
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            background-color: #fff;
+            font-size: 13px;
+        }
+
+        /* Top Navbar Responsive */
+        .top-nav {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 15px;
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--vtc-blue);
+            font-style: italic;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+        
+        /* Updated Nav Btn Style for Breadcrumb look */
+        .nav-btn {
+            background-color: var(--vtc-blue);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 6px 12px;
+            margin: 2px;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+        }
+        
+        .nav-btn.active-tab {
+            background-color: var(--vtc-blue-dark);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+
+        .user-info {
+            color: var(--vtc-blue);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+
+        /* Page Title Bar */
+        .page-title-bar {
+            background-color: #337ab7;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-left: 5px solid #1b5480;
+            font-size: 14px;
+        }
+
+        /* Filter Section Optimized */
+        .filter-section {
+            padding: 0 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+        
+        /* Mobile Filter Toggle */
+        .filter-toggle-container {
+            display: none;
+            margin-bottom: 10px;
+        }
+        .btn-filter-toggle {
+            width: 100%;
+            text-align: left;
+            background-color: #f0f7ff;
+            color: #0068ac;
+            border: 1px solid #cce5ff;
+            font-weight: 600;
+            padding: 8px 15px;
+            border-radius: 4px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        .btn-filter-toggle:active {
+            background-color: #e0efff;
+        }
+
+        /* Custom label sizing to match desktop dense layout while stacking on mobile */
+        .filter-label {
+            font-weight: 600;
+            color: #0068ac;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            padding-top: 6px; /* Align with input */
+            white-space: nowrap;
+        }
+        
+        .filter-label i {
+            margin-right: 6px;
+            width: 16px; /* Fixed width for icon alignment */
+            text-align: center;
+        }
+
+        .form-control, .form-select {
+            font-size: 13px;
+            border-radius: 3px;
+            padding: 5px 8px;
+        }
+
+        .btn-search {
+            background-color: #26b6d4;
+            color: white;
+            border: none;
+            padding: 8px 30px;
+            border-radius: 3px;
+            font-weight: bold;
+            box-shadow: 0 2px 4px rgba(0,0,0,0.1);
+            transition: background 0.2s;
+        }
+        
+        .btn-search:hover {
+            background-color: #1a9cb7;
+            color: white;
+        }
+
+        /* Action Toolbar */
+        .action-toolbar {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .toolbar-btn {
+            font-size: 12px;
+            margin-right: 5px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+            margin-bottom: 5px;
+        }
+        
+        .toolbar-btn:hover {
+            background-color: #e2e6ea;
+        }
+
+        /* Table Responsive Wrapper */
+        .table-responsive-custom {
+            padding: 0 15px;
+            margin-bottom: 20px;
+            width: 100%;
+            overflow-x: auto;
+            -webkit-overflow-scrolling: touch;
+            position: relative; /* Context for sticky */
+        }
+
+        .table {
+            font-size: 12px;
+            white-space: nowrap;
+            margin-bottom: 0;
+            border-collapse: separate; /* Required for sticky borders */
+            border-spacing: 0;
+        }
+
+        .table thead th {
+            background-color: #dff0d8;
+            vertical-align: middle;
+            text-align: center;
+            border-bottom: 2px solid #aeccae;
+            border-top: 1px solid #dee2e6; /* Ensure border exists */
+            color: #333;
+            font-weight: bold;
+            padding: 10px 8px;
+            position: sticky;
+            top: 0;
+            z-index: 10;
+        }
+        
+        .table-striped tbody tr:nth-of-type(odd) {
+            background-color: #f9f9f9;
+        }
+
+        /* Sticky Action Column Logic */
+        .table th:last-child, 
+        .table td:last-child {
+            position: sticky;
+            right: 0;
+            z-index: 5;
+            border-left: 1px solid #dee2e6;
+            box-shadow: -2px 0 5px rgba(0,0,0,0.05);
+        }
+        
+        .table th:last-child {
+            background-color: #dff0d8 !important;
+            z-index: 15; /* Higher than other headers */
+        }
+        
+        .table tbody td:last-child {
+            background-color: #fff;
+        }
+        
+        /* Fix stripe color for sticky column */
+        .table-striped tbody tr:nth-of-type(odd) td:last-child {
+            background-color: #f9f9f9;
+        }
+        .table-striped tbody tr:hover td:last-child {
+            background-color: #e8f4fd; /* Hover highlight fix */
+        }
+
+        .table td {
+            vertical-align: middle;
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+
+        /* Status Colors */
+        .status-success { color: #28a745; font-weight: 500; }
+        .status-cancel { color: #dc3545; }
+        .status-init { color: #6c757d; font-style: italic;}
+        .status-refund { color: #fd7e14; }
+
+        /* Action Buttons */
+        .action-btn-group button {
+            margin: 0 2px;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 3px;
+            border: none;
+            color: white;
+            transition: opacity 0.2s;
+        }
+        
+        .action-btn-group button:hover { opacity: 0.85; }
+        .btn-view { background-color: #f0ad4e; }
+        .btn-check { background-color: #0d6efd; }
+        .btn-cancel { background-color: #dc3545; }
+
+        /* Footer Pagination */
+        .footer-pagination {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+        .pagination { margin-bottom: 0; }
+        .page-link { color: #337ab7; }
+        .page-item.active .page-link { background-color: #337ab7; border-color: #337ab7; }
+
+        /* Responsive Breakpoints */
+        @media (max-width: 992px) {
+            .filter-label { margin-bottom: 4px; }
+            .col-form-container { margin-bottom: 10px; }
+            .logo-text { font-size: 20px; }
+        }
+
+        @media (max-width: 768px) {
+            .top-nav { flex-direction: column; align-items: flex-start !important; gap: 10px; }
+            
+            /* Horizontal Scroll Navigation */
+            .nav-menu-container { 
+                width: 100%; 
+                display: flex; 
+                flex-wrap: nowrap !important; /* Prevent stacking */
+                gap: 8px; 
+                margin-left: 0 !important; 
+                margin-top: 5px;
+                overflow-x: auto; /* Enable scroll */
+                padding-bottom: 5px;
+                -webkit-overflow-scrolling: touch;
+                mask-image: linear-gradient(to right, black 90%, transparent 100%); /* Fade effect at end */
+            }
+            
+            .nav-btn {
+                flex: 0 0 auto; /* Prevent shrinking */
+                white-space: nowrap;
+            }
+
+            .user-info-container { width: 100%; justify-content: space-between; margin-top: 5px; border-top: 1px solid #eee; padding-top: 5px;}
+            
+            .action-toolbar { flex-direction: column; align-items: flex-start; gap: 10px; }
+            .toolbar-right { width: 100%; }
+            .toolbar-right input { flex-grow: 1; }
+            
+            .footer-pagination { flex-direction: column; gap: 10px; align-items: center; }
+
+            /* Filter Toggle Logic */
+            .filter-toggle-container { display: block; }
+            #filter-content { display: none; } /* Hidden by default mobile */
+            #filter-content.show { display: block; animation: slideDown 0.3s ease-out; }
+            
+            /* Sticky Header Fix for Mobile */
+            .table thead th { top: -1px; } /* Tiny offset fix */
+        }
+
+        @keyframes slideDown {
+            from { opacity: 0; transform: translateY(-10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- Header Section -->
+    <div class="d-flex justify-content-between align-items-center top-nav">
+        <div class="d-flex align-items-center flex-wrap w-100 overflow-hidden">
+            <a href="#" class="logo-text me-3 flex-shrink-0">
+                <i class="fa-solid fa-wifi fa-rotate-90 me-1" style="font-size: 18px;"></i>VTC<span style="color: #00a0e3">Pay</span>
+            </a>
+            
+            <!-- Navigation Menu - Updated to show specific path -->
+            <div class="ms-md-3 nav-menu-container">
+                <button class="nav-btn active-tab">
+                    <i class="fa-solid fa-money-bill me-2"></i> 
+                    Giao dịch 
+                    <i class="fa-solid fa-chevron-right mx-2" style="font-size: 10px; opacity: 0.7;"></i> 
+                    <span class="fw-light">Duyệt tiền công thanh toán</span>
+                </button>
+            </div>
+        </div>
+        
+        <!-- User Info -->
+        <div class="d-flex align-items-center user-info-container ms-3">
+            <span class="user-info me-2"><i class="fa-solid fa-circle-user me-1"></i> hongtt</span>
+            <a href="#" class="text-danger" title="Đăng xuất"><i class="fa-solid fa-right-from-bracket"></i></a>
+        </div>
+    </div>
+
+    <!-- Page Title -->
+    <div class="page-title-bar shadow-sm">
+        <i class="fa-solid fa-dollar-sign me-2"></i> DUYỆT TIỀN CÔNG THANH TOÁN
+    </div>
+
+    <!-- Filter Form Section (Re-structured for Grid) -->
+    <div class="container-fluid filter-section">
+        
+        <!-- Mobile Toggle Button -->
+        <div class="filter-toggle-container d-md-none">
+            <button class="btn btn-filter-toggle" onclick="toggleFilter()">
+                <span><i class="fa-solid fa-filter me-2"></i> Bộ lọc tìm kiếm</span>
+                <i class="fa-solid fa-chevron-down" id="filter-icon"></i>
+            </button>
+        </div>
+
+        <div id="filter-content">
+            <!-- Row 1 -->
+            <div class="row align-items-center mb-2">
+                <!-- Item 1: Từ ngày -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-regular fa-calendar-days"></i> Từ Ngày</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="14/01/2026 10:55">
+                        <span class="input-group-text bg-white"><i class="fa-solid fa-calendar text-primary"></i></span>
+                    </div>
+                </div>
+                
+                <!-- Item 2: Đến ngày -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-regular fa-calendar-days"></i> Đến Ngày</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <div class="input-group">
+                        <input type="text" class="form-control" value="21/01/2026 23:59">
+                        <span class="input-group-text bg-white"><i class="fa-solid fa-calendar text-primary"></i></span>
+                    </div>
+                </div>
+
+                <!-- Item 3: Mã đơn hàng -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-barcode"></i> Mã đơn</label>
+                </div>
+                <div class="col-lg-3 col-md-12 mb-2">
+                    <input type="text" class="form-control" placeholder="Nhập mã đơn hàng...">
+                </div>
+            </div>
+            
+            <!-- Row 2 -->
+            <div class="row align-items-center mb-2">
+                <!-- Item 1: Mã đối tác -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-regular fa-id-card"></i> Mã đối tác</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <input type="text" class="form-control">
+                </div>
+
+                <!-- Item 2: TK VTCPay -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-wallet"></i> TK VTCPay</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <input type="text" class="form-control">
+                </div>
+
+                <!-- Item 3: TK Ngân Hàng -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-building-columns"></i> TK Ngân hàng</label>
+                </div>
+                <div class="col-lg-3 col-md-12 mb-2">
+                    <input type="text" class="form-control">
+                </div>
+            </div>
+
+            <!-- Row 3 -->
+            <div class="row align-items-center mb-2">
+                <!-- Item 1: Loại giao dịch -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-money-check"></i> Loại GD</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <select class="form-select">
+                        <option>Tất Cả</option>
+                        <option>Thanh toán qua Deeplink App</option>
+                        <option>Thanh toán chuyển khoản</option>
+                    </select>
+                </div>
+
+                <!-- Item 2: Ngân Hàng -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-building"></i> Ngân Hàng</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <select class="form-select">
+                        <option>Tất cả</option>
+                        <option>NCB</option>
+                        <option>ZaloPay</option>
+                    </select>
+                </div>
+
+                <!-- Item 3: Trạng thái -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-filter"></i> Trạng thái</label>
+                </div>
+                <div class="col-lg-3 col-md-12 mb-2">
+                    <select class="form-select">
+                        <option>Tất Cả</option>
+                        <option>Thành công</option>
+                        <option>Hủy</option>
+                        <option>Khởi tạo</option>
+                    </select>
+                </div>
+            </div>
+
+            <!-- Row 4 -->
+            <div class="row align-items-center mb-2">
+                <!-- Item 1: Kênh kết nối -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-network-wired"></i> Kênh</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <select class="form-select"><option>Tất cả</option></select>
+                </div>
+                
+                <!-- Item 2: VtcTransID -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-hashtag"></i> VtcTransID</label>
+                </div>
+                <div class="col-lg-3 col-md-6 mb-2">
+                    <input type="text" class="form-control">
+                </div>
+                
+                <!-- Item 3: TK Sub-Merchant -->
+                <div class="col-lg-1 col-md-12 mb-1">
+                    <label class="filter-label"><i class="fa-solid fa-store"></i> Sub-Mer</label>
+                </div>
+                <div class="col-lg-3 col-md-12 mb-2">
+                    <input type="text" class="form-control" placeholder="Nhập TK Sub-Merchant">
+                </div>
+            </div>
+            
+            <div class="text-center mt-3 mb-3 pb-2 border-bottom">
+                 <button class="btn-search ripple"><i class="fa-solid fa-magnifying-glass me-1"></i> Tra Cứu</button>
+            </div>
+        </div> <!-- End #filter-content -->
+    </div>
+
+    <!-- Action Toolbar -->
+    <div class="d-flex justify-content-between align-items-center action-toolbar rounded mx-3">
+        <div class="toolbar-left d-flex flex-wrap">
+            <button class="btn toolbar-btn"><i class="fa-solid fa-cloud-arrow-down text-primary"></i> Xuất dữ liệu</button>
+            <button class="btn toolbar-btn"><i class="fa-solid fa-bars text-primary"></i> Hiện 10 dòng</button>
+            <button class="btn toolbar-btn"><i class="fa-solid fa-eye-slash text-primary"></i> Ẩn/hiện cột</button>
+        </div>
+        <div class="toolbar-right d-flex align-items-center">
+            <span class="me-2 fw-bold text-secondary" style="font-size: 12px; white-space: nowrap;">Tìm nhanh:</span>
+            <input type="text" class="form-control form-control-sm" placeholder="Nhập từ khóa...">
+        </div>
+    </div>
+
+    <!-- Data Table -->
+    <div class="table-responsive-custom">
+        <table class="table table-bordered table-striped table-hover align-middle">
+            <thead>
+                <tr>
+                    <th>Thời gian</th>
+                    <th>Mã đối tác</th>
+                    <th>Mã Đơn Hàng</th>
+                    <th>VtcTransID</th>
+                    <th>Mã GD</th>
+                    <th>Loại giao dịch</th>
+                    <th>Ngân Hàng</th>
+                    <th>TK Merchant</th>
+                    <th>Tên đầy đủ</th>
+                    <th>TK Ngân Hàng</th>
+                    <th>Số Tiền</th>
+                    <th>Mã GD Ngân hàng</th>
+                    <th>Người thực hiện</th>
+                    <th>TG thành công</th>
+                    <th>Loại merchant</th>
+                    <th>Cổng kết nối</th>
+                    <th>Trạng thái</th>
+                    <th class="text-center">Chức Năng</th>
+                </tr>
+            </thead>
+            <tbody id="table-body">
+                <!-- Data populated by JS -->
+            </tbody>
+        </table>
+    </div>
+
+    <!-- Footer Pagination -->
+    <div class="d-flex justify-content-between align-items-center footer-pagination">
+        <div class="text-muted fw-bold">Hiển thị 1-10 của 127 bản ghi</div>
+        <nav>
+            <ul class="pagination pagination-sm">
+                <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-angle-left"></i></a></li>
+                <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                <li class="page-item"><a class="page-link" href="#">2</a></li>
+                <li class="page-item"><a class="page-link" href="#">3</a></li>
+                <li class="page-item"><a class="page-link" href="#">...</a></li>
+                <li class="page-item"><a class="page-link" href="#">13</a></li>
+                <li class="page-item"><a class="page-link" href="#"><i class="fa-solid fa-angle-right"></i></a></li>
+            </ul>
+        </nav>
+    </div>
+
+    <script>
+        // Mobile Filter Toggle
+        function toggleFilter() {
+            const content = document.getElementById('filter-content');
+            const icon = document.getElementById('filter-icon');
+            content.classList.toggle('show');
+            
+            if(content.classList.contains('show')) {
+                icon.classList.remove('fa-chevron-down');
+                icon.classList.add('fa-chevron-up');
+            } else {
+                icon.classList.remove('fa-chevron-up');
+                icon.classList.add('fa-chevron-down');
+            }
+        }
+
+        const data = [
+            {
+                time: "14/01/2026 14:54:37", partner: "20260114145431", order: "1100013338", vtcId: "", 
+                transCode: "PG-1000001104", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909", 
+                executor: "hangnm", successTime: "14/01/2026 14:57:19", merchType: "", gateway: "ZaloPay", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 16:44:21", partner: "20260114164155", order: "1100013339", vtcId: "POR3bd28af1ea02f", 
+                transCode: "PG-0", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", name: "", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", 
+                executor: "System", successTime: "14/01/2026 17:30:11", merchType: "", gateway: "NCB", 
+                status: "Hủy", actionType: "none"
+            },
+            {
+                time: "14/01/2026 17:11:19", partner: "20260114171111", order: "1100013340", vtcId: "", 
+                transCode: "PG-1000001106", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "7979091", 
+                executor: "hangnm", successTime: "14/01/2026 17:12:47", merchType: "", gateway: "ZaloPay", 
+                status: "Thành công", actionType: "view"
+            },
+            {
+                time: "14/01/2026 17:26:56", partner: "20260114172651", order: "1100013342", vtcId: "", 
+                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 17:27:16", partner: "20260114172711", order: "1100013343", vtcId: "", 
+                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 17:29:23", partner: "20260114172625", order: "1100013344", vtcId: "", 
+                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 17:29:49", partner: "20260114172910", order: "1100013345", vtcId: "", 
+                transCode: "PG-0", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
+                executor: "System", successTime: "14/01/2026 17:40:06", merchType: "", gateway: "ZaloPay", 
+                status: "Hủy", actionType: "none"
+            },
+            {
+                time: "14/01/2026 17:33:06", partner: "20260114173256", order: "1100013346", vtcId: "POR76e672d8d6014", 
+                transCode: "PG-0", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", name: "", bankAcc: "1100013346", amount: "10,000", bankTrans: "1100013346", 
+                executor: "", successTime: "---", merchType: "", gateway: "NCB", 
+                status: "Khởi tạo", actionType: "approve"
+            },
+            {
+                time: "14/01/2026 17:38:54", partner: "20260114173849", order: "1100013347", vtcId: "", 
+                transCode: "PG-1000001108", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
+                merchant: "0963465816", name: "", bankAcc: "", amount: "10,000", bankTrans: "797909133", 
+                executor: "hangnm", successTime: "14/01/2026 17:48:30", merchType: "", gateway: "ZaloPay", 
+                status: "Đã hoàn tiền", actionType: "none"
+            },
+            {
+                time: "14/01/2026 17:41:03", partner: "20260114174056", order: "1100013348", vtcId: "PORccc938006ef18", 
+                transCode: "PG-1000001110", type: "Thanh toán chuyển khoản", bank: "NCB", 
+                merchant: "0963465816", name: "", bankAcc: "1100013348", amount: "10,000", bankTrans: "1100013348", 
+                executor: "hangnm", successTime: "14/01/2026 17:41:53", merchType: "", gateway: "NCB", 
+                status: "Thành công", actionType: "view"
+            }
+        ];
+
+        function renderTable() {
+            const tbody = document.getElementById('table-body');
+            let html = '';
+
+            data.forEach(row => {
+                let statusClass = '';
+                if(row.status === 'Thành công') statusClass = 'status-success';
+                else if(row.status === 'Hủy') statusClass = 'status-cancel';
+                else if(row.status === 'Khởi tạo') statusClass = 'status-init';
+                else if(row.status === 'Đã hoàn tiền') statusClass = 'status-refund';
+
+                let actionHtml = '';
+                if(row.actionType === 'view') {
+                    actionHtml = `<div class="action-btn-group"><button class="btn-view" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></button></div>`;
+                } else if(row.actionType === 'approve') {
+                    actionHtml = `
+                        <div class="action-btn-group">
+                            <button class="btn-check" title="Duyệt"><i class="fa-solid fa-check"></i></button>
+                            <button class="btn-cancel" title="Hủy"><i class="fa-solid fa-xmark"></i></button>
+                        </div>
+                    `;
+                }
+
+                html += `
+                    <tr>
+                        <td class="text-nowrap">${row.time}</td>
+                        <td>${row.partner}</td>
+                        <td class="fw-bold text-primary">${row.order}</td>
+                        <td style="max-width: 100px; overflow: hidden; text-overflow: ellipsis;" title="${row.vtcId}">${row.vtcId}</td>
+                        <td>${row.transCode.replace('PG-', 'PG-<br>')}</td>
+                        <td>${row.type}</td>
+                        <td>${row.bank}</td>
+                        <td>${row.merchant}</td>
+                        <td>${row.name}</td>
+                        <td>${row.bankAcc}</td>
+                        <td class="text-end fw-bold">${row.amount}</td>
+                        <td>${row.bankTrans}</td>
+                        <td>${row.executor}</td>
+                        <td class="text-nowrap">${row.successTime}</td>
+                        <td>${row.merchType}</td>
+                        <td>${row.gateway}</td>
+                        <td class="${statusClass}">${row.status}</td>
+                        <td class="text-center">${actionHtml}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+        }
+
+        renderTable();
+        
+        document.querySelector('.btn-search').addEventListener('click', () => {
+             // Simulate search load
+             const btn = document.querySelector('.btn-search');
+             const originalHtml = btn.innerHTML;
+             btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang tìm...';
+             setTimeout(() => {
+                 btn.innerHTML = originalHtml;
+             }, 800);
+        });
+    </script>
+</body>
+</html>
