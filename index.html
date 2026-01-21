@@ -50,11 +50,15 @@
             font-weight: 600;
         }
 
-        /* Top Navbar Responsive */
+        /* Top Navbar Responsive - REVERTED TO ORIGINAL GRAY/WHITE THEME */
         .top-nav {
             background-color: #fff;
             border-bottom: 1px solid #ddd;
             padding: 10px 15px;
+            color: #333;
+            /* Fix z-index to ensure dropdown is above table headers */
+            position: relative;
+            z-index: 1000;
         }
 
         .logo-text {
@@ -66,10 +70,11 @@
             white-space: nowrap;
         }
         
+        /* Nav Button Styles */
         .nav-btn {
-            background-color: #fff;
-            color: var(--vtc-blue);
-            border: 1px solid var(--vtc-blue);
+            background-color: var(--vtc-blue);
+            color: white;
+            border: none;
             border-radius: 3px;
             padding: 6px 12px;
             margin: 2px;
@@ -78,16 +83,36 @@
             display: inline-flex;
             align-items: center;
             cursor: pointer;
+            text-decoration: none;
         }
         
         .nav-btn:hover {
-            background-color: #e6f7ff;
+            background-color: var(--vtc-blue-dark);
+            color: white;
         }
 
         .nav-btn.active-tab {
+            background-color: var(--vtc-blue-dark);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+        
+        /* Dropdown specific adjustments */
+        .nav-dropdown .dropdown-toggle::after {
+            margin-left: 0.5em;
+        }
+        .nav-dropdown .dropdown-menu {
+            font-size: 13px;
+            border-radius: 0;
+            margin-top: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        .nav-dropdown .dropdown-item:active, .nav-dropdown .dropdown-item.active {
             background-color: var(--vtc-blue);
-            color: white;
-            box-shadow: inset 0 2px 4px rgba(0,0,0,0.1);
+        }
+        .nav-dropdown .dropdown-item {
+            padding: 8px 15px;
+            cursor: pointer;
         }
 
         .user-info {
@@ -95,10 +120,18 @@
             font-weight: 500;
             white-space: nowrap;
         }
+        
+        .logout-btn {
+            color: #dc3545 !important;
+            transition: opacity 0.2s;
+        }
+        .logout-btn:hover {
+            opacity: 0.7;
+        }
 
-        /* Page Title Bar */
+        /* Page Title Bar - UNIFIED BLUE THEME */
         .page-title-bar {
-            background-color: #337ab7;
+            background-color: #337ab7; /* Standard Blue */
             color: white;
             padding: 10px 15px;
             font-weight: bold;
@@ -341,7 +374,7 @@
                 -webkit-overflow-scrolling: touch;
             }
             
-            .nav-btn {
+            .nav-btn, .dropdown-toggle {
                 flex: 0 0 auto;
                 white-space: nowrap;
             }
@@ -371,33 +404,42 @@
 
     <!-- Header Section -->
     <div class="d-flex justify-content-between align-items-center top-nav">
-        <div class="d-flex align-items-center flex-wrap w-100 overflow-hidden">
+        <div class="d-flex align-items-center flex-wrap w-100 overflow-hidden" style="overflow: visible !important;">
             <a href="#" class="logo-text me-3 flex-shrink-0">
                 <i class="fa-solid fa-wifi fa-rotate-90 me-1" style="font-size: 18px;"></i>VTC<span style="color: #00a0e3">Pay</span>
             </a>
             
-            <!-- Navigation Menu -->
-            <div class="ms-md-3 nav-menu-container">
-                <button id="nav-approval" class="nav-btn active-tab" onclick="switchTab('approval')">
+            <!-- Navigation Menu with Dropdown -->
+            <div class="ms-md-3 nav-menu-container d-flex align-items-center">
+                <button id="nav-approval" class="nav-btn active-tab me-1" onclick="switchTab('approval')">
                     <i class="fa-solid fa-money-bill me-2"></i> 
                     Duyệt tiền cổng
                 </button>
-                <button id="nav-report" class="nav-btn" onclick="switchTab('report')">
-                    <i class="fa-solid fa-chart-bar me-2"></i> 
-                    Báo cáo Merchant
-                </button>
+                
+                <!-- Báo cáo Dropdown -->
+                <div class="dropdown nav-dropdown d-inline-block">
+                    <button class="nav-btn dropdown-toggle" type="button" id="reportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-chart-pie me-2"></i> Báo cáo
+                    </button>
+                    <ul class="dropdown-menu" aria-labelledby="reportDropdown">
+                        <li><a class="dropdown-item" id="nav-report" onclick="switchTab('report')"><i class="fa-solid fa-chart-bar me-2 text-primary"></i>Tổng hợp Merchant</a></li>
+                        <li><a class="dropdown-item" id="nav-detail-report" onclick="switchTab('detail-report')"><i class="fa-solid fa-list-check me-2 text-success"></i>Chi tiết Merchant</a></li>
+                        <li><hr class="dropdown-divider"></li>
+                        <li><a class="dropdown-item" id="nav-refund-report" onclick="switchTab('refund-report')"><i class="fa-solid fa-rotate-left me-2 text-danger"></i>Hoàn tiền tổng hợp</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         
         <!-- User Info -->
         <div class="d-flex align-items-center user-info-container ms-3">
             <span class="user-info me-2"><i class="fa-solid fa-circle-user me-1"></i> hongtt</span>
-            <a href="#" class="text-danger" title="Đăng xuất"><i class="fa-solid fa-right-from-bracket"></i></a>
+            <a href="#" class="logout-btn" title="Đăng xuất"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </div>
 
     <!-- ==============================================
-         MODULE 1: DUYỆT TIỀN CỔNG THANH TOÁN (DEFAULT)
+         MODULE 1: DUYỆT TIỀN CÔNG THANH TOÁN (DEFAULT)
          ============================================== -->
     <div id="section-approval">
         <div class="page-title-bar shadow-sm">
@@ -514,10 +556,10 @@
     </div>
 
     <!-- ==============================================
-         MODULE 2: BÁO CÁO TỔNG HỢP MERCHANT (NEW)
+         MODULE 2: BÁO CÁO TỔNG HỢP MERCHANT
          ============================================== -->
     <div id="section-report" class="d-none-custom">
-        <div class="page-title-bar shadow-sm" style="background-color: #2c3e50; border-left-color: #1a252f;">
+        <div class="page-title-bar shadow-sm">
             <i class="fa-solid fa-chart-line me-2"></i> BÁO CÁO TỔNG HỢP MERCHANT
         </div>
 
@@ -656,16 +698,295 @@
         </div>
     </div>
 
+    <!-- ==============================================
+         MODULE 3: BÁO CÁO CHI TIẾT MERCHANT
+         ============================================== -->
+    <div id="section-detail-report" class="d-none-custom">
+        <div class="page-title-bar shadow-sm">
+            <i class="fa-solid fa-list-check me-2"></i> BÁO CÁO CHI TIẾT MERCHANT
+        </div>
+
+        <div class="container-fluid filter-section">
+            <div class="filter-toggle-container d-md-none">
+                <button class="btn btn-filter-toggle" onclick="toggleFilter('filter-detail-report')">
+                    <span><i class="fa-solid fa-filter me-2"></i> Bộ lọc chi tiết</span>
+                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
+                </button>
+            </div>
+
+            <div id="filter-detail-report" class="filter-content-wrapper">
+                <!-- Row 1 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-store"></i> Loại Mer</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Cá nhân</option><option>Doanh nghiệp</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-plug"></i> Loại tích hợp</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Website</option><option>App</option><option>POS</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-signature"></i> Tên Mer</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control" placeholder="Tên Merchant..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-user-tag"></i> TK Merchant</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control" placeholder="Tài khoản Merchant..."></div>
+                </div>
+                
+                <!-- Row 2 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label highlight-new-label"><i class="fa-solid fa-store"></i> Sub-Mer</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control highlight-new-field" placeholder="TK Sub-Merchant..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-user"></i> TK KH</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control" placeholder="Tài khoản KH..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-regular fa-credit-card"></i> Thẻ TT</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Visa</option><option>MasterCard</option><option>ATM Nội địa</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-money-check-dollar"></i> PT TT</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Ví điện tử</option><option>Thẻ quốc tế</option><option>Thẻ nội địa</option></select></div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-credit-card"></i> Loại Bin</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-file-contract"></i> Nhóm HĐ</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Nhóm A</option><option>Nhóm B</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-eye"></i> Kiểu xem</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Mặc định</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-filter"></i> Trạng thái</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Thành công</option><option>Thất bại</option></select></div>
+                </div>
+
+                <!-- Row 4 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-network-wired"></i> Kênh KN</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-building-columns"></i> Ngân hàng</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-regular fa-calendar-days"></i> Từ Ngày</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><div class="input-group"><input type="text" class="form-control" value="01/01/2026"><span class="input-group-text bg-white"><i class="fa-solid fa-calendar text-primary"></i></span></div></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-regular fa-calendar-days"></i> Đến Ngày</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><div class="input-group"><input type="text" class="form-control" value="31/01/2026"><span class="input-group-text bg-white"><i class="fa-solid fa-calendar text-primary"></i></span></div></div>
+                </div>
+                
+                <div class="text-center mt-3 mb-3 pb-2 border-bottom">
+                     <button class="btn-search ripple"><i class="fa-solid fa-magnifying-glass me-1"></i> Tìm kiếm</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center action-toolbar rounded mx-3">
+            <div class="toolbar-left d-flex flex-wrap">
+                <button class="btn toolbar-btn"><i class="fa-solid fa-cloud-arrow-down text-primary"></i> Xuất dữ liệu</button>
+                <button class="btn toolbar-btn"><i class="fa-solid fa-bars text-primary"></i> Hiện 10 dòng</button>
+                <button class="btn toolbar-btn"><i class="fa-solid fa-eye-slash text-primary"></i> Ẩn/hiện cột</button>
+            </div>
+            <div class="toolbar-right d-flex align-items-center">
+                <span class="me-2 fw-bold text-secondary" style="font-size: 12px; white-space: nowrap;">Tìm nhanh:</span>
+                <input type="text" class="form-control form-control-sm" placeholder="Nhập từ khóa...">
+            </div>
+        </div>
+
+        <div class="table-responsive-custom">
+            <table id="table-detail-report" class="table table-bordered table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th class="text-nowrap">Thời gian</th>
+                        <th class="text-nowrap">Merchant</th>
+                        <th class="text-nowrap">Số TK Merchant</th>
+                        <th class="text-nowrap highlight-new-col-header">Số TK Sub-Merchant</th>
+                        <th class="text-nowrap">Mã GD</th>
+                        <th class="text-nowrap">Mã đơn hàng VTC</th>
+                        <th class="text-nowrap">VTCTransID</th>
+                        <th class="text-nowrap">Mã đối tác</th>
+                        <th class="text-nowrap">Tên KH</th>
+                        <th class="text-nowrap">Số TK KH</th>
+                        <th class="text-nowrap">PT Thanh toán</th>
+                        <th class="text-end text-nowrap">Giá trị GD (1)</th>
+                        <th class="text-end text-nowrap">Phí KH chịu (2)</th>
+                        <th class="text-end text-nowrap">Phí Merchant chịu (3)</th>
+                        <th class="text-end text-nowrap" title="(1)+(2)-(6)-(7)">Số tiền KH chịu (4)</th>
+                        <th class="text-end text-nowrap" title="(1)-(3)">Số tiền Merchant nhận (5)</th>
+                        <th class="text-end text-nowrap">Chiết khấu (6)</th>
+                        <th class="text-end text-nowrap">Giảm giá (7)</th>
+                        <th class="text-nowrap">Mã GD NH</th>
+                        <th class="text-nowrap">Kênh kết nối</th>
+                        <th class="text-center sticky-col-right" style="width: 80px;">Chức Năng</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-detail-report"></tbody>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center footer-pagination">
+            <div class="text-muted fw-bold">Hiển thị 1-5 của 5 bản ghi chi tiết</div>
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-angle-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-angle-right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- ==============================================
+         MODULE 4: BÁO CÁO HOÀN TIỀN TỔNG HỢP
+         ============================================== -->
+    <div id="section-refund-report" class="d-none-custom">
+        <div class="page-title-bar shadow-sm">
+            <i class="fa-solid fa-rotate-left me-2"></i> BÁO CÁO HOÀN TIỀN TỔNG HỢP
+        </div>
+
+        <div class="container-fluid filter-section">
+            <div class="filter-toggle-container d-md-none">
+                <button class="btn btn-filter-toggle" onclick="toggleFilter('filter-refund-report')">
+                    <span><i class="fa-solid fa-filter me-2"></i> Bộ lọc hoàn tiền</span>
+                    <i class="fa-solid fa-chevron-down icon-toggle"></i>
+                </button>
+            </div>
+
+            <div id="filter-refund-report" class="filter-content-wrapper">
+                <!-- Row 1 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-store"></i> Loại Mer</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Cá nhân</option><option>Doanh nghiệp</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-signature"></i> Tên Mer</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control" placeholder="Tên Merchant..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-regular fa-calendar-days"></i> Từ Ngày</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><div class="input-group"><input type="text" class="form-control" value="01/01/2026"><span class="input-group-text bg-white"><i class="fa-solid fa-calendar text-primary"></i></span></div></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-regular fa-calendar-days"></i> Đến Ngày</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><div class="input-group"><input type="text" class="form-control" value="31/01/2026"><span class="input-group-text bg-white"><i class="fa-solid fa-calendar text-primary"></i></span></div></div>
+                </div>
+                
+                <!-- Row 2 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-user-tag"></i> TK Merchant</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control" placeholder="Tài khoản Merchant..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label highlight-new-label"><i class="fa-solid fa-store"></i> Sub-Mer</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control highlight-new-field" placeholder="TK Sub-Merchant..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-regular fa-id-card"></i> Đối tác</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><input type="text" class="form-control" placeholder="Mã đối tác..."></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-money-bill-transfer"></i> Loại GD</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>Hoàn toàn phần</option><option>Hoàn một phần</option></select></div>
+                </div>
+
+                <!-- Row 3 -->
+                <div class="row align-items-center mb-2">
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-dungeon"></i> Cổng</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Tất cả</option><option>VTC Pay</option><option>ZaloPay</option></select></div>
+                    
+                    <div class="col-lg-1 col-md-12 mb-1"><label class="filter-label"><i class="fa-solid fa-chart-pie"></i> Biểu đồ</label></div>
+                    <div class="col-lg-2 col-md-6 mb-2"><select class="form-select"><option>Không hiện</option><option>Biểu đồ cột</option></select></div>
+                    
+                    <div class="col-lg-6"></div>
+                </div>
+                
+                <div class="text-center mt-3 mb-3 pb-2 border-bottom">
+                     <button class="btn-search ripple"><i class="fa-solid fa-magnifying-glass me-1"></i> Tìm kiếm</button>
+                </div>
+            </div>
+        </div>
+
+        <div class="d-flex justify-content-between align-items-center action-toolbar rounded mx-3">
+            <div class="toolbar-left d-flex flex-wrap">
+                <button class="btn toolbar-btn"><i class="fa-solid fa-cloud-arrow-down text-primary"></i> Xuất dữ liệu</button>
+                <button class="btn toolbar-btn"><i class="fa-solid fa-bars text-primary"></i> Hiện 10 dòng</button>
+                <button class="btn toolbar-btn"><i class="fa-solid fa-eye-slash text-primary"></i> Ẩn/hiện cột</button>
+            </div>
+            <div class="toolbar-right d-flex align-items-center">
+                <span class="me-2 fw-bold text-secondary" style="font-size: 12px; white-space: nowrap;">Tìm nhanh:</span>
+                <input type="text" class="form-control form-control-sm" placeholder="Nhập từ khóa...">
+            </div>
+        </div>
+
+        <div class="table-responsive-custom">
+            <table id="table-refund-report" class="table table-bordered table-striped table-hover align-middle">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="width: 50px;">STT</th>
+                        <th>Số TK Merchant</th>
+                        <th class="highlight-new-col-header">Số TK Sub-Merchant</th>
+                        <th>Loại GD</th>
+                        <th class="text-end">Số lượng GD</th>
+                        <th class="text-end">Tổng giá trị GD gốc</th>
+                        <th class="text-end">Số tiền hoàn trả</th>
+                        <th class="text-end">Phí Merchant chịu</th>
+                        <th class="text-end">Phí hoàn merchant chịu</th>
+                        <th class="text-end">Phí hoàn KH chịu</th>
+                        <th class="text-end">Chiết khấu gốc</th>
+                        <th class="text-end">Số tiền giảm giá</th>
+                        <th class="text-end">Số tiền hoàn trả KH</th>
+                    </tr>
+                </thead>
+                <tbody id="tbody-refund-report"></tbody>
+                <tfoot class="fw-bold bg-light">
+                    <tr>
+                        <td colspan="4" class="text-end">TỔNG CỘNG:</td>
+                        <td class="text-end text-primary" id="sum-rf-count">0</td>
+                        <td class="text-end text-success" id="sum-rf-orig-val">0</td>
+                        <td class="text-end text-danger" id="sum-rf-val">0</td>
+                        <td class="text-end" id="sum-rf-fee-merch">0</td>
+                        <td class="text-end" id="sum-rf-fee-refund-merch">0</td>
+                        <td class="text-end" id="sum-rf-fee-cust">0</td>
+                        <td class="text-end" id="sum-rf-disc">0</td>
+                        <td class="text-end" id="sum-rf-promo">0</td>
+                        <td class="text-end text-primary" id="sum-rf-cust-recv">0</td>
+                    </tr>
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="d-flex justify-content-between align-items-center footer-pagination">
+            <div class="text-muted fw-bold">Hiển thị 1-5 của 5 bản ghi hoàn tiền</div>
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-angle-left"></i></a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item disabled"><a class="page-link" href="#"><i class="fa-solid fa-angle-right"></i></a></li>
+                </ul>
+            </nav>
+        </div>
+    </div>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
+
     <script>
         // --- LOGIC CHUYỂN TAB ---
         function switchTab(tabName) {
             // Update Nav Styles
             document.querySelectorAll('.nav-btn').forEach(btn => btn.classList.remove('active-tab'));
-            document.getElementById('nav-' + tabName).classList.add('active-tab');
+            
+            // Handle Dropdown Active State
+            if (tabName === 'report' || tabName === 'detail-report' || tabName === 'refund-report') {
+                const dropdownBtn = document.getElementById('reportDropdown');
+                dropdownBtn.classList.add('active-tab');
+                
+                // Highlight dropdown item
+                document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
+                document.getElementById('nav-' + tabName).classList.add('active');
+            } else {
+                document.getElementById('nav-' + tabName).classList.add('active-tab');
+            }
 
             // Show/Hide Sections
             document.getElementById('section-approval').classList.add('d-none-custom');
             document.getElementById('section-report').classList.add('d-none-custom');
+            document.getElementById('section-detail-report').classList.add('d-none-custom');
+            document.getElementById('section-refund-report').classList.add('d-none-custom');
             
             document.getElementById('section-' + tabName).classList.remove('d-none-custom');
             
@@ -690,82 +1011,25 @@
             }
         }
 
+        function formatCurrency(num) {
+            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+        }
+
         // --- DATA MODULE 1: DUYỆT TIỀN CÔNG ---
         const approvalData = [
-             {
-                time: "14/01/2026 14:54:37", partner: "20260114145431", order: "1100013338", vtcId: "POR3bd28af1ea02f", 
-                transCode: "PG-1000001104", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0981234567", name: "Nguyễn Văn A", bankAcc: "", amount: "10,000", bankTrans: "797909", 
-                executor: "hangnm", successTime: "14/01/2026 14:57:19", merchType: "", gateway: "ZaloPay", 
-                status: "Thành công", actionType: "view"
-            },
-            {
-                time: "14/01/2026 16:44:21", partner: "20260114164155", order: "1100013339", vtcId: "POR3bd28af1ea02f", 
-                transCode: "PG-1000001105", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", subMerchant: "", name: "Trần Thị B", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", 
-                executor: "System", successTime: "14/01/2026 17:30:11", merchType: "", gateway: "NCB", 
-                status: "Hủy", actionType: "none"
-            },
-            {
-                time: "14/01/2026 17:11:19", partner: "20260114171111", order: "1100013340", vtcId: "POR3bd28af1ea02g", 
-                transCode: "PG-1000001106", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0912345678", name: "Lê Văn C", bankAcc: "", amount: "20,000", bankTrans: "7979091", 
-                executor: "hangnm", successTime: "14/01/2026 17:12:47", merchType: "", gateway: "ZaloPay", 
-                status: "Thành công", actionType: "view"
-            },
-            {
-                time: "14/01/2026 17:26:56", partner: "20260114172651", order: "1100013342", vtcId: "POR3bd28af1ea02h", 
-                transCode: "PG-1000001107", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0977654321", name: "", bankAcc: "", amount: "15,000", bankTrans: "", 
-                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
-                status: "Khởi tạo", actionType: "approve"
-            },
-            {
-                time: "14/01/2026 17:27:16", partner: "20260114172711", order: "1100013343", vtcId: "POR3bd28af1ea02i", 
-                transCode: "PG-1000001108", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "30,000", bankTrans: "", 
-                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
-                status: "Khởi tạo", actionType: "approve"
-            },
-            {
-                time: "14/01/2026 17:29:23", partner: "20260114172625", order: "1100013344", vtcId: "POR3bd28af1ea02j", 
-                transCode: "PG-1000001109", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "0999888777", name: "", bankAcc: "", amount: "10,000", bankTrans: "", 
-                executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", 
-                status: "Khởi tạo", actionType: "approve"
-            },
-            {
-                time: "14/01/2026 17:29:49", partner: "20260114172910", order: "1100013345", vtcId: "POR3bd28af1ea02k", 
-                transCode: "PG-1000001110", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "", name: "Phạm Văn D", bankAcc: "", amount: "50,000", bankTrans: "", 
-                executor: "System", successTime: "14/01/2026 17:40:06", merchType: "", gateway: "ZaloPay", 
-                status: "Hủy", actionType: "none"
-            },
-            {
-                time: "14/01/2026 17:33:06", partner: "20260114173256", order: "1100013346", vtcId: "POR76e672d8d6014", 
-                transCode: "PG-1000001111", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", subMerchant: "0966555444", name: "", bankAcc: "1100013346", amount: "100,000", bankTrans: "1100013346", 
-                executor: "", successTime: "---", merchType: "", gateway: "NCB", 
-                status: "Khởi tạo", actionType: "approve"
-            },
-            {
-                time: "14/01/2026 17:38:54", partner: "20260114173849", order: "1100013347", vtcId: "POR3bd28af1ea02l", 
-                transCode: "PG-1000001112", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", 
-                merchant: "0963465816", subMerchant: "", name: "Hoàng Thị E", bankAcc: "", amount: "10,000", bankTrans: "797909133", 
-                executor: "hangnm", successTime: "14/01/2026 17:48:30", merchType: "", gateway: "ZaloPay", 
-                status: "Đã hoàn tiền", actionType: "none"
-            },
-            {
-                time: "14/01/2026 17:41:03", partner: "20260114174056", order: "1100013348", vtcId: "PORccc938006ef18", 
-                transCode: "PG-1000001113", type: "Thanh toán chuyển khoản", bank: "NCB", 
-                merchant: "0963465816", subMerchant: "0911222333", name: "", bankAcc: "1100013348", amount: "25,000", bankTrans: "1100013348", 
-                executor: "hangnm", successTime: "14/01/2026 17:41:53", merchType: "", gateway: "NCB", 
-                status: "Thành công", actionType: "view"
-            }
+             { time: "14/01/2026 14:54:37", partner: "20260114145431", order: "1100013338", vtcId: "POR3bd28af1ea02f", transCode: "PG-1000001104", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "0981234567", name: "Nguyễn Văn A", bankAcc: "", amount: "10,000", bankTrans: "797909", executor: "hangnm", successTime: "14/01/2026 14:57:19", merchType: "", gateway: "ZaloPay", status: "Thành công", actionType: "view" },
+             { time: "14/01/2026 16:44:21", partner: "20260114164155", order: "1100013339", vtcId: "POR3bd28af1ea02f", transCode: "PG-1000001105", type: "Thanh toán chuyển khoản", bank: "NCB", merchant: "0963465816", subMerchant: "", name: "Trần Thị B", bankAcc: "1100013339", amount: "10,000", bankTrans: "1100013339", executor: "System", successTime: "14/01/2026 17:30:11", merchType: "", gateway: "NCB", status: "Hủy", actionType: "none" },
+             { time: "14/01/2026 17:11:19", partner: "20260114171111", order: "1100013340", vtcId: "POR3bd28af1ea02g", transCode: "PG-1000001106", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "0912345678", name: "Lê Văn C", bankAcc: "", amount: "20,000", bankTrans: "7979091", executor: "hangnm", successTime: "14/01/2026 17:12:47", merchType: "", gateway: "ZaloPay", status: "Thành công", actionType: "view" },
+             { time: "14/01/2026 17:26:56", partner: "20260114172651", order: "1100013342", vtcId: "POR3bd28af1ea02h", transCode: "PG-1000001107", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "0977654321", name: "", bankAcc: "", amount: "15,000", bankTrans: "", executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", status: "Khởi tạo", actionType: "approve" },
+             { time: "14/01/2026 17:27:16", partner: "20260114172711", order: "1100013343", vtcId: "POR3bd28af1ea02i", transCode: "PG-1000001108", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "", name: "", bankAcc: "", amount: "30,000", bankTrans: "", executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", status: "Khởi tạo", actionType: "approve" },
+             { time: "14/01/2026 17:29:23", partner: "20260114172625", order: "1100013344", vtcId: "POR3bd28af1ea02j", transCode: "PG-1000001109", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "0999888777", name: "", bankAcc: "", amount: "10,000", bankTrans: "", executor: "", successTime: "---", merchType: "", gateway: "ZaloPay", status: "Khởi tạo", actionType: "approve" },
+             { time: "14/01/2026 17:29:49", partner: "20260114172910", order: "1100013345", vtcId: "POR3bd28af1ea02k", transCode: "PG-1000001110", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "", name: "Phạm Văn D", bankAcc: "", amount: "50,000", bankTrans: "", executor: "System", successTime: "14/01/2026 17:40:06", merchType: "", gateway: "ZaloPay", status: "Hủy", actionType: "none" },
+             { time: "14/01/2026 17:33:06", partner: "20260114173256", order: "1100013346", vtcId: "POR76e672d8d6014", transCode: "PG-1000001111", type: "Thanh toán chuyển khoản", bank: "NCB", merchant: "0963465816", subMerchant: "0966555444", name: "", bankAcc: "1100013346", amount: "100,000", bankTrans: "1100013346", executor: "", successTime: "---", merchType: "", gateway: "NCB", status: "Khởi tạo", actionType: "approve" },
+             { time: "14/01/2026 17:38:54", partner: "20260114173849", order: "1100013347", vtcId: "POR3bd28af1ea02l", transCode: "PG-1000001112", type: "Thanh toán qua Deeplink App", bank: "DeepLinkApp", merchant: "0963465816", subMerchant: "", name: "Hoàng Thị E", bankAcc: "", amount: "10,000", bankTrans: "797909133", executor: "hangnm", successTime: "14/01/2026 17:48:30", merchType: "", gateway: "ZaloPay", status: "Đã hoàn tiền", actionType: "none" },
+             { time: "14/01/2026 17:41:03", partner: "20260114174056", order: "1100013348", vtcId: "PORccc938006ef18", transCode: "PG-1000001113", type: "Thanh toán chuyển khoản", bank: "NCB", merchant: "0963465816", subMerchant: "0911222333", name: "", bankAcc: "1100013348", amount: "25,000", bankTrans: "1100013348", executor: "hangnm", successTime: "14/01/2026 17:41:53", merchType: "", gateway: "NCB", status: "Thành công", actionType: "view" }
         ];
 
-        // --- DATA MODULE 2: BÁO CÁO (Dữ liệu giả lập 1 trang) ---
-        // Fields: STT, Merchant, TK Merch, TK Sub, Count, Value(1), FeeCust(2), FeeMerch(3), CustPay(4), MerchRecv(5), Disc(6), Promo(7)
+        // --- DATA MODULE 2: BÁO CÁO TỔNG HỢP ---
         const reportData = [
             { id: 1, name: "Shop Mẹ và Bé", merch: "0963465816", subMerch: "0981234567", count: 120, val: 1200000000, feeCust: 0, feeMerch: 12000000, disc: 5000000, promo: 2000000 },
             { id: 2, name: "Tạp hóa Minh Anh", merch: "0912345678", subMerch: "0912345678", count: 50, val: 500000000, feeCust: 2000000, feeMerch: 5000000, disc: 0, promo: 0 },
@@ -774,9 +1038,23 @@
             { id: 5, name: "Nhà sách Phương Nam", merch: "0966555444", subMerch: "0911222333", count: 80, val: 140000000, feeCust: 500000, feeMerch: 1400000, disc: 0, promo: 0 },
         ];
 
-        function formatCurrency(num) {
-            return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
-        }
+        // --- DATA MODULE 3: BÁO CÁO CHI TIẾT ---
+        const detailReportData = [
+            { time: "14/01/2026 09:00:00", merch: "Shop Mẹ và Bé", merchAcc: "0963465816", subMerchAcc: "0981234567", transId: "PG-2026011401", orderId: "ORD-001", vtcTrans: "VTC-001", partner: "DT001", cust: "Nguyễn Văn A", custAcc: "0909123123", method: "Ví điện tử", val: 100000, feeCust: 0, feeMerch: 1000, disc: 0, promo: 0, bankId: "BIDV-1234", channel: "App" },
+            { time: "14/01/2026 09:15:00", merch: "Tạp hóa Minh Anh", merchAcc: "0912345678", subMerchAcc: "0912345678", transId: "PG-2026011402", orderId: "ORD-002", vtcTrans: "VTC-002", partner: "DT002", cust: "Trần Thị B", custAcc: "0912345345", method: "Thẻ nội địa", val: 200000, feeCust: 2000, feeMerch: 1000, disc: 0, promo: 0, bankId: "VCB-5678", channel: "POS" },
+            { time: "14/01/2026 09:30:00", merch: "Siêu thị Điện máy", merchAcc: "0977654321", subMerchAcc: "", transId: "PG-2026011403", orderId: "ORD-003", vtcTrans: "VTC-003", partner: "DT003", cust: "Lê Văn C", custAcc: "0988777666", method: "Thẻ quốc tế", val: 5000000, feeCust: 0, feeMerch: 100000, disc: 200000, promo: 100000, bankId: "VISA-9999", channel: "Website" },
+            { time: "14/01/2026 10:00:00", merch: "Thời trang Nữ", merchAcc: "0999888777", subMerchAcc: "0933444555", transId: "PG-2026011404", orderId: "ORD-004", vtcTrans: "VTC-004", partner: "DT004", cust: "Phạm Thị D", custAcc: "0933111222", method: "Ví điện tử", val: 500000, feeCust: 0, feeMerch: 5000, disc: 50000, promo: 0, bankId: "MOMO-1111", channel: "App" },
+            { time: "14/01/2026 10:30:00", merch: "Nhà sách Phương Nam", merchAcc: "0966555444", subMerchAcc: "0911222333", transId: "PG-2026011405", orderId: "ORD-005", vtcTrans: "VTC-005", partner: "DT005", cust: "Hoàng Văn E", custAcc: "0977888999", method: "Thẻ nội địa", val: 150000, feeCust: 1000, feeMerch: 1000, disc: 0, promo: 0, bankId: "TCB-2222", channel: "Website" }
+        ];
+
+        // --- DATA MODULE 4: BÁO CÁO HOÀN TIỀN (NEW) ---
+        const refundReportData = [
+            { id: 1, merchAcc: "0963465816", subMerchAcc: "0981234567", transType: "Hoàn toàn phần", count: 5, origVal: 5000000, refundVal: 5000000, feeMerch: 50000, refundFeeMerch: 0, feeRefundCust: 0, disc: 0, promo: 0, custRecv: 5000000 },
+            { id: 2, merchAcc: "0912345678", subMerchAcc: "0912345678", transType: "Hoàn một phần", count: 2, origVal: 2000000, refundVal: 1000000, feeMerch: 20000, refundFeeMerch: 5000, feeRefundCust: 0, disc: 0, promo: 0, custRecv: 1000000 },
+            { id: 3, merchAcc: "0977654321", subMerchAcc: "", transType: "Hoàn toàn phần", count: 10, origVal: 15000000, refundVal: 15000000, feeMerch: 150000, refundFeeMerch: 0, feeRefundCust: 0, disc: 500000, promo: 200000, custRecv: 14300000 },
+            { id: 4, merchAcc: "0999888777", subMerchAcc: "0933444555", transType: "Hoàn một phần", count: 3, origVal: 3000000, refundVal: 500000, feeMerch: 30000, refundFeeMerch: 2000, feeRefundCust: 1000, disc: 0, promo: 0, custRecv: 499000 },
+            { id: 5, merchAcc: "0966555444", subMerchAcc: "0911222333", transType: "Hoàn toàn phần", count: 1, origVal: 500000, refundVal: 500000, feeMerch: 5000, refundFeeMerch: 0, feeRefundCust: 0, disc: 0, promo: 0, custRecv: 500000 },
+        ];
 
         function renderApproval() {
             const tbody = document.getElementById('tbody-approval');
@@ -831,17 +1109,12 @@
             const tbody = document.getElementById('tbody-report');
             let html = '';
             
-            // Variables for footer sums
             let sCount=0, sVal=0, sFeeCust=0, sFeeMerch=0, sCustPay=0, sMerchRecv=0, sDisc=0, sPromo=0;
 
             reportData.forEach(row => {
-                // Calculate derived columns
-                // Số tiền KH chịu (4) = (1) + (2) - (6) - (7)
                 const custPay = row.val + row.feeCust - row.disc - row.promo;
-                // Số tiền Merchant nhận (5) = (1) - (3)
                 const merchRecv = row.val - row.feeMerch;
 
-                // Accumulate totals
                 sCount += row.count;
                 sVal += row.val;
                 sFeeCust += row.feeCust;
@@ -873,7 +1146,6 @@
             });
             tbody.innerHTML = html;
 
-            // Update footer totals
             document.getElementById('sum-count').innerText = formatCurrency(sCount);
             document.getElementById('sum-val').innerText = formatCurrency(sVal);
             document.getElementById('sum-fee-cust').innerText = formatCurrency(sFeeCust);
@@ -884,14 +1156,110 @@
             document.getElementById('sum-promo').innerText = formatCurrency(sPromo);
         }
 
-        function initColumnResize() {
-            // Logic resize chung cho cả 2 bảng
-            // Tìm bảng nào đang hiển thị
-            const activeTable = !document.getElementById('section-approval').classList.contains('d-none-custom') 
-                                ? document.getElementById('table-approval') 
-                                : document.getElementById('table-report');
+        function renderDetailReport() {
+            const tbody = document.getElementById('tbody-detail-report');
+            let html = '';
+            
+            detailReportData.forEach(row => {
+                // Calculation: Số tiền KH chịu(4)=(1)+(2)-(6)-(7)
+                const custPay = row.val + row.feeCust - row.disc - row.promo;
+                // Calculation: Số tiền Merchant nhận(5)=(1)-(3)
+                const merchRecv = row.val - row.feeMerch;
 
-            if(!activeTable) return;
+                html += `
+                    <tr>
+                        <td class="text-nowrap">${row.time}</td>
+                        <td class="text-nowrap">${row.merch}</td>
+                        <td>${row.merchAcc}</td>
+                        <td class="highlight-new-col-cell">${row.subMerchAcc}</td>
+                        <td>${row.transId}</td>
+                        <td>${row.orderId}</td>
+                        <td>${row.vtcTrans}</td>
+                        <td>${row.partner}</td>
+                        <td class="text-nowrap">${row.cust}</td>
+                        <td>${row.custAcc}</td>
+                        <td>${row.method}</td>
+                        <td class="text-end fw-bold">${formatCurrency(row.val)}</td>
+                        <td class="text-end">${formatCurrency(row.feeCust)}</td>
+                        <td class="text-end">${formatCurrency(row.feeMerch)}</td>
+                        <td class="text-end fw-bold text-primary">${formatCurrency(custPay)}</td>
+                        <td class="text-end fw-bold text-success">${formatCurrency(merchRecv)}</td>
+                        <td class="text-end text-muted">${formatCurrency(row.disc)}</td>
+                        <td class="text-end text-muted">${formatCurrency(row.promo)}</td>
+                        <td>${row.bankId}</td>
+                        <td>${row.channel}</td>
+                        <td class="text-center sticky-col-right">
+                             <div class="action-btn-group"><button class="btn-view" title="Xem chi tiết"><i class="fa-regular fa-eye"></i></button></div>
+                        </td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+        }
+
+        function renderRefundReport() {
+            const tbody = document.getElementById('tbody-refund-report');
+            let html = '';
+            
+            let sCount = 0, sOrigVal = 0, sRefundVal = 0, sFeeMerch = 0, sRefundFeeMerch = 0, sFeeRefundCust = 0, sDisc = 0, sPromo = 0, sCustRecv = 0;
+
+            refundReportData.forEach(row => {
+                sCount += row.count;
+                sOrigVal += row.origVal;
+                sRefundVal += row.refundVal;
+                sFeeMerch += row.feeMerch;
+                sRefundFeeMerch += row.refundFeeMerch;
+                sFeeRefundCust += row.feeRefundCust;
+                sDisc += row.disc;
+                sPromo += row.promo;
+                sCustRecv += row.custRecv;
+
+                html += `
+                    <tr>
+                        <td class="text-center">${row.id}</td>
+                        <td>${row.merchAcc}</td>
+                        <td class="highlight-new-col-cell">${row.subMerchAcc}</td>
+                        <td>${row.transType}</td>
+                        <td class="text-end">${row.count}</td>
+                        <td class="text-end text-success">${formatCurrency(row.origVal)}</td>
+                        <td class="text-end fw-bold text-danger">${formatCurrency(row.refundVal)}</td>
+                        <td class="text-end">${formatCurrency(row.feeMerch)}</td>
+                        <td class="text-end">${formatCurrency(row.refundFeeMerch)}</td>
+                        <td class="text-end">${formatCurrency(row.feeRefundCust)}</td>
+                        <td class="text-end text-muted">${formatCurrency(row.disc)}</td>
+                        <td class="text-end text-muted">${formatCurrency(row.promo)}</td>
+                        <td class="text-end fw-bold text-primary">${formatCurrency(row.custRecv)}</td>
+                    </tr>
+                `;
+            });
+            tbody.innerHTML = html;
+
+            document.getElementById('sum-rf-count').innerText = formatCurrency(sCount);
+            document.getElementById('sum-rf-orig-val').innerText = formatCurrency(sOrigVal);
+            document.getElementById('sum-rf-val').innerText = formatCurrency(sRefundVal);
+            document.getElementById('sum-rf-fee-merch').innerText = formatCurrency(sFeeMerch);
+            document.getElementById('sum-rf-fee-refund-merch').innerText = formatCurrency(sRefundFeeMerch);
+            document.getElementById('sum-rf-fee-cust').innerText = formatCurrency(sFeeRefundCust);
+            document.getElementById('sum-rf-disc').innerText = formatCurrency(sDisc);
+            document.getElementById('sum-rf-promo').innerText = formatCurrency(sPromo);
+            document.getElementById('sum-rf-cust-recv').innerText = formatCurrency(sCustRecv);
+        }
+
+        function initColumnResize() {
+            // Find active table container
+            let activeTableId = '';
+            if (!document.getElementById('section-approval').classList.contains('d-none-custom')) {
+                activeTableId = 'table-approval';
+            } else if (!document.getElementById('section-report').classList.contains('d-none-custom')) {
+                activeTableId = 'table-report';
+            } else if (!document.getElementById('section-detail-report').classList.contains('d-none-custom')) {
+                activeTableId = 'table-detail-report';
+            } else if (!document.getElementById('section-refund-report').classList.contains('d-none-custom')) {
+                activeTableId = 'table-refund-report';
+            }
+
+            if(!activeTableId) return;
+            const activeTable = document.getElementById(activeTableId);
 
             const headers = activeTable.querySelectorAll('th');
             
@@ -900,7 +1268,7 @@
             });
 
             headers.forEach((th, index) => {
-                if (th.classList.contains('sticky-col-right')) return; // Skip sticky action col
+                if (th.classList.contains('sticky-col-right')) return; 
 
                 const resizer = document.createElement('div');
                 resizer.classList.add('resizer');
@@ -940,6 +1308,8 @@
         // Init
         renderApproval();
         renderReport();
+        renderDetailReport();
+        renderRefundReport();
         initColumnResize();
         
         // Button loading effect
@@ -955,4 +1325,3 @@
     </script>
 </body>
 </html>
-
