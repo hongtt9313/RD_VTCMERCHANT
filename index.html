@@ -224,21 +224,31 @@
             background-color: #e2e6ea;
         }
 
-        /* UPDATED: Allow text wrapping globally */
+        /* UPDATED: Table Responsive & Text Wrapping */
         .table {
             font-size: 12px;
-            white-space: normal; /* Changed from nowrap to normal */
             margin-bottom: 0;
             border-collapse: separate;
             border-spacing: 0;
-            word-wrap: break-word; /* Ensure long words break */
+            /* Allow wrapping */
+            white-space: normal; 
+            word-wrap: break-word;
+        }
+
+        .table th, .table td {
+            white-space: normal !important; /* Force text to wrap */
+            word-break: break-word; /* Break long words if necessary */
+            vertical-align: middle;
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
         }
 
         .table-responsive-custom {
             padding: 0 15px;
             margin-bottom: 20px;
             width: 100%;
-            /* overflow-x: auto;  Removed to prevent scroll if we stack */
+            overflow-x: auto; /* Enable horizontal scroll for table container only */
+            -webkit-overflow-scrolling: touch;
             position: relative;
         }
 
@@ -254,12 +264,6 @@
             position: sticky;
             top: 0;
             z-index: 10;
-        }
-
-        .table td {
-            vertical-align: middle;
-            padding: 8px;
-            border-bottom: 1px solid #dee2e6;
         }
 
         .sticky-col-right {
@@ -343,14 +347,13 @@
             display: none !important;
         }
 
-        /* Mobile Card View Styles */
         @media (max-width: 992px) {
             .filter-label { margin-bottom: 4px; }
             .col-form-container { margin-bottom: 10px; }
             .logo-text { font-size: 20px; }
 
-            /* Force Table to Card View */
-            .table-responsive-custom { overflow-x: hidden; } /* No scroll */
+            /* Force Table to Card View on Mobile */
+            .table-responsive-custom { overflow-x: hidden; } 
             
             .table, .table thead, .table tbody, .table th, .table td, .table tr { 
                 display: block; 
@@ -376,7 +379,7 @@
                 position: relative;
                 padding-left: 50% !important; 
                 text-align: right !important;
-                white-space: normal !important; /* Allow wrapping in card view */
+                white-space: normal !important;
                 min-height: 35px;
             }
             
@@ -393,7 +396,6 @@
                 color: #0068ac;
             }
             
-            /* Remove sticky styles on mobile card view */
             .sticky-col-right {
                 position: static !important;
                 box-shadow: none !important;
@@ -401,7 +403,6 @@
                 background-color: transparent !important;
             }
             
-            /* Special handling for Action column */
             .table td:last-child {
                 border-bottom: 0;
                 padding-left: 10px !important;
