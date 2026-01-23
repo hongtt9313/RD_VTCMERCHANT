@@ -102,7 +102,22 @@
             border-spacing: 0;
             white-space: normal; 
             word-wrap: break-word;
+            width: 100%; /* Đảm bảo bảng co giãn theo khung */
+            table-layout: fixed; /* Quan trọng để resize hoạt động mượt mà */
         }
+
+        /* Tối ưu độ rộng tối thiểu cho các cột để tránh bị co quá mức */
+        .table th {
+            white-space: nowrap; /* Tiêu đề không xuống dòng */
+            position: relative; /* Cần thiết để đặt resizer tuyệt đối */
+            overflow: hidden;
+            text-overflow: ellipsis;
+        }
+        
+        /* Định nghĩa lại min-width để dễ nhìn hơn */
+        .col-min-w { min-width: 130px; }
+        .col-min-w-sm { min-width: 100px; }
+        .col-min-w-lg { min-width: 200px; }
 
         .table th, .table td {
             white-space: normal !important;
@@ -146,6 +161,26 @@
 
         .table-striped tbody tr:nth-of-type(odd) td.sticky-col-right {
             background-color: #f9f9f9;
+        }
+
+        /* --- STYLES CHO THANH KÉO (RESIZER) --- */
+        .resizer {
+            position: absolute;
+            top: 0;
+            right: 0;
+            width: 5px;
+            cursor: col-resize;
+            user-select: none;
+            height: 100%;
+            z-index: 20;
+            background-color: transparent; /* Ẩn khi không hover */
+            border-right: 1px solid transparent;
+        }
+
+        .resizer:hover, .resizing {
+            background-color: #00a0e3; /* Hiện màu xanh khi hover hoặc đang kéo */
+            width: 4px;
+            cursor: col-resize;
         }
 
         .chi-ho-tabs .nav-link {
@@ -385,7 +420,7 @@
                             <small class="text-muted fst-italic">* Hỗ trợ file .xlsx, .xls. Dung lượng tối đa 5MB.</small>
                         </div>
                     </div>
-
+                    <!-- Kết quả kiểm tra file (Ẩn mặc định) -->
                     <div id="bulk-result-section" class="d-none-custom">
                         <div class="row">
                             <div class="col-md-3">
@@ -414,24 +449,28 @@
                             </div>
                         </div>
 
+                        <!-- Bảng xem trước -->
                         <div class="table-responsive-custom mt-2">
-                            <table class="table table-striped table-bordered" style="min-width: 1700px;">
+                            <!-- ID cho bảng để JS dễ thao tác -->
+                            <table class="table table-striped table-bordered resizable-table" id="tableBulk">
                                 <thead>
                                     <tr>
                                         <th class="text-center" style="width: 50px;">STT</th>
-                                        <th>STK chuyển</th>
-                                        <th>Ngân hàng chuyển</th>
-                                        <th>Số TK Merchant</th>
-                                        <th>Số TK Sub-Merchant</th>
-                                        <th>Ngân hàng nhận</th>
-                                        <th>Số tài khoản/Thẻ người nhận</th>
-                                        <th>Số tiền</th>
-                                        <th>Nội dung chuyển tiền</th>
-                                        <th class="text-center" style="width: 150px;">Kết quả chuyển tiền</th>
-                                        <th class="sticky-col-right text-center" style="width: 250px;">Ghi chú</th>
+                                        <th class="col-min-w">STK chuyển</th>
+                                        <th class="col-min-w">Ngân hàng chuyển</th>
+                                        <th class="col-min-w-sm">Số TK Merchant</th>
+                                        <th class="col-min-w-sm">Số TK Sub-Merchant</th>
+                                        <th class="col-min-w">Ngân hàng nhận</th>
+                                        <th class="col-min-w">Số tài khoản/Thẻ người nhận</th>
+                                        <th class="col-min-w">Số tiền</th>
+                                        <th class="col-min-w-lg">Nội dung chuyển tiền</th>
+                                        <th class="text-center col-min-w">Kết quả chuyển tiền</th>
+                                        <th class="sticky-col-right text-center col-min-w">Ghi chú</th>
                                     </tr>
                                 </thead>
-                                <tbody id="bulkPreviewBody"></tbody>
+                                <tbody id="bulkPreviewBody">
+                                    <!-- JS sẽ render dữ liệu vào đây -->
+                                </tbody>
                             </table>
                         </div>
 
@@ -481,20 +520,22 @@
                     </div>
 
                     <div class="table-responsive-custom">
-                        <table class="table table-striped table-bordered" style="min-width: 1700px;">
+                        <!-- ID cho bảng để JS dễ thao tác -->
+                        <table class="table table-striped table-bordered resizable-table" id="tableHistory">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 100px;">Mã GD</th>
-                                    <th style="width: 140px;">Thời gian</th>
-                                    <th>STK chuyển</th>
-                                    <th>Ngân hàng chuyển</th>
-                                    <th>Số TK Merchant</th>
-                                    <th>Số TK Sub-Merchant</th>
-                                    <th>Ngân hàng nhận</th>
-                                    <th>Số tài khoản/Thẻ người nhận</th>
-                                    <th>Số tiền</th>
-                                    <th>Nội dung chuyển tiền</th>
-                                    <th class="text-center" style="width: 150px;">Kết quả</th>
+                                    <!-- Đã sửa width từ 100px lên 130px và dùng min-width -->
+                                    <th class="text-center" style="min-width: 130px;">Mã GD</th>
+                                    <th class="col-min-w">Thời gian</th>
+                                    <th class="col-min-w">STK chuyển</th>
+                                    <th class="col-min-w">Ngân hàng chuyển</th>
+                                    <th class="col-min-w-sm">Số TK Merchant</th>
+                                    <th class="col-min-w-sm">Số TK Sub-Merchant</th>
+                                    <th class="col-min-w">Ngân hàng nhận</th>
+                                    <th class="col-min-w">Số tài khoản/Thẻ người nhận</th>
+                                    <th class="col-min-w">Số tiền</th>
+                                    <th class="col-min-w-lg">Nội dung chuyển tiền</th>
+                                    <th class="text-center col-min-w">Kết quả</th>
                                 </tr>
                             </thead>
                             <tbody id="historyBody"></tbody>
@@ -710,6 +751,9 @@
             document.getElementById('bulkTotalMoney').innerText = formatMoney(totalMoney);
             const btn = document.getElementById('btnProcessBulk');
             btn.disabled = valid === 0; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Chuyển tiền';
+            
+            // Re-init resize for the bulk table after populating
+            makeTableResizable('tableBulk');
         }
 
         function resetBulk() { document.getElementById('excelFile').value = ''; document.getElementById('bulk-result-section').classList.add('d-none-custom'); }
@@ -746,12 +790,68 @@
                 html += `<tr><td class="text-center fw-bold text-primary">${tx.id}</td><td class="small text-muted">${tx.time}</td><td>${tx.srcAcc}</td><td>${tx.srcBank}</td><td>${tx.merAcc}</td><td>${tx.subAcc}</td><td>${tx.destBank}</td><td>${tx.destAcc}</td><td class="text-end fw-bold">${formatMoney(tx.amount)}</td><td>${tx.content}</td><td class="text-center"><span class="badge bg-success">Thành công</span></td></tr>`;
             });
             tbody.innerHTML = html || '<tr><td colspan="11" class="text-center py-4 text-muted">Không có giao dịch phù hợp</td></tr>';
+            
+            // Re-init resize logic
+            makeTableResizable('tableHistory');
+        }
+
+        // --- RESIZABLE COLUMNS LOGIC ---
+        function makeTableResizable(tableId) {
+            const table = document.getElementById(tableId);
+            if (!table) return;
+            const headers = table.querySelectorAll('th');
+            
+            headers.forEach(header => {
+                // Skip if already has resizer
+                if (header.querySelector('.resizer')) return;
+
+                // Skip the sticky columns if needed, but usually fine
+                const resizer = document.createElement('div');
+                resizer.classList.add('resizer');
+                resizer.style.height = `${table.offsetHeight}px`; 
+                header.appendChild(resizer);
+                createResizableColumn(header, resizer);
+            });
+        }
+
+        function createResizableColumn(col, resizer) {
+            let x = 0;
+            let w = 0;
+
+            const mouseDownHandler = function(e) {
+                x = e.clientX;
+                const styles = window.getComputedStyle(col);
+                w = parseInt(styles.width, 10);
+                
+                document.addEventListener('mousemove', mouseMoveHandler);
+                document.addEventListener('mouseup', mouseUpHandler);
+                resizer.classList.add('resizing');
+            };
+
+            const mouseMoveHandler = function(e) {
+                const dx = e.clientX - x;
+                col.style.width = `${w + dx}px`;
+            };
+
+            const mouseUpHandler = function() {
+                document.removeEventListener('mousemove', mouseMoveHandler);
+                document.removeEventListener('mouseup', mouseUpHandler);
+                resizer.classList.remove('resizing');
+            };
+
+            resizer.addEventListener('mousedown', mouseDownHandler);
         }
 
         document.addEventListener('DOMContentLoaded', () => {
             renderHistory();
+            
+            // Make history table resizable on load
+            makeTableResizable('tableHistory');
+
             const tabEl = document.getElementById('history-transfer-tab');
-            tabEl.addEventListener('shown.bs.tab', function (event) { renderHistory(); })
+            tabEl.addEventListener('shown.bs.tab', function (event) { 
+                renderHistory();
+            });
         });
     </script>
 </body>
