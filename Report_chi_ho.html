@@ -138,7 +138,6 @@
             position: sticky;
             top: 0;
             z-index: 10;
-            /* CẬP NHẬT: Cho phép xuống dòng, hiển thị đầy đủ */
             white-space: normal; 
             overflow: visible;
             text-overflow: clip;
@@ -149,10 +148,9 @@
             padding: 8px;
             border-bottom: 1px solid #dee2e6;
             border-right: 1px solid #dee2e6;
-            /* CẬP NHẬT: Xuống dòng cho dữ liệu dài */
             white-space: normal !important;
             word-wrap: break-word;
-            word-break: break-word; /* Ngắt dòng cả những từ dài liền mạch */
+            word-break: break-word; 
         }
 
         /* Column Widths */
@@ -160,10 +158,9 @@
         .col-min-w-sm { min-width: 100px; }
         .col-min-w-lg { min-width: 200px; }
         
-        /* CẬP NHẬT: Class riêng cho cột Số tiền */
         .col-amount { 
             min-width: 150px; 
-            white-space: nowrap !important; /* Bắt buộc không xuống dòng */
+            white-space: nowrap !important; 
         }
 
         /* --- Resizer --- */
@@ -196,20 +193,19 @@
         }
         .btn-search:hover { background-color: #1a9cb7; color: white; }
 
-        /* --- Custom Toolbar Styles (Đã điều chỉnh) --- */
+        /* --- Custom Toolbar Styles --- */
         .btn-tool-custom {
-            width: 140px;     /* Độ rộng cố định bằng nhau cho cả 3 nút */
-            height: 32px;     /* Chiều cao nhỏ gọn */
+            width: 140px;     
+            height: 32px;     
             display: inline-flex;
             align-items: center;
-            justify-content: center; /* Căn giữa nội dung */
+            justify-content: center;
             font-size: 12px;
             font-weight: 600;
-            padding: 0 5px;   /* Padding nhỏ */
+            padding: 0 5px;   
             white-space: nowrap;
         }
         
-        /* Riêng cho select để canh giữa text */
         select.btn-tool-custom {
             text-align: center;
             padding-left: 5px;
@@ -274,6 +270,7 @@
 
         <div class="filter-section">
             <div class="row g-3">
+                <!-- Dòng 1: Thời gian -->
                 <div class="col-md-6">
                     <label class="fw-bold mb-1">Từ ngày</label>
                     <input type="date" id="searchFromDate" class="form-control">
@@ -282,22 +279,54 @@
                     <label class="fw-bold mb-1">Đến ngày</label>
                     <input type="date" id="searchToDate" class="form-control">
                 </div>
+
+                <!-- Dòng 2: Cổng kết nối & Ngân hàng nhận -->
                 <div class="col-md-6">
-                    <label class="fw-bold mb-1">STK Chuyển</label>
-                    <select id="searchSrcAcc" class="form-select">
-                        <option value="">Tất cả tài khoản nguồn</option>
-                        <option value="020094055033">0200...5033 - Sacombank</option>
-                        <option value="1207380178">1207...0178 - BIDV</option>
-                        <option value="0000783364175">0000...4175 - MB</option>
+                    <label class="fw-bold mb-1">Cổng kết nối</label>
+                    <select id="searchGateway" class="form-select">
+                        <option value="">Tất cả</option>
+                        <option value="STB">Sacombank (STB)</option>
+                        <option value="BIDV">BIDV</option>
+                        <option value="MB">MB Bank</option>
+                        <option value="VCB">Vietcombank (VCB)</option>
+                        <option value="TCB">Techcombank (TCB)</option>
                     </select>
                 </div>
                 <div class="col-md-6">
+                    <label class="fw-bold mb-1">Ngân hàng nhận</label>
+                    <select id="searchDestBank" class="form-select">
+                        <option value="">Tất cả</option>
+                        <option value="Vietcombank">Vietcombank</option>
+                        <option value="Techcombank">Techcombank</option>
+                        <option value="MB">MB Bank</option>
+                        <option value="ACB">ACB</option>
+                        <option value="VPBank">VPBank</option>
+                        <option value="Vietinbank">Vietinbank</option>
+                        <option value="TPBank">TPBank</option>
+                        <option value="VIB">VIB</option>
+                        <option value="HDBank">HDBank</option>
+                        <option value="SHB">SHB</option>
+                    </select>
+                </div>
+
+                <!-- Dòng 3: Merchant & Sub-Merchant -->
+                <div class="col-md-6">
                     <label class="fw-bold mb-1">TK Merchant</label>
-                    <input type="text" id="searchMerAcc" class="form-control" placeholder="Nhập mã Merchant (VD: M123456)">
+                    <input type="text" id="searchMerAcc" class="form-control" placeholder="Nhập mã Merchant (VD: NN_Voltality_)">
                 </div>
                 <div class="col-md-6">
                     <label class="fw-bold mb-1">TK Sub-Merchant</label>
                     <input type="text" id="searchSubAcc" class="form-control" placeholder="Nhập mã Sub-Merchant">
+                </div>
+
+                <!-- Dòng 4: Mã đối soát & TK NH người nhận -->
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">Mã đối soát</label>
+                    <input type="text" id="searchReconcileCode" class="form-control" placeholder="Nhập mã đối soát...">
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">TK NH người nhận</label>
+                    <input type="text" id="searchDestAcc" class="form-control" placeholder="Nhập số tài khoản người nhận...">
                 </div>
                 
                 <div class="col-12 text-center mt-3 pt-2 border-top">
@@ -308,7 +337,7 @@
             </div>
         </div>
 
-        <!-- Toolbar Chức Năng Mới (Căn trái, nút nhỏ bằng nhau) -->
+        <!-- Toolbar Chức Năng Mới -->
         <div class="d-flex align-items-center mb-2 gap-2 justify-content-start">
             <!-- 1. Select Hiển thị dòng -->
             <select class="form-select form-select-sm btn-tool-custom border-secondary" id="pageSizeSelect" onchange="renderHistory()" title="Số dòng hiển thị">
@@ -339,17 +368,20 @@
                 <thead>
                     <tr>
                         <th class="text-center" style="min-width: 130px;">Mã GD</th>
+                        <th class="text-center" style="min-width: 130px;">Mã đơn hàng VTC</th>
                         <th class="col-min-w">Thời gian</th>
                         <th class="col-min-w">STK chuyển</th>
-                        <th class="col-min-w">Ngân hàng chuyển</th>
+                        <!-- Cập nhật tiêu đề cột Ngân hàng chuyển thành Cổng kết nối -->
+                        <th class="col-min-w">Cổng kết nối</th>
                         <th class="col-min-w-sm">Số TK Merchant</th>
                         <th class="col-min-w-lg">Tên Merchant</th>
                         <th class="col-min-w-sm">Số TK Sub-Merchant</th>
                         <th class="col-min-w-lg">Tên Sub-Merchant</th>
                         <th class="col-min-w">Ngân hàng nhận</th>
                         <th class="col-min-w">Số tài khoản/Thẻ người nhận</th>
-                        <!-- CẬP NHẬT: Dùng class col-amount -->
+                        <th class="col-min-w-lg">Tên chủ Thẻ NH</th>
                         <th class="col-amount text-end">Số tiền</th>
+                        <th class="col-min-w-lg">Mã đối soát</th>
                         <th class="col-min-w-lg">Nội dung chuyển tiền</th>
                     </tr>
                 </thead>
@@ -384,43 +416,97 @@
         // --- Utilities ---
         const formatMoney = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 
-        // --- Mock Data ---
+        // --- Mock Data (CẬP NHẬT 10 DÒNG THEO YÊU CẦU & srcBank là viết tắt) ---
         let transactionHistory = [
             { 
-                id: 'GD92831', time: '2023-10-25 10:30', 
-                srcAcc: '020094055033', srcBank: 'Sacombank',
-                merAcc: 'M123456', merName: 'CTY CP TM DV ABC',
-                subAcc: 'SUB001', subName: 'Chi nhánh Hà Nội',
-                destBank: 'Vietcombank', destAcc: '0011002345678',
-                amount: 500000, content: 'Thanh toan don hang #001',
-                status: 'SUCCESS'
+                id: '1000000727', vtcOrderId: '1100011827', time: '2023-10-26 08:10', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G001', subName: 'Đại lý Trạm sạc Voltality G001',
+                destBank: 'Vietcombank', destAcc: '0341000123456', destName: 'NGUYEN VAN A',
+                amount: 150000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680001"}',
+                content: 'Thanh toan phi sac xe dien', status: 'SUCCESS'
             },
             { 
-                id: 'GD92832', time: '2023-10-25 11:15', 
-                srcAcc: '020094055033', srcBank: 'Sacombank',
-                merAcc: 'M123456', merName: 'CTY CP TM DV ABC',
-                subAcc: 'Nhiều Sub', subName: 'Tổng hợp nhiều chi nhánh',
-                destBank: 'Nhiều NH', destAcc: 'Danh sách (50)',
-                amount: 25000000, content: 'Thanh toan luong T10 (Theo lô)',
-                status: 'PENDING'
-            },
-            { 
-                id: 'GD92834', time: '2023-10-24 08:30', 
-                srcAcc: '0000783364175', srcBank: 'MB',
-                merAcc: 'M123456', merName: 'CTY CP TM DV ABC',
-                subAcc: 'SUB003', subName: 'Chi nhánh Đà Nẵng',
-                destBank: 'Techcombank', destAcc: '190333444555',
-                amount: 150000, content: 'Chi phi van hanh',
-                status: 'SUCCESS'
-            },
-            { 
-                id: 'GD92835', time: '2023-10-23 14:20', 
+                id: '1000000728', vtcOrderId: '1100011828', time: '2023-10-26 08:25', 
                 srcAcc: '1207380178', srcBank: 'BIDV',
-                merAcc: 'M999999', merName: 'CTY TNHH XYZ TOAN CAU',
-                subAcc: 'SUB001', subName: 'Kho vận Miền Nam',
-                destBank: 'ACB', destAcc: '888999111',
-                amount: 3000000, content: 'Tam ung cong tac phi',
-                status: 'SUCCESS'
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G002', subName: 'Đại lý Trạm sạc Voltality G002',
+                destBank: 'Techcombank', destAcc: '1903456789012', destName: 'TRAN THI B',
+                amount: 250000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680002"}',
+                content: 'Thanh toan dich vu sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000729', vtcOrderId: '1100011829', time: '2023-10-26 09:00', 
+                srcAcc: '0000783364175', srcBank: 'MB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G003', subName: 'Đại lý Trạm sạc Voltality G003',
+                destBank: 'MB', destAcc: '0987654321', destName: 'LE VAN C',
+                amount: 500000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680003"}',
+                content: 'Nap tien tram sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000730', vtcOrderId: '1100011830', time: '2023-10-26 09:45', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G004', subName: 'Đại lý Trạm sạc Voltality G004',
+                destBank: 'ACB', destAcc: '888111222', destName: 'PHAM THI D',
+                amount: 120000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680004"}',
+                content: 'Thanh toan sac nhanh', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000731', vtcOrderId: '1100011831', time: '2023-10-26 10:15', 
+                srcAcc: '1207380178', srcBank: 'BIDV',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G005', subName: 'Đại lý Trạm sạc Voltality G005',
+                destBank: 'VPBank', destAcc: '123456789', destName: 'HOANG VAN E',
+                amount: 80000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680005"}',
+                content: 'Phi sac xe may dien', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000732', vtcOrderId: '1100011832', time: '2023-10-26 11:00', 
+                srcAcc: '0000783364175', srcBank: 'MB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G006', subName: 'Đại lý Trạm sạc Voltality G006',
+                destBank: 'Vietinbank', destAcc: '101010202020', destName: 'VU THI F',
+                amount: 300000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680006"}',
+                content: 'Thanh toan combo sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000733', vtcOrderId: '1100011833', time: '2023-10-26 13:30', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G007', subName: 'Đại lý Trạm sạc Voltality G007',
+                destBank: 'TPBank', destAcc: '000111222333', destName: 'DANG VAN G',
+                amount: 450000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680007"}',
+                content: 'Thanh toan cuoc sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000734', vtcOrderId: '1100011834', time: '2023-10-26 14:15', 
+                srcAcc: '1207380178', srcBank: 'BIDV',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G008', subName: 'Đại lý Trạm sạc Voltality G008',
+                destBank: 'VIB', destAcc: '666777888', destName: 'BUI THI H',
+                amount: 60000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680008"}',
+                content: 'Sac xe dien mini', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000735', vtcOrderId: '1100011835', time: '2023-10-26 15:45', 
+                srcAcc: '0000783364175', srcBank: 'MB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G009', subName: 'Đại lý Trạm sạc Voltality G009',
+                destBank: 'HDBank', destAcc: '0888999000', destName: 'NGO VAN I',
+                amount: 110000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680009"}',
+                content: 'Phi su dung tram sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000736', vtcOrderId: '1100011836', time: '2023-10-26 16:20', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G010', subName: 'Đại lý Trạm sạc Voltality G010',
+                destBank: 'SHB', destAcc: '100200300', destName: 'DO THI K',
+                amount: 90000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680010"}',
+                content: 'Thanh toan', status: 'SUCCESS'
             }
         ];
 
@@ -494,23 +580,25 @@
             const tfoot = document.getElementById('historyFoot');
             if (!tfoot) return;
 
-            // Cấu trúc bảng: 
-            // 0..9: Các cột trước "Số tiền"
-            // 10: Cột "Số tiền"
-            // 11: Cột "Nội dung" (Sau số tiền)
+            // Cấu trúc bảng MỚI (15 cột): 
+            // 0: Mã GD
+            // 1: Mã đơn hàng VTC (MỚI)
+            // 2..11: Các cột trước "Số tiền" (10 cột)
+            // 12: Cột "Số tiền"
+            // 13..14: Các cột sau số tiền (Mã đối soát, Nội dung)
             
-            // 1. Tính số cột hiển thị TRƯỚC cột Tiền (Index 10)
+            // 1. Tính số cột hiển thị TRƯỚC cột Tiền (Index 12)
             let spanBefore = 0;
-            for(let i = 0; i < 10; i++) {
+            for(let i = 0; i < 12; i++) {
                 if (!hiddenColumns.has(i)) spanBefore++;
             }
 
-            // 2. Kiểm tra cột Tiền có hiển thị không
-            const isAmountVisible = !hiddenColumns.has(10);
+            // 2. Kiểm tra cột Tiền có hiển thị không (Index 12)
+            const isAmountVisible = !hiddenColumns.has(12);
 
-            // 3. Tính số cột hiển thị SAU cột Tiền
+            // 3. Tính số cột hiển thị SAU cột Tiền (Index 13, 14)
             let spanAfter = 0;
-            for(let i = 11; i < 12; i++) {
+            for(let i = 13; i < 15; i++) {
                 if (!hiddenColumns.has(i)) spanAfter++;
             }
 
@@ -523,13 +611,11 @@
 
             // Render ô Giá trị Tiền
             if (isAmountVisible) {
-                // Nếu không có cột nào phía trước, thêm nhãn vào ô tiền luôn cho rõ
                 const prefix = (spanBefore === 0) ? "Tổng: " : "";
-                // CẬP NHẬT: Thêm class col-amount vào ô tổng tiền
                 html += `<td class="text-end fw-bold text-danger fs-6 align-middle col-amount">${prefix}${formatMoney(currentTotalAmount)}</td>`;
             }
 
-            // Render ô Phía sau (Hòa các cột sau nếu có)
+            // Render ô Phía sau
             if (spanAfter > 0) {
                 html += `<td colspan="${spanAfter}"></td>`;
             }
@@ -544,9 +630,13 @@
             let html = '';
             
             // Get Filters
-            const srcAccFilter = document.getElementById('searchSrcAcc')?.value || '';
+            // Cổng kết nối (was STK Chuyển) - match theo tên ngân hàng srcBank
+            const gatewayFilter = document.getElementById('searchGateway')?.value || '';
+            const destBankFilter = document.getElementById('searchDestBank')?.value || '';
             const merAccFilter = document.getElementById('searchMerAcc')?.value.trim().toLowerCase() || '';
             const subAccFilter = document.getElementById('searchSubAcc')?.value.trim().toLowerCase() || '';
+            const reconcileFilter = document.getElementById('searchReconcileCode')?.value.trim().toLowerCase() || '';
+            const destAccFilter = document.getElementById('searchDestAcc')?.value.trim().toLowerCase() || '';
             
             // Get Page Size
             const pageSize = parseInt(document.getElementById('pageSizeSelect').value);
@@ -554,9 +644,25 @@
             // Filter Data
             const filteredData = transactionHistory.filter(tx => {
                 if (tx.status !== 'SUCCESS') return false;
-                if (srcAccFilter && !tx.srcAcc.includes(srcAccFilter)) return false;
+                
+                // Filter Cổng kết nối (check srcBank)
+                if (gatewayFilter && tx.srcBank !== gatewayFilter) return false;
+
+                // Filter Ngân hàng nhận (check destBank)
+                if (destBankFilter && tx.destBank !== destBankFilter) return false;
+
+                // Filter Merchant
                 if (merAccFilter && !tx.merAcc.toLowerCase().includes(merAccFilter)) return false;
+
+                // Filter Sub-Merchant
                 if (subAccFilter && !tx.subAcc.toLowerCase().includes(subAccFilter)) return false;
+
+                // Filter Mã đối soát (check trong chuỗi JSON)
+                if (reconcileFilter && !tx.reconcileCode.toLowerCase().includes(reconcileFilter)) return false;
+
+                // Filter TK NH người nhận
+                if (destAccFilter && !tx.destAcc.toLowerCase().includes(destAccFilter)) return false;
+
                 return true;
             });
 
@@ -574,17 +680,19 @@
                 html += `
                     <tr>
                         <td class="text-center fw-bold text-primary">${tx.id}</td>
+                        <td class="text-center fw-bold text-secondary">${tx.vtcOrderId}</td>
                         <td class="small text-muted">${tx.time}</td>
                         <td>${tx.srcAcc}</td>
-                        <td>${tx.srcBank}</td>
+                        <td class="fw-bold text-success">${tx.srcBank}</td>
                         <td class="fw-bold text-secondary">${tx.merAcc}</td>
                         <td>${tx.merName}</td>
                         <td class="fw-bold text-secondary">${tx.subAcc}</td>
                         <td>${tx.subName}</td>
                         <td>${tx.destBank}</td>
                         <td>${tx.destAcc}</td>
-                        <!-- CẬP NHẬT: Thêm class col-amount vào ô dữ liệu tiền -->
+                        <td class="fw-bold text-dark">${tx.destName}</td>
                         <td class="text-end fw-bold col-amount">${formatMoney(tx.amount)}</td>
+                        <td class="small text-muted font-monospace text-break" style="font-size: 11px;">${tx.reconcileCode}</td>
                         <td>${tx.content}</td>
                     </tr>
                 `;
@@ -593,7 +701,7 @@
             tbody.innerHTML = html;
             
             if(html === '') {
-                tbody.innerHTML = '<tr><td colspan="12" class="text-center py-4 text-muted"><i class="fa-solid fa-inbox fa-2x mb-2 d-block"></i>Không tìm thấy dữ liệu phù hợp</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="15" class="text-center py-4 text-muted"><i class="fa-solid fa-inbox fa-2x mb-2 d-block"></i>Không tìm thấy dữ liệu phù hợp</td></tr>';
             }
 
             // Re-apply Resize & Visibility & Update Footer
