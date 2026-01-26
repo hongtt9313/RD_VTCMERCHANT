@@ -3,7 +3,7 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Module Chi Hộ - VTC Pay</title>
+    <title>Báo cáo chuyển tiền chi hộ - VTC Pay</title>
     <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
     <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
     <!-- Google Fonts: Open Sans -->
@@ -21,11 +21,11 @@
 
         body {
             font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
-            background-color: #fff;
+            background-color: #f5f7fa;
             font-size: 13px;
         }
 
-        /* --- Common Styles (Giữ nguyên từ index.html để đồng bộ giao diện) --- */
+        /* --- Header Styles --- */
         .top-nav {
             background-color: #fff;
             border-bottom: 1px solid #ddd;
@@ -33,6 +33,7 @@
             color: #333;
             position: relative;
             z-index: 1000;
+            box-shadow: 0 1px 3px rgba(0,0,0,0.05);
         }
 
         .logo-text {
@@ -75,24 +76,43 @@
             white-space: nowrap;
         }
         
+        /* --- Content Layout --- */
+        .report-container {
+            padding: 20px;
+            background-color: #fff;
+            margin: 20px;
+            border-radius: 5px;
+            box-shadow: 0 0 10px rgba(0,0,0,0.05);
+        }
+
         .page-title-bar {
             background-color: #337ab7;
             color: white;
-            padding: 10px 15px;
+            padding: 12px 15px;
             font-weight: bold;
             text-transform: uppercase;
-            margin-bottom: 20px;
-            border-left: 5px solid #1b5480;
-            font-size: 14px;
+            font-size: 15px;
+            border-radius: 5px 5px 0 0;
+            display: flex;
+            align-items: center;
         }
 
+        .filter-section {
+            padding: 20px;
+            margin-bottom: 20px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            border-radius: 0 0 5px 5px;
+        }
+
+        /* --- Table Styles --- */
         .table-responsive-custom {
-            padding: 0 15px;
             margin-bottom: 20px;
             width: 100%;
             overflow-x: auto;
             -webkit-overflow-scrolling: touch;
             position: relative;
+            border: 1px solid #dee2e6;
         }
 
         .table {
@@ -102,68 +122,48 @@
             border-spacing: 0;
             white-space: normal; 
             word-wrap: break-word;
-            width: 100%; /* Đảm bảo bảng co giãn theo khung */
-            table-layout: fixed; /* Quan trọng để resize hoạt động mượt mà */
+            width: 100%;
+            table-layout: fixed;
         }
 
-        /* Tối ưu độ rộng tối thiểu cho các cột để tránh bị co quá mức */
         .table th {
-            white-space: nowrap; /* Tiêu đề không xuống dòng */
-            position: relative; /* Cần thiết để đặt resizer tuyệt đối */
-            overflow: hidden;
-            text-overflow: ellipsis;
-        }
-        
-        /* Định nghĩa lại min-width để dễ nhìn hơn */
-        .col-min-w { min-width: 130px; }
-        .col-min-w-sm { min-width: 100px; }
-        .col-min-w-lg { min-width: 200px; }
-
-        .table th, .table td {
-            white-space: normal !important;
-            word-break: break-word;
-            vertical-align: middle;
-            padding: 8px;
-            border-bottom: 1px solid #dee2e6;
-        }
-
-        .table thead th {
             background-color: #dff0d8;
             vertical-align: middle;
             text-align: center;
             border-bottom: 2px solid #aeccae;
-            border-top: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
             color: #333;
             font-weight: bold;
             padding: 10px 8px;
             position: sticky;
             top: 0;
             z-index: 10;
+            white-space: normal; 
+            overflow: visible;
+            text-overflow: clip;
         }
 
-        .sticky-col-right {
-            position: sticky;
-            right: 0;
-            z-index: 5;
-            border-left: 2px solid #dee2e6;
-            box-shadow: -4px 0 8px rgba(0,0,0,0.08);
-            clip-path: inset(0px -15px 0px 0px);
+        .table td {
+            vertical-align: middle;
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+            border-right: 1px solid #dee2e6;
+            white-space: normal !important;
+            word-wrap: break-word;
+            word-break: break-word; 
         }
+
+        /* Column Widths */
+        .col-min-w { min-width: 130px; }
+        .col-min-w-sm { min-width: 100px; }
+        .col-min-w-lg { min-width: 200px; }
         
-        thead th.sticky-col-right {
-            background-color: #dff0d8 !important;
-            z-index: 15;
-        }
-        
-        tbody td.sticky-col-right {
-            background-color: #fff;
+        .col-amount { 
+            min-width: 150px; 
+            white-space: nowrap !important; 
         }
 
-        .table-striped tbody tr:nth-of-type(odd) td.sticky-col-right {
-            background-color: #f9f9f9;
-        }
-
-        /* --- STYLES CHO THANH KÉO (RESIZER) --- */
+        /* --- Resizer --- */
         .resizer {
             position: absolute;
             top: 0;
@@ -173,78 +173,65 @@
             user-select: none;
             height: 100%;
             z-index: 20;
-            background-color: transparent; /* Ẩn khi không hover */
-            border-right: 1px solid transparent;
+            background-color: transparent;
         }
 
         .resizer:hover, .resizing {
-            background-color: #00a0e3; /* Hiện màu xanh khi hover hoặc đang kéo */
+            background-color: #00a0e3;
             width: 4px;
-            cursor: col-resize;
         }
 
-        .chi-ho-tabs .nav-link {
-            color: #555;
-            font-weight: 600;
-            border-radius: 0;
-            margin-bottom: -1px;
-        }
-        .chi-ho-tabs .nav-link.active {
-            color: var(--vtc-blue);
-            border-color: #dee2e6 #dee2e6 #fff;
-            border-top: 3px solid var(--vtc-blue);
-        }
-        
-        .money-in-words {
-            font-style: italic;
-            color: #666;
-            margin-top: 5px;
-            font-size: 12px;
+        /* --- Components --- */
+        .form-control, .form-select {
+            font-size: 13px;
+            border-radius: 3px;
+            padding: 6px 10px;
         }
 
-        .summary-card {
-            background: #fff;
-            border: 1px solid #ddd;
-            border-radius: 4px;
-            padding: 15px;
-            margin-bottom: 15px;
-            border-left: 4px solid var(--vtc-blue);
-        }
-        
-        .summary-value {
-            font-size: 18px;
-            font-weight: bold;
-            color: var(--vtc-blue);
-        }
-
-        .recipient-name-display {
-            background-color: #e8f4fd;
-            border: 1px solid #b6d4fe;
-            color: #005691;
-            padding: 8px 12px;
-            border-radius: 4px;
-            font-weight: bold;
-            margin-top: 5px;
-            display: none;
-        }
-        
-        .is-valid-check {
-            border-color: #198754;
-            padding-right: calc(1.5em + .75rem);
-            background-image: url("data:image/svg+xml,%3csvg xmlns='http://www.w3.org/2000/svg' viewBox='0 0 8 8'%3e%3cpath fill='%23198754' d='M2.3 6.73L.6 4.53c-.4-1.04.46-1.4 1.1-.8l1.1 1.4 3.4-3.8c.6-.63 1.6-.27 1.2.7l-4 4.6c-.43.5-.8.4-1.1.1z'/%3e%3c/svg%3e");
-            background-repeat: no-repeat;
-            background-position: right calc(.375em + .1875rem) center;
-            background-size: calc(.75em + .375rem) calc(.75em + .375rem);
-        }
-
-        .d-none-custom { display: none !important; }
-        .bg-readonly { background-color: #f8f9fa; }
-        
-        /* Button Styles */
         .btn-search {
-            background-color: #26b6d4; color: white; border: none; padding: 8px 30px; border-radius: 3px; font-weight: bold; transition: background 0.2s;
+            background-color: #26b6d4; color: white; border: none; padding: 8px 40px; border-radius: 3px; font-weight: bold; transition: background 0.2s;
         }
         .btn-search:hover { background-color: #1a9cb7; color: white; }
+
+        /* --- Custom Toolbar Styles --- */
+        .btn-tool-custom {
+            width: 140px;     
+            height: 32px;     
+            display: inline-flex;
+            align-items: center;
+            justify-content: center;
+            font-size: 12px;
+            font-weight: 600;
+            padding: 0 5px;   
+            white-space: nowrap;
+        }
+        
+        select.btn-tool-custom {
+            text-align: center;
+            padding-left: 5px;
+            cursor: pointer;
+        }
+
+        .footer-pagination {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border: 1px solid #dee2e6;
+            font-size: 12px;
+            border-radius: 5px;
+        }
+        .pagination { margin-bottom: 0; }
+        .page-link { color: #337ab7; }
+        .page-item.active .page-link { background-color: #337ab7; border-color: #337ab7; }
+        .d-none-custom { display: none !important; }
+
+        /* Dropdown check list */
+        .dropdown-menu-check-list {
+            min-width: 200px;
+            padding: 10px;
+        }
+        .dropdown-menu-check-list .form-check {
+            margin-bottom: 5px;
+        }
     </style>
 </head>
 <body>
@@ -256,306 +243,169 @@
                 <i class="fa-solid fa-wifi fa-rotate-90 me-1" style="font-size: 18px;"></i>VTC<span style="color: #00a0e3">Pay</span>
             </a>
             
-            <!-- Navigation Menu -->
             <div class="ms-md-3 nav-menu-container d-flex align-items-center">
-                <!-- Nút Quay về trang chính -->
                 <a href="index.html" class="nav-btn me-1 text-decoration-none">
                     <i class="fa-solid fa-arrow-left me-2"></i> 
                     Về trang chủ
                 </a>
-                
-                <!-- MODULE: CHI HỘ (Active) -->
-                <button id="nav-chiho" class="nav-btn active-tab me-1">
-                    <i class="fa-solid fa-paper-plane me-2"></i> 
-                    Chi hộ
+                <button class="nav-btn active-tab me-1">
+                    <i class="fa-solid fa-file-invoice-dollar me-2"></i> 
+                    Báo cáo chi hộ
                 </button>
             </div>
         </div>
         
-        <!-- User Info -->
         <div class="d-flex align-items-center user-info-container ms-3">
             <span class="user-info me-2"><i class="fa-solid fa-circle-user me-1"></i> hongtt</span>
             <a href="#" class="text-danger"><i class="fa-solid fa-right-from-bracket"></i></a>
         </div>
     </div>
 
-    <!-- MODULE CHI HỘ CONTENT -->
-    <div id="module-chiho" class="module-section">
-        <div class="page-title-bar">
-            <i class="fa-solid fa-paper-plane me-2"></i> Quản lý Chi hộ / Chuyển tiền
+    <!-- MAIN CONTENT -->
+    <div class="report-container">
+        
+        <div class="page-title-bar justify-content-between">
+            <span><i class="fa-solid fa-clock-rotate-left me-2"></i> Báo cáo chuyển tiền chi hộ</span>
         </div>
 
-        <div class="container-fluid">
-            <!-- Sub-Tabs -->
-            <ul class="nav nav-tabs chi-ho-tabs mb-3" id="chiHoTab" role="tablist">
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link active" id="single-transfer-tab" data-bs-toggle="tab" data-bs-target="#single-transfer" type="button" role="tab">
-                        <i class="fa-solid fa-user me-2"></i>Chuyển tiền đơn
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="bulk-transfer-tab" data-bs-toggle="tab" data-bs-target="#bulk-transfer" type="button" role="tab">
-                        <i class="fa-solid fa-file-excel me-2"></i>Chuyển tiền theo danh sách
-                    </button>
-                </li>
-                <li class="nav-item" role="presentation">
-                    <button class="nav-link" id="history-transfer-tab" data-bs-toggle="tab" data-bs-target="#history-transfer" type="button" role="tab">
-                        <i class="fa-solid fa-clock-rotate-left me-2"></i>Lịch sử giao dịch
-                    </button>
-                </li>
-            </ul>
+        <div class="filter-section">
+            <div class="row g-3">
+                <!-- Dòng 1: Thời gian -->
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">Từ ngày</label>
+                    <input type="date" id="searchFromDate" class="form-control">
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">Đến ngày</label>
+                    <input type="date" id="searchToDate" class="form-control">
+                </div>
 
-            <div class="tab-content" id="chiHoTabContent">
+                <!-- Dòng 2: Cổng kết nối & Ngân hàng nhận -->
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">Cổng kết nối</label>
+                    <select id="searchGateway" class="form-select">
+                        <option value="">Tất cả</option>
+                        <option value="STB">Sacombank (STB)</option>
+                        <option value="BIDV">BIDV</option>
+                        <option value="MB">MB Bank</option>
+                        <option value="VCB">Vietcombank (VCB)</option>
+                        <option value="TCB">Techcombank (TCB)</option>
+                    </select>
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">Ngân hàng nhận</label>
+                    <select id="searchDestBank" class="form-select">
+                        <option value="">Tất cả</option>
+                        <option value="Vietcombank">Vietcombank</option>
+                        <option value="Techcombank">Techcombank</option>
+                        <option value="MB">MB Bank</option>
+                        <option value="ACB">ACB</option>
+                        <option value="VPBank">VPBank</option>
+                        <option value="Vietinbank">Vietinbank</option>
+                        <option value="TPBank">TPBank</option>
+                        <option value="VIB">VIB</option>
+                        <option value="HDBank">HDBank</option>
+                        <option value="SHB">SHB</option>
+                    </select>
+                </div>
+
+                <!-- Dòng 3: Merchant & Sub-Merchant -->
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">TK Merchant</label>
+                    <input type="text" id="searchMerAcc" class="form-control" placeholder="Nhập mã Merchant (VD: NN_Voltality_)">
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">TK Sub-Merchant</label>
+                    <input type="text" id="searchSubAcc" class="form-control" placeholder="Nhập mã Sub-Merchant">
+                </div>
+
+                <!-- Dòng 4: Mã đối soát & TK NH người nhận -->
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">Mã đối soát</label>
+                    <input type="text" id="searchReconcileCode" class="form-control" placeholder="Nhập mã đối soát...">
+                </div>
+                <div class="col-md-6">
+                    <label class="fw-bold mb-1">TK NH người nhận</label>
+                    <input type="text" id="searchDestAcc" class="form-control" placeholder="Nhập số tài khoản người nhận...">
+                </div>
                 
-                <!-- 1. CHUYỂN TIỀN ĐƠN -->
-                <div class="tab-pane fade show active" id="single-transfer" role="tabpanel">
-                    <div class="card shadow-sm border-0">
-                        <div class="card-body">
-                            <h5 class="card-title text-primary mb-4 border-bottom pb-2">Thông tin giao dịch</h5>
-                            <div id="singleTransferAlert" class="alert alert-danger d-none-custom mb-3" role="alert">
-                                <i class="fa-solid fa-circle-exclamation me-2"></i> <span id="singleTransferAlertMsg">Giao dịch không thành công!</span>
-                            </div>
-
-                            <form id="formSingleTransfer" onsubmit="handleSingleTransfer(event)">
-                                <div class="row g-3">
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Tài khoản nguồn <span class="text-danger">*</span></label>
-                                        <select class="form-select bg-light text-primary fw-bold" required>
-                                            <option value="020094055033">0200***5033 - Ngân hàng TMCP Sài Gòn thương tín (Sacombank)</option>
-                                            <option value="1207380178">1207***0178 - Ngân hàng TMCP Đầu tư và Phát triển Việt Nam (BIDV)</option>
-                                            <option value="0000783364175">000078***4175 - Ngân hàng TMCP Quân đội (MB)</option>
-                                        </select>
-                                    </div>
-                                    <div class="col-md-6"></div>
-
-                                    <div class="col-12"><hr class="my-2 text-muted"></div>
-
-                                    <div class="col-12 mb-2">
-                                        <h6 class="fw-bold text-uppercase text-secondary"><i class="fa-solid fa-user-tag me-2"></i>Đối tượng nhận tiền</h6>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Số Tài khoản Merchant <span class="text-danger">*</span></label>
-                                        <div class="input-group">
-                                            <input type="text" id="merchantAccount" class="form-control" placeholder="Nhập số TK Merchant (VD: M123456)" required oninput="resetMerchantCheck()">
-                                            <button class="btn btn-primary" type="button" id="btnCheckMerchant" onclick="checkMerchant()" title="Tìm kiếm thông tin">
-                                                <i class="fa-solid fa-magnifying-glass"></i>
-                                            </button>
-                                        </div>
-                                        <input type="hidden" id="isValidMerchant" value="false">
-                                    </div>
-
-                                    <div id="merchantResultContainer" class="col-12 d-none-custom">
-                                        <div class="row g-3">
-                                            <div class="col-12">
-                                                <div class="recipient-name-display d-block">
-                                                    <i class="fa-solid fa-check-circle me-2"></i>Merchant: <span id="merchantNameDisplay" class="fw-bold text-uppercase"></span>
-                                                </div>
-                                            </div>
-                                            <div class="col-md-6">
-                                                <label class="form-label fw-bold">TK Sub-Merchant <span class="text-danger">*</span></label>
-                                                <select id="subMerchantSelect" class="form-select" onchange="loadBankInfo()">
-                                                    <option value="">-- Chọn Sub-Merchant --</option>
-                                                </select>
-                                            </div>
-                                            <div class="col-md-6" id="bankInfoArea">
-                                                <div class="row g-2">
-                                                    <div class="col-12">
-                                                        <label class="form-label fw-bold text-muted" style="font-size:12px">Ngân hàng thụ hưởng</label>
-                                                        <input type="text" id="bankNameDisplay" class="form-control bg-readonly" readonly placeholder="Thông tin ngân hàng...">
-                                                    </div>
-                                                    <div class="col-12">
-                                                        <label class="form-label fw-bold text-muted" style="font-size:12px">Số tài khoản/Thẻ</label>
-                                                        <input type="text" id="bankAccountDisplay" class="form-control bg-readonly" readonly placeholder="Số tài khoản...">
-                                                    </div>
-                                                </div>
-                                            </div>
-                                        </div>
-                                    </div>
-
-                                    <div class="col-12"><hr class="my-2 text-muted"></div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Số tiền (VNĐ) <span class="text-danger">*</span></label>
-                                        <input type="text" id="singleAmount" class="form-control" placeholder="Nhập số tiền" required oninput="formatCurrencyInput(this)">
-                                        <div id="amountInWords" class="money-in-words"></div>
-                                    </div>
-
-                                    <div class="col-md-6">
-                                        <label class="form-label fw-bold">Nội dung chuyển tiền <span class="text-danger">*</span></label>
-                                        <select class="form-select mb-2" id="transferReason" onchange="checkCustomReason()" required>
-                                            <option value="">-- Chọn lý do --</option>
-                                            <option value="Thanh toán tiền hàng">Thanh toán tiền hàng</option>
-                                            <option value="Thanh toán phí dịch vụ">Thanh toán phí dịch vụ</option>
-                                            <option value="Hoàn tiền giao dịch">Hoàn tiền giao dịch</option>
-                                            <option value="Chi trả lương">Chi trả lương</option>
-                                            <option value="OTHER">Khác (Nhập nội dung)</option>
-                                        </select>
-                                        <textarea id="customReasonArea" class="form-control d-none-custom" rows="2" placeholder="Nhập nội dung khác..."></textarea>
-                                    </div>
-
-                                    <div class="col-12 text-end mt-4">
-                                        <button type="reset" class="btn btn-secondary me-2" onclick="resetMerchantCheck()"><i class="fa-solid fa-rotate-left"></i> Nhập lại</button>
-                                        <button type="submit" class="btn btn-primary px-4"><i class="fa-solid fa-paper-plane"></i> Chuyển tiền</button>
-                                    </div>
-                                </div>
-                            </form>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 2. CHUYỂN TIỀN THEO DANH SÁCH -->
-                <div class="tab-pane fade" id="bulk-transfer" role="tabpanel">
-                    <div class="card shadow-sm border-0 mb-3">
-                        <div class="card-body">
-                            <div class="d-flex justify-content-between align-items-center mb-3">
-                                <h5 class="card-title text-primary mb-0">Upload danh sách chuyển tiền</h5>
-                                <a href="#" class="text-decoration-none"><i class="fa-solid fa-download"></i> Tải file mẫu (.xlsx)</a>
-                            </div>
-                            
-                            <div class="input-group mb-3">
-                                <input type="file" class="form-control" id="excelFile" accept=".xlsx, .xls, .csv">
-                                <button class="btn btn-outline-primary" type="button" onclick="processFile()"><i class="fa-solid fa-upload"></i> Kiểm tra & Upload</button>
-                            </div>
-                            <small class="text-muted fst-italic">* Hỗ trợ file .xlsx, .xls. Dung lượng tối đa 5MB.</small>
-                        </div>
-                    </div>
-                    <!-- Kết quả kiểm tra file (Ẩn mặc định) -->
-                    <div id="bulk-result-section" class="d-none-custom">
-                        <div class="row">
-                            <div class="col-md-3">
-                                <div class="summary-card">
-                                    <div class="text-muted">Tổng giao dịch</div>
-                                    <div class="summary-value" id="bulkTotalRows">0</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="summary-card" style="border-left-color: #28a745;">
-                                    <div class="text-muted">Hợp lệ</div>
-                                    <div class="summary-value text-success" id="bulkValidRows">0</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="summary-card" style="border-left-color: #dc3545;">
-                                    <div class="text-muted">Không hợp lệ</div>
-                                    <div class="summary-value text-danger" id="bulkInvalidRows">0</div>
-                                </div>
-                            </div>
-                            <div class="col-md-3">
-                                <div class="summary-card" style="border-left-color: #fd7e14;">
-                                    <div class="text-muted">Tổng tiền dự kiến</div>
-                                    <div class="summary-value text-warning" id="bulkTotalMoney">0 đ</div>
-                                </div>
-                            </div>
-                        </div>
-
-                        <!-- Bảng xem trước -->
-                        <div class="table-responsive-custom mt-2">
-                            <!-- ID cho bảng để JS dễ thao tác -->
-                            <table class="table table-striped table-bordered resizable-table" id="tableBulk">
-                                <thead>
-                                    <tr>
-                                        <th class="text-center" style="width: 50px;">STT</th>
-                                        <th class="col-min-w">STK chuyển</th>
-                                        <th class="col-min-w">Ngân hàng chuyển</th>
-                                        <th class="col-min-w-sm">Số TK Merchant</th>
-                                        <th class="col-min-w-sm">Số TK Sub-Merchant</th>
-                                        <th class="col-min-w">Ngân hàng nhận</th>
-                                        <th class="col-min-w">Số tài khoản/Thẻ người nhận</th>
-                                        <th class="col-min-w">Số tiền</th>
-                                        <th class="col-min-w-lg">Nội dung chuyển tiền</th>
-                                        <th class="text-center col-min-w">Kết quả chuyển tiền</th>
-                                        <th class="sticky-col-right text-center col-min-w">Ghi chú</th>
-                                    </tr>
-                                </thead>
-                                <tbody id="bulkPreviewBody">
-                                    <!-- JS sẽ render dữ liệu vào đây -->
-                                </tbody>
-                            </table>
-                        </div>
-
-                        <div class="text-end mt-3 mb-5">
-                            <button class="btn btn-danger me-2" onclick="resetBulk()"><i class="fa-solid fa-trash"></i> Hủy bỏ</button>
-                            <button class="btn btn-primary px-4" id="btnProcessBulk" onclick="confirmBulkTransfer()" disabled><i class="fa-solid fa-paper-plane"></i> Chuyển tiền</button>
-                        </div>
-                    </div>
-                </div>
-
-                <!-- 3. LỊCH SỬ GIAO DỊCH -->
-                <div class="tab-pane fade" id="history-transfer" role="tabpanel">
-                    <div class="filter-section border rounded py-3 mb-3">
-                        <div class="row g-3">
-                            <div class="col-md-6">
-                                <label class="fw-bold mb-1" style="font-size:12px">Từ ngày</label>
-                                <input type="date" id="searchFromDate" class="form-control">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold mb-1" style="font-size:12px">Đến ngày</label>
-                                <input type="date" id="searchToDate" class="form-control">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold mb-1" style="font-size:12px">STK Chuyển</label>
-                                <select id="searchSrcAcc" class="form-select">
-                                    <option value="">Tất cả</option>
-                                    <option value="020094055033">0200...5033 (Sacombank)</option>
-                                    <option value="1207380178">1207...0178 (BIDV)</option>
-                                    <option value="0000783364175">0000...4175 (MB)</option>
-                                </select>
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold mb-1" style="font-size:12px">TK Merchant</label>
-                                <input type="text" id="searchMerAcc" class="form-control" placeholder="Nhập TK Merchant">
-                            </div>
-                            <div class="col-md-6">
-                                <label class="fw-bold mb-1" style="font-size:12px">TK Sub-Merchant</label>
-                                <input type="text" id="searchSubAcc" class="form-control" placeholder="Nhập TK Sub-Merchant">
-                            </div>
-                            
-                            <div class="col-12 text-center mt-3 pt-2 border-top">
-                                <button class="btn btn-search px-5" onclick="renderHistory()">
-                                    <i class="fa-solid fa-magnifying-glass me-2"></i> Tìm kiếm
-                                </button>
-                            </div>
-                        </div>
-                    </div>
-
-                    <div class="table-responsive-custom">
-                        <!-- ID cho bảng để JS dễ thao tác -->
-                        <table class="table table-striped table-bordered resizable-table" id="tableHistory">
-                            <thead>
-                                <tr>
-                                    <!-- Đã sửa width từ 100px lên 130px và dùng min-width -->
-                                    <th class="text-center" style="min-width: 130px;">Mã GD</th>
-                                    <th class="col-min-w">Thời gian</th>
-                                    <th class="col-min-w">STK chuyển</th>
-                                    <th class="col-min-w">Ngân hàng chuyển</th>
-                                    <th class="col-min-w-sm">Số TK Merchant</th>
-                                    <th class="col-min-w-sm">Số TK Sub-Merchant</th>
-                                    <th class="col-min-w">Ngân hàng nhận</th>
-                                    <th class="col-min-w">Số tài khoản/Thẻ người nhận</th>
-                                    <th class="col-min-w">Số tiền</th>
-                                    <th class="col-min-w-lg">Nội dung chuyển tiền</th>
-                                    <th class="text-center col-min-w">Kết quả</th>
-                                </tr>
-                            </thead>
-                            <tbody id="historyBody"></tbody>
-                        </table>
-                    </div>
-                    
-                    <div class="footer-pagination d-flex justify-content-between align-items-center rounded">
-                        <div class="text-muted">Hiển thị 1-10 trên 50 bản ghi</div>
-                        <nav>
-                            <ul class="pagination pagination-sm">
-                                <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
-                                <li class="page-item active"><a class="page-link" href="#">1</a></li>
-                                <li class="page-item"><a class="page-link" href="#">2</a></li>
-                                <li class="page-item"><a class="page-link" href="#">3</a></li>
-                                <li class="page-item"><a class="page-link" href="#">Tiếp</a></li>
-                            </ul>
-                        </nav>
-                    </div>
+                <div class="col-12 text-center mt-3 pt-2 border-top">
+                    <button class="btn btn-search" onclick="renderHistory()">
+                        <i class="fa-solid fa-magnifying-glass me-2"></i> Tìm kiếm
+                    </button>
                 </div>
             </div>
+        </div>
+
+        <!-- Toolbar Chức Năng Mới -->
+        <div class="d-flex align-items-center mb-2 gap-2 justify-content-start">
+            <!-- 1. Select Hiển thị dòng -->
+            <select class="form-select form-select-sm btn-tool-custom border-secondary" id="pageSizeSelect" onchange="renderHistory()" title="Số dòng hiển thị">
+                <option value="10">Hiển thị: 10</option>
+                <option value="20">Hiển thị: 20</option>
+                <option value="50">Hiển thị: 50</option>
+                <option value="100">Hiển thị: 100</option>
+            </select>
+            
+            <!-- 2. Dropdown Ẩn/Hiện Cột -->
+            <div class="dropdown">
+                <button class="btn btn-outline-secondary btn-sm dropdown-toggle bg-white text-dark btn-tool-custom" type="button" id="columnToggleDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                    <i class="fa-solid fa-table-columns me-1"></i> Ẩn/Hiện cột
+                </button>
+                <ul class="dropdown-menu dropdown-menu-check-list shadow" aria-labelledby="columnToggleDropdown" id="columnToggleMenu" onclick="event.stopPropagation()">
+                    <!-- JS sẽ điền danh sách cột vào đây -->
+                </ul>
+            </div>
+
+            <!-- 3. Nút Xuất File -->
+            <button class="btn btn-success btn-sm btn-tool-custom" onclick="alert('Đang xuất file Excel...')">
+                <i class="fa-solid fa-file-excel me-1"></i> Xuất file
+            </button>
+        </div>
+
+        <div class="table-responsive-custom">
+            <table class="table table-striped table-bordered resizable-table" id="tableHistory">
+                <thead>
+                    <tr>
+                        <th class="text-center" style="min-width: 130px;">Mã GD</th>
+                        <th class="text-center" style="min-width: 130px;">Mã đơn hàng VTC</th>
+                        <th class="col-min-w">Thời gian</th>
+                        <th class="col-min-w">STK chuyển</th>
+                        <!-- Cập nhật tiêu đề cột Ngân hàng chuyển thành Cổng kết nối -->
+                        <th class="col-min-w">Cổng kết nối</th>
+                        <th class="col-min-w-sm">Số TK Merchant</th>
+                        <th class="col-min-w-lg">Tên Merchant</th>
+                        <th class="col-min-w-sm">Số TK Sub-Merchant</th>
+                        <th class="col-min-w-lg">Tên Sub-Merchant</th>
+                        <th class="col-min-w">Ngân hàng nhận</th>
+                        <th class="col-min-w">Số tài khoản/Thẻ người nhận</th>
+                        <th class="col-min-w-lg">Tên chủ Thẻ NH</th>
+                        <th class="col-amount text-end">Số tiền</th>
+                        <th class="col-min-w-lg">Mã đối soát</th>
+                        <th class="col-min-w-lg">Nội dung chuyển tiền</th>
+                    </tr>
+                </thead>
+                <tbody id="historyBody">
+                    <!-- Dữ liệu được render tại đây -->
+                </tbody>
+                <!-- THÊM TFOOT -->
+                <tfoot id="historyFoot" class="fw-bold" style="background-color: #e9ecef; border-top: 2px solid #dee2e6;">
+                    <!-- JS sẽ render dòng tổng tiền vào đây -->
+                </tfoot>
+            </table>
+        </div>
+        
+        <div class="footer-pagination d-flex justify-content-between align-items-center">
+            <div class="text-muted">Hiển thị <span class="fw-bold" id="showingCount">0</span> trên <span class="fw-bold" id="totalCount">0</span> bản ghi</div>
+            <nav>
+                <ul class="pagination pagination-sm">
+                    <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                    <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                    <li class="page-item"><a class="page-link" href="#">2</a></li>
+                    <li class="page-item"><a class="page-link" href="#">3</a></li>
+                    <li class="page-item"><a class="page-link" href="#">Tiếp</a></li>
+                </ul>
+            </nav>
         </div>
     </div>
 
@@ -563,249 +413,311 @@
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
     <script>
+        // --- Utilities ---
         const formatMoney = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 
-        const docSoThanhChu = (function() {
-            const t = ["không", "một", "hai", "ba", "bốn", "năm", "sáu", "bảy", "tám", "chín"];
-            const donVi = ["", "nghìn", "triệu", "tỷ", "nghìn tỷ", "triệu tỷ"];
-            function doc3So(n, docDayDu) {
-                let s = "";
-                const tram = Math.floor(n / 100);
-                const chuc = Math.floor((n % 100) / 10);
-                const dv = n % 10;
-                if (docDayDu || tram > 0) {
-                    s += " " + t[tram] + " trăm";
-                    if (chuc === 0 && dv !== 0) s += " linh";
-                }
-                if (chuc > 1) {
-                    s += " " + t[chuc] + " mươi";
-                    if (dv === 1) s += " mốt"; else if (dv === 5) s += " lăm"; else if (dv > 0) s += " " + t[dv];
-                } else if (chuc === 1) {
-                    s += " mười";
-                    if (dv === 1) s += " một"; else if (dv === 5) s += " lăm"; else if (dv > 0) s += " " + t[dv];
-                } else if (dv > 0) {
-                    if (tram > 0 || docDayDu) s += " " + t[dv]; else s += " " + t[dv];
-                }
-                return s;
-            }
-            return function(so) {
-                if (so === 0) return "Không";
-                let s = ""; let i = 0; so = Math.abs(so);
-                while (so > 0) {
-                    const lop = so % 1000;
-                    if (lop > 0) { s = doc3So(lop, so >= 1000 && i > 0) + " " + donVi[i] + s; }
-                    i++; so = Math.floor(so / 1000);
-                }
-                s = s.trim(); return s.charAt(0).toUpperCase() + s.slice(1);
-            }
-        })();
-
+        // --- Mock Data (CẬP NHẬT 10 DÒNG THEO YÊU CẦU & srcBank là viết tắt) ---
         let transactionHistory = [
             { 
-                id: 'GD92831', time: '2023-10-25 10:30', srcAcc: '020094055033', srcBank: 'Sacombank', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Vietcombank', destAcc: '0011002345678', amount: 500000, content: 'Thanh toan don hang #001', status: 'SUCCESS'
+                id: '1000000727', vtcOrderId: '1100011827', time: '2023-10-26 08:10', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G001', subName: 'Đại lý Trạm sạc Voltality G001',
+                destBank: 'Vietcombank', destAcc: '0341000123456', destName: 'NGUYEN VAN A',
+                amount: 150000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680001"}',
+                content: 'Thanh toan phi sac xe dien', status: 'SUCCESS'
             },
             { 
-                id: 'GD92834', time: '2023-10-24 08:30', srcAcc: '0000783364175', srcBank: 'MB', merAcc: 'M123456', subAcc: 'SUB003', destBank: 'Techcombank', destAcc: '190333444555', amount: 150000, content: 'Chi phi van hanh', status: 'SUCCESS'
+                id: '1000000728', vtcOrderId: '1100011828', time: '2023-10-26 08:25', 
+                srcAcc: '1207380178', srcBank: 'BIDV',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G002', subName: 'Đại lý Trạm sạc Voltality G002',
+                destBank: 'Techcombank', destAcc: '1903456789012', destName: 'TRAN THI B',
+                amount: 250000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680002"}',
+                content: 'Thanh toan dich vu sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000729', vtcOrderId: '1100011829', time: '2023-10-26 09:00', 
+                srcAcc: '0000783364175', srcBank: 'MB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G003', subName: 'Đại lý Trạm sạc Voltality G003',
+                destBank: 'MB', destAcc: '0987654321', destName: 'LE VAN C',
+                amount: 500000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680003"}',
+                content: 'Nap tien tram sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000730', vtcOrderId: '1100011830', time: '2023-10-26 09:45', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G004', subName: 'Đại lý Trạm sạc Voltality G004',
+                destBank: 'ACB', destAcc: '888111222', destName: 'PHAM THI D',
+                amount: 120000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680004"}',
+                content: 'Thanh toan sac nhanh', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000731', vtcOrderId: '1100011831', time: '2023-10-26 10:15', 
+                srcAcc: '1207380178', srcBank: 'BIDV',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G005', subName: 'Đại lý Trạm sạc Voltality G005',
+                destBank: 'VPBank', destAcc: '123456789', destName: 'HOANG VAN E',
+                amount: 80000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680005"}',
+                content: 'Phi sac xe may dien', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000732', vtcOrderId: '1100011832', time: '2023-10-26 11:00', 
+                srcAcc: '0000783364175', srcBank: 'MB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G006', subName: 'Đại lý Trạm sạc Voltality G006',
+                destBank: 'Vietinbank', destAcc: '101010202020', destName: 'VU THI F',
+                amount: 300000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680006"}',
+                content: 'Thanh toan combo sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000733', vtcOrderId: '1100011833', time: '2023-10-26 13:30', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G007', subName: 'Đại lý Trạm sạc Voltality G007',
+                destBank: 'TPBank', destAcc: '000111222333', destName: 'DANG VAN G',
+                amount: 450000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680007"}',
+                content: 'Thanh toan cuoc sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000734', vtcOrderId: '1100011834', time: '2023-10-26 14:15', 
+                srcAcc: '1207380178', srcBank: 'BIDV',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G008', subName: 'Đại lý Trạm sạc Voltality G008',
+                destBank: 'VIB', destAcc: '666777888', destName: 'BUI THI H',
+                amount: 60000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680008"}',
+                content: 'Sac xe dien mini', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000735', vtcOrderId: '1100011835', time: '2023-10-26 15:45', 
+                srcAcc: '0000783364175', srcBank: 'MB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G009', subName: 'Đại lý Trạm sạc Voltality G009',
+                destBank: 'HDBank', destAcc: '0888999000', destName: 'NGO VAN I',
+                amount: 110000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680009"}',
+                content: 'Phi su dung tram sac', status: 'SUCCESS'
+            },
+            { 
+                id: '1000000736', vtcOrderId: '1100011836', time: '2023-10-26 16:20', 
+                srcAcc: '020094055033', srcBank: 'STB',
+                merAcc: 'NN_Voltality_', merName: 'Công ty TNHH Voltality',
+                subAcc: 'NN_Voltality_G010', subName: 'Đại lý Trạm sạc Voltality G010',
+                destBank: 'SHB', destAcc: '100200300', destName: 'DO THI K',
+                amount: 90000, reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680010"}',
+                content: 'Thanh toan', status: 'SUCCESS'
             }
         ];
 
-        const mockMerchants = {
-            'M123456': {
-                name: 'CÔNG TY CỔ PHẦN THƯƠNG MẠI DỊCH VỤ ABC',
-                subs: [
-                    { id: 'SUB001', name: 'SUB001 - Chi nhánh Hà Nội', bankName: 'Ngân hàng TMCP Ngoại thương Việt Nam (Vietcombank)', bankAcc: '0011002345678' },
-                    { id: 'SUB002', name: 'SUB002 - Chi nhánh TP.HCM', bankName: 'Ngân hàng TMCP Á Châu (ACB)', bankAcc: '123456788888' },
-                    { id: 'SUB003', name: 'SUB003 - Chi nhánh Đà Nẵng', bankName: 'Ngân hàng TMCP Kỹ Thương (Techcombank)', bankAcc: '190333444555' }
-                ]
-            }
-        };
+        // Trạng thái hiển thị của các cột (Index của cột bị ẩn)
+        let hiddenColumns = new Set();
+        // Biến lưu tổng tiền hiện tại để dùng khi ẩn/hiện cột
+        let currentTotalAmount = 0; 
 
-        function formatCurrencyInput(input) {
-            let rawValue = input.value.replace(/\D/g, '');
-            if (rawValue === '') { input.value = ''; document.getElementById('amountInWords').innerText = ""; return; }
-            input.value = new Intl.NumberFormat('vi-VN').format(rawValue);
-            showAmountInWords();
+        // --- Init Function ---
+        document.addEventListener('DOMContentLoaded', () => {
+            initColumnToggler();
+            renderHistory();
+        });
+
+        // --- Column Toggler Logic ---
+        function initColumnToggler() {
+            const table = document.getElementById('tableHistory');
+            const headers = table.querySelectorAll('thead th');
+            const menu = document.getElementById('columnToggleMenu');
+            
+            headers.forEach((th, index) => {
+                const text = th.innerText;
+                const li = document.createElement('li');
+                
+                li.innerHTML = `
+                    <div class="form-check ms-2">
+                        <input class="form-check-input" type="checkbox" value="${index}" id="colCheck${index}" checked onchange="toggleColumn(${index})">
+                        <label class="form-check-label" for="colCheck${index}">
+                            ${text}
+                        </label>
+                    </div>
+                `;
+                menu.appendChild(li);
+            });
         }
 
-        function showAmountInWords() {
-            const rawVal = document.getElementById('singleAmount').value.replace(/\./g, '');
-            const amount = Number(rawVal);
-            if (amount > 0) {
-                const text = docSoThanhChu(amount);
-                document.getElementById('amountInWords').innerText = `Bằng chữ: ${text} đồng`;
+        function toggleColumn(colIndex) {
+            const isChecked = document.getElementById(`colCheck${colIndex}`).checked;
+            
+            if (isChecked) {
+                hiddenColumns.delete(colIndex);
             } else {
-                document.getElementById('amountInWords').innerText = "";
+                hiddenColumns.add(colIndex);
             }
+            
+            applyColumnVisibility();
         }
 
-        function checkMerchant() {
-            const mcCode = document.getElementById('merchantAccount').value.trim();
-            const btnCheck = document.getElementById('btnCheckMerchant');
-            const resultContainer = document.getElementById('merchantResultContainer');
-            const isValidInput = document.getElementById('isValidMerchant');
-            const merchantNameDisplay = document.getElementById('merchantNameDisplay');
-            const subSelect = document.getElementById('subMerchantSelect');
-
-            if (!mcCode) { alert("Vui lòng nhập số Tài khoản Merchant!"); return; }
-
-            btnCheck.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i>';
-            btnCheck.disabled = true;
-
-            setTimeout(() => {
-                btnCheck.innerHTML = '<i class="fa-solid fa-magnifying-glass"></i>';
-                btnCheck.disabled = false;
-
-                if (mockMerchants[mcCode]) {
-                    const data = mockMerchants[mcCode];
-                    isValidInput.value = "true";
-                    document.getElementById('merchantAccount').classList.add('is-valid-check');
-                    resultContainer.classList.remove('d-none-custom');
-                    merchantNameDisplay.innerText = data.name;
-                    subSelect.innerHTML = '<option value="">-- Chọn Sub-Merchant --</option>';
-                    data.subs.forEach(sub => {
-                        const opt = document.createElement('option');
-                        opt.value = sub.id; opt.text = sub.name;
-                        opt.dataset.bankName = sub.bankName; opt.dataset.bankAcc = sub.bankAcc;
-                        subSelect.appendChild(opt);
-                    });
-                    document.getElementById('bankNameDisplay').value = '';
-                    document.getElementById('bankAccountDisplay').value = '';
-                } else {
-                    alert("Không tìm thấy thông tin tài khoản!");
-                    resetMerchantCheck();
+        function applyColumnVisibility() {
+            const table = document.getElementById('tableHistory');
+            // Chỉ tác động đến thead và tbody, bỏ qua tfoot vì tfoot được xử lý riêng
+            const rows = table.querySelectorAll('thead tr, tbody tr'); 
+            
+            rows.forEach(row => {
+                const cells = row.children;
+                for (let i = 0; i < cells.length; i++) {
+                    if (hiddenColumns.has(i)) {
+                        cells[i].style.display = 'none';
+                    } else {
+                        cells[i].style.display = '';
+                    }
                 }
-            }, 600);
-        }
-
-        function resetMerchantCheck() {
-            document.getElementById('isValidMerchant').value = "false";
-            document.getElementById('merchantAccount').classList.remove('is-valid-check');
-            document.getElementById('merchantResultContainer').classList.add('d-none-custom');
-            document.getElementById('singleTransferAlert').classList.add('d-none-custom');
-            document.getElementById('subMerchantSelect').innerHTML = '<option value="">-- Chọn Sub-Merchant --</option>';
-            document.getElementById('bankNameDisplay').value = '';
-            document.getElementById('bankAccountDisplay').value = '';
-        }
-
-        function loadBankInfo() {
-            const subSelect = document.getElementById('subMerchantSelect');
-            const selectedOpt = subSelect.selectedOptions[0];
-            if (selectedOpt && selectedOpt.value) {
-                document.getElementById('bankNameDisplay').value = selectedOpt.dataset.bankName;
-                document.getElementById('bankAccountDisplay').value = selectedOpt.dataset.bankAcc;
-            } else {
-                document.getElementById('bankNameDisplay').value = '';
-                document.getElementById('bankAccountDisplay').value = '';
-            }
-        }
-
-        function checkCustomReason() {
-            const reason = document.getElementById('transferReason').value;
-            const customArea = document.getElementById('customReasonArea');
-            if (reason === 'OTHER') { customArea.classList.remove('d-none-custom'); customArea.required = true; } 
-            else { customArea.classList.add('d-none-custom'); customArea.required = false; }
-        }
-
-        function handleSingleTransfer(e) {
-            e.preventDefault();
-            const isValidMerchant = document.getElementById('isValidMerchant').value;
-            if (isValidMerchant !== "true") { alert("Vui lòng kiểm tra thông tin tài khoản Merchant!"); return; }
-            if (!document.getElementById('subMerchantSelect').value) { alert("Vui lòng chọn Sub-Merchant!"); return; }
-            const rawAmount = document.getElementById('singleAmount').value.replace(/\./g, '');
-            if (isNaN(Number(rawAmount)) || Number(rawAmount) < 10000) { alert("Số tiền chuyển tối thiểu là 10.000 VNĐ"); return; }
-            
-            let content = document.getElementById('transferReason').value;
-            if (content === 'OTHER' && !document.getElementById('customReasonArea').value.trim()) { alert("Vui lòng nhập nội dung!"); return; }
-
-            document.getElementById('singleTransferAlert').classList.add('d-none-custom');
-            if(confirm('Bạn có chắc chắn muốn thực hiện giao dịch này?')) {
-                document.getElementById('singleTransferAlert').classList.remove('d-none-custom');
-                document.getElementById('singleTransferAlertMsg').innerText = "Giao dịch thất bại: Hệ thống tạm thời gián đoạn. Vui lòng thử lại sau.";
-                document.getElementById('singleTransferAlert').scrollIntoView({behavior: 'smooth', block: 'center'});
-            }
-        }
-
-        function processFile() {
-            const fileInput = document.getElementById('excelFile');
-            if (fileInput.files.length === 0) { alert("Vui lòng chọn file Excel!"); return; }
-            document.getElementById('bulk-result-section').classList.remove('d-none-custom');
-            
-            const mockRows = [
-                { stt: 1, srcAcc: '020094055033', srcBank: 'Sacombank', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Vietcombank', destAcc: '0011002345678', amt: 100000, content: 'Thanh toan don hang #001', status: true, note: '' },
-                { stt: 2, srcAcc: '020094055033', srcBank: 'Sacombank', merAcc: 'M123456', subAcc: 'SUB002', destBank: 'ACB', destAcc: '123456788888', amt: 200000, content: 'Thanh toan luong T10', status: true, note: '' },
-                { stt: 3, srcAcc: '1207380178', srcBank: 'BIDV', merAcc: 'M999999', subAcc: '', destBank: 'MB', destAcc: 'INVALID_ACC', amt: 50000, content: 'Ho tro phi', status: false, note: 'Lỗi: TK Sub-Merchant trống' }
-            ];
-
-            let html = ''; let valid = 0; let invalid = 0; let totalMoney = 0;
-            mockRows.forEach(row => {
-                if (row.status) { valid++; totalMoney += row.amt; } else { invalid++; }
-                const noteContent = row.status ? '<i class="fa-solid fa-circle-check text-success fs-4"></i>' : `<span class="text-danger fw-bold"><i class="fa-solid fa-circle-exclamation me-1"></i> ${row.note}</span>`;
-                const resultBadge = row.status ? `<span class="badge bg-warning text-dark" id="result-status-${row.stt}">Chờ xử lý</span>` : '<span class="badge bg-secondary">Bỏ qua</span>';
-                html += `<tr><td class="text-center">${row.stt}</td><td>${row.srcAcc}</td><td>${row.srcBank}</td><td>${row.merAcc}</td><td>${row.subAcc}</td><td>${row.destBank}</td><td>${row.destAcc}</td><td class="text-end fw-bold">${formatMoney(row.amt)}</td><td>${row.content}</td><td class="text-center align-middle">${resultBadge}</td><td class="sticky-col-right text-center align-middle">${noteContent}</td></tr>`;
             });
 
-            document.getElementById('bulkPreviewBody').innerHTML = html;
-            document.getElementById('bulkTotalRows').innerText = mockRows.length;
-            document.getElementById('bulkValidRows').innerText = valid;
-            document.getElementById('bulkInvalidRows').innerText = invalid;
-            document.getElementById('bulkTotalMoney').innerText = formatMoney(totalMoney);
-            const btn = document.getElementById('btnProcessBulk');
-            btn.disabled = valid === 0; btn.innerHTML = '<i class="fa-solid fa-paper-plane"></i> Chuyển tiền';
+            // Cập nhật lại Footer sau khi ẩn/hiện cột
+            updateFooter();
+        }
+
+        // Hàm cập nhật Footer với logic Hòa ô (Colspan)
+        function updateFooter() {
+            const tfoot = document.getElementById('historyFoot');
+            if (!tfoot) return;
+
+            // Cấu trúc bảng MỚI (15 cột): 
+            // 0: Mã GD
+            // 1: Mã đơn hàng VTC (MỚI)
+            // 2..11: Các cột trước "Số tiền" (10 cột)
+            // 12: Cột "Số tiền"
+            // 13..14: Các cột sau số tiền (Mã đối soát, Nội dung)
             
-            // Re-init resize for the bulk table after populating
-            makeTableResizable('tableBulk');
-        }
-
-        function resetBulk() { document.getElementById('excelFile').value = ''; document.getElementById('bulk-result-section').classList.add('d-none-custom'); }
-
-        function confirmBulkTransfer() {
-            if(confirm('Xác nhận xử lý các giao dịch hợp lệ?')) {
-                const btn = document.getElementById('btnProcessBulk');
-                btn.innerHTML = '<i class="fa-solid fa-spinner fa-spin"></i> Đang xử lý...'; btn.disabled = true;
-                setTimeout(() => {
-                    const badges = document.querySelectorAll('[id^="result-status-"]');
-                    badges.forEach(badge => { badge.className = 'badge bg-success'; badge.innerText = 'Thành công'; });
-                    const amount = 450000; 
-                    const newTx = { id: 'GD_BULK_' + Math.floor(Math.random() * 1000), time: new Date().toLocaleString('vi-VN'), srcAcc: '020094055033', srcBank: 'Sacombank', merAcc: 'M123456', subAcc: 'Nhiều Sub', destBank: 'Nhiều NH', destAcc: `Danh sách (${document.getElementById('bulkValidRows').innerText})`, amount: amount, content: 'Chuyen tien theo lo', status: 'SUCCESS', note: '' };
-                    transactionHistory.unshift(newTx);
-                    alert('Đã xử lý thành công lô chuyển tiền!');
-                    btn.innerHTML = '<i class="fa-solid fa-check"></i> Hoàn tất';
-                }, 1500);
+            // 1. Tính số cột hiển thị TRƯỚC cột Tiền (Index 12)
+            let spanBefore = 0;
+            for(let i = 0; i < 12; i++) {
+                if (!hiddenColumns.has(i)) spanBefore++;
             }
+
+            // 2. Kiểm tra cột Tiền có hiển thị không (Index 12)
+            const isAmountVisible = !hiddenColumns.has(12);
+
+            // 3. Tính số cột hiển thị SAU cột Tiền (Index 13, 14)
+            let spanAfter = 0;
+            for(let i = 13; i < 15; i++) {
+                if (!hiddenColumns.has(i)) spanAfter++;
+            }
+
+            let html = '<tr class="table-active">';
+            
+            // Render ô Label "Tổng cộng" (Hòa các cột trước)
+            if (spanBefore > 0) {
+                html += `<td colspan="${spanBefore}" class="text-end fw-bold text-uppercase text-secondary align-middle">Tổng cộng:</td>`;
+            }
+
+            // Render ô Giá trị Tiền
+            if (isAmountVisible) {
+                const prefix = (spanBefore === 0) ? "Tổng: " : "";
+                html += `<td class="text-end fw-bold text-danger fs-6 align-middle col-amount">${prefix}${formatMoney(currentTotalAmount)}</td>`;
+            }
+
+            // Render ô Phía sau
+            if (spanAfter > 0) {
+                html += `<td colspan="${spanAfter}"></td>`;
+            }
+
+            html += '</tr>';
+            tfoot.innerHTML = html;
         }
 
+        // --- Render Logic ---
         function renderHistory() {
             const tbody = document.getElementById('historyBody');
             let html = '';
-            const srcAccFilter = document.getElementById('searchSrcAcc')?.value || '';
+            
+            // Get Filters
+            // Cổng kết nối (was STK Chuyển) - match theo tên ngân hàng srcBank
+            const gatewayFilter = document.getElementById('searchGateway')?.value || '';
+            const destBankFilter = document.getElementById('searchDestBank')?.value || '';
             const merAccFilter = document.getElementById('searchMerAcc')?.value.trim().toLowerCase() || '';
             const subAccFilter = document.getElementById('searchSubAcc')?.value.trim().toLowerCase() || '';
-
-            transactionHistory.forEach(tx => {
-                if (tx.status !== 'SUCCESS') return;
-                if (srcAccFilter && !tx.srcAcc.includes(srcAccFilter)) return;
-                if (merAccFilter && !tx.merAcc.toLowerCase().includes(merAccFilter)) return;
-                if (subAccFilter && !tx.subAcc.toLowerCase().includes(subAccFilter)) return;
-
-                html += `<tr><td class="text-center fw-bold text-primary">${tx.id}</td><td class="small text-muted">${tx.time}</td><td>${tx.srcAcc}</td><td>${tx.srcBank}</td><td>${tx.merAcc}</td><td>${tx.subAcc}</td><td>${tx.destBank}</td><td>${tx.destAcc}</td><td class="text-end fw-bold">${formatMoney(tx.amount)}</td><td>${tx.content}</td><td class="text-center"><span class="badge bg-success">Thành công</span></td></tr>`;
-            });
-            tbody.innerHTML = html || '<tr><td colspan="11" class="text-center py-4 text-muted">Không có giao dịch phù hợp</td></tr>';
+            const reconcileFilter = document.getElementById('searchReconcileCode')?.value.trim().toLowerCase() || '';
+            const destAccFilter = document.getElementById('searchDestAcc')?.value.trim().toLowerCase() || '';
             
-            // Re-init resize logic
+            // Get Page Size
+            const pageSize = parseInt(document.getElementById('pageSizeSelect').value);
+
+            // Filter Data
+            const filteredData = transactionHistory.filter(tx => {
+                if (tx.status !== 'SUCCESS') return false;
+                
+                // Filter Cổng kết nối (check srcBank)
+                if (gatewayFilter && tx.srcBank !== gatewayFilter) return false;
+
+                // Filter Ngân hàng nhận (check destBank)
+                if (destBankFilter && tx.destBank !== destBankFilter) return false;
+
+                // Filter Merchant
+                if (merAccFilter && !tx.merAcc.toLowerCase().includes(merAccFilter)) return false;
+
+                // Filter Sub-Merchant
+                if (subAccFilter && !tx.subAcc.toLowerCase().includes(subAccFilter)) return false;
+
+                // Filter Mã đối soát (check trong chuỗi JSON)
+                if (reconcileFilter && !tx.reconcileCode.toLowerCase().includes(reconcileFilter)) return false;
+
+                // Filter TK NH người nhận
+                if (destAccFilter && !tx.destAcc.toLowerCase().includes(destAccFilter)) return false;
+
+                return true;
+            });
+
+            // Update Counts
+            document.getElementById('totalCount').innerText = filteredData.length;
+            document.getElementById('showingCount').innerText = Math.min(filteredData.length, pageSize);
+
+            // TÍNH TỔNG TIỀN & Lưu vào biến toàn cục
+            currentTotalAmount = filteredData.reduce((sum, item) => sum + item.amount, 0);
+
+            // Slice Data based on Page Size
+            const displayData = filteredData.slice(0, pageSize);
+
+            displayData.forEach(tx => {
+                html += `
+                    <tr>
+                        <td class="text-center fw-bold text-primary">${tx.id}</td>
+                        <td class="text-center fw-bold text-secondary">${tx.vtcOrderId}</td>
+                        <td class="small text-muted">${tx.time}</td>
+                        <td>${tx.srcAcc}</td>
+                        <td class="fw-bold text-success">${tx.srcBank}</td>
+                        <td class="fw-bold text-secondary">${tx.merAcc}</td>
+                        <td>${tx.merName}</td>
+                        <td class="fw-bold text-secondary">${tx.subAcc}</td>
+                        <td>${tx.subName}</td>
+                        <td>${tx.destBank}</td>
+                        <td>${tx.destAcc}</td>
+                        <td class="fw-bold text-dark">${tx.destName}</td>
+                        <td class="text-end fw-bold col-amount">${formatMoney(tx.amount)}</td>
+                        <td class="small text-muted font-monospace text-break" style="font-size: 11px;">${tx.reconcileCode}</td>
+                        <td>${tx.content}</td>
+                    </tr>
+                `;
+            });
+
+            tbody.innerHTML = html;
+            
+            if(html === '') {
+                tbody.innerHTML = '<tr><td colspan="15" class="text-center py-4 text-muted"><i class="fa-solid fa-inbox fa-2x mb-2 d-block"></i>Không tìm thấy dữ liệu phù hợp</td></tr>';
+            }
+
+            // Re-apply Resize & Visibility & Update Footer
             makeTableResizable('tableHistory');
+            applyColumnVisibility(); // Hàm này sẽ gọi updateFooter()
         }
 
-        // --- RESIZABLE COLUMNS LOGIC ---
+        // --- Resizable Columns Logic ---
         function makeTableResizable(tableId) {
             const table = document.getElementById(tableId);
             if (!table) return;
-            const headers = table.querySelectorAll('th');
+            const headers = table.querySelectorAll('thead th');
             
             headers.forEach(header => {
-                // Skip if already has resizer
                 if (header.querySelector('.resizer')) return;
 
-                // Skip the sticky columns if needed, but usually fine
                 const resizer = document.createElement('div');
                 resizer.classList.add('resizer');
                 resizer.style.height = `${table.offsetHeight}px`; 
@@ -841,18 +753,6 @@
 
             resizer.addEventListener('mousedown', mouseDownHandler);
         }
-
-        document.addEventListener('DOMContentLoaded', () => {
-            renderHistory();
-            
-            // Make history table resizable on load
-            makeTableResizable('tableHistory');
-
-            const tabEl = document.getElementById('history-transfer-tab');
-            tabEl.addEventListener('shown.bs.tab', function (event) { 
-                renderHistory();
-            });
-        });
     </script>
 </body>
 </html>
