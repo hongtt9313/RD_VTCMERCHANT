@@ -111,6 +111,7 @@
             word-wrap: break-word; /* Force wrapping */
             overflow-wrap: break-word;
             white-space: normal !important;
+            text-align: center; /* Center align data by default */
         }
 
         .table thead th {
@@ -466,7 +467,7 @@
                                         <th style="width: 10%; text-align: right;">Số tiền</th>
                                         <th style="width: 12%;">Nội dung</th>
                                         <th class="text-center" style="width: 10%;">Kết quả</th>
-                                        <th style="width: 8%;">Mã GD</th>
+                                        <th style="width: 8%;">Mã đơn hàng</th>
                                         <th class="text-center" style="width: 8%;">Đối soát</th>
                                     </tr>
                                 </thead>
@@ -561,14 +562,14 @@
                                 <i class="fa-solid fa-table-columns me-1"></i> Ẩn/Hiện cột
                             </button>
                             <ul class="dropdown-menu dropdown-menu-end p-2" style="min-width: 200px;">
-                                <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(0)"> Mã GD</label></li>
+                                <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(0)"> Mã đơn hàng</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(1)"> Thời gian</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(2)"> Kênh kết nối</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(3)"> TK Merchant</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(4)"> TK Sub-Merchant</label></li>
-                                <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(5)"> NH nhận</label></li>
+                                <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(5)"> NH thụ hưởng</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(6)"> Tên người thụ hưởng</label></li> <!-- NEW -->
-                                <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(7)"> Số TK nhận</label></li>
+                                <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(7)"> Số TK/Thẻ thụ hưởng</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(8)"> Số tiền</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(9)"> Nội dung</label></li>
                                 <li><label class="dropdown-item"><input type="checkbox" checked onchange="toggleColumn(10)"> Kết quả</label></li>
@@ -586,14 +587,14 @@
                         <table class="table table-striped table-bordered" id="historyTable">
                             <thead>
                                 <tr>
-                                    <th class="text-center" style="width: 8%;">Mã GD</th>
+                                    <th class="text-center" style="width: 8%;">Mã đơn hàng</th>
                                     <th style="width: 9%;">Thời gian</th>
                                     <th style="width: 8%;">Kênh kết nối</th> 
                                     <th style="width: 7%;">TK Merchant</th>
                                     <th style="width: 7%;">TK Sub-Merchant</th>
-                                    <th style="width: 10%;">NH nhận</th>
+                                    <th style="width: 10%;">NH thụ hưởng</th>
                                     <th style="width: 12%;">Tên người thụ hưởng</th> <!-- NEW COLUMN -->
-                                    <th style="width: 10%;">Số TK nhận</th>
+                                    <th style="width: 10%;">Số TK/Thẻ thụ hưởng</th>
                                     <th style="width: 10%; text-align: right;">Số tiền</th>
                                     <th style="width: 10%;">Nội dung</th>
                                     <th class="text-center" style="width: 5%;">KQ</th>
@@ -727,13 +728,13 @@
 
         let transactionHistory = [
             { 
-                id: 'GD92831', time: '2023-10-25 10:30', srcAcc: '020094055033', srcBank: 'Sacombank', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Vietcombank', destAcc: '0011002345678', benName: 'NGUYEN VAN A', amount: 500000, content: 'Thanh toan don hang #001', status: 'SUCCESS', doiSoatCode: '{"ftNumber":"FT23102680006"}'
+                id: '1100013338', time: '2023-10-25 10:30', srcAcc: '020094055033', srcBank: 'Sacombank', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Vietcombank', destAcc: '0011002345678', benName: 'NGUYEN VAN A', amount: 500000, content: 'Thanh toan don hang #001', status: 'SUCCESS', doiSoatCode: '{"ftNumber":"FT23102680006"}'
             },
             { 
-                id: 'GD92834', time: '2023-10-24 08:30', srcAcc: '0000783364175', srcBank: 'MB', merAcc: 'M123456', subAcc: 'SUB003', destBank: 'Techcombank', destAcc: '190333444555', benName: 'LE VAN C', amount: 150000, content: 'Chi phi van hanh', status: 'PENDING', doiSoatCode: ''
+                id: '1100013339', time: '2023-10-24 08:30', srcAcc: '0000783364175', srcBank: 'MB', merAcc: 'M123456', subAcc: 'SUB003', destBank: 'Techcombank', destAcc: '190333444555', benName: 'LE VAN C', amount: 150000, content: 'Chi phi van hanh', status: 'PENDING', doiSoatCode: ''
             },
             { 
-                id: 'GD92835', time: '2023-10-24 09:15', srcAcc: '1207380178', srcBank: 'BIDV', merAcc: 'M888888', subAcc: 'SUB-A', destBank: 'ACB', destAcc: '123456788888', benName: 'CONG TY VAN TAI XYZ', amount: 2000000, content: 'Thanh toan luong', status: 'FAILED', doiSoatCode: '{"errorCode":"TIMEOUT"}'
+                id: '1100013340', time: '2023-10-24 09:15', srcAcc: '1207380178', srcBank: 'BIDV', merAcc: 'M888888', subAcc: 'SUB-A', destBank: 'ACB', destAcc: '123456788888', benName: 'CONG TY VAN TAI XYZ', amount: 2000000, content: 'Thanh toan luong', status: 'FAILED', doiSoatCode: '{"errorCode":"TIMEOUT"}'
             }
         ];
 
@@ -945,10 +946,10 @@
 
         function initBulkData() {
              const mockRows = [
-                { stt: 1, vtcCode: 'VTC98712301', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Vietcombank', destAcc: '0011002345678', benName: 'NGUYEN VAN A', amt: 100000, content: 'Thanh toan don hang #001', status: true, doiSoatCode: '{"status":"SUCCESS","ftNumber":"FT23102680006"}' },
-                { stt: 2, vtcCode: 'VTC98712302', merAcc: 'M123456', subAcc: 'SUB002', destBank: 'ACB', destAcc: '123456788888', benName: 'TRAN THI B', amt: 200000, content: 'Thanh toan luong T10', status: true, doiSoatCode: '{"status":"PENDING","ftNumber":"FT23102680007"}' },
+                { stt: 1, vtcCode: '1100013338', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Vietcombank', destAcc: '0011002345678', benName: 'NGUYEN VAN A', amt: 100000, content: 'Thanh toan don hang #001', status: true, doiSoatCode: '{"status":"SUCCESS","ftNumber":"FT23102680006"}' },
+                { stt: 2, vtcCode: '1100013339', merAcc: 'M123456', subAcc: 'SUB002', destBank: 'ACB', destAcc: '123456788888', benName: 'TRAN THI B', amt: 200000, content: 'Thanh toan luong T10', status: true, doiSoatCode: '{"status":"PENDING","ftNumber":"FT23102680007"}' },
                 { stt: 3, vtcCode: '-', merAcc: 'M999999', subAcc: '', destBank: 'MB', destAcc: 'INVALID_ACC', benName: '', amt: 50000, content: 'Ho tro phi', status: false, doiSoatCode: '{"status":"FAILED","errorCode":"INVALID_ACC"}' },
-                { stt: 4, vtcCode: 'VTC98712303', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Techcombank', destAcc: '190333444555', benName: 'LE VAN C', amt: 150000, content: 'Thuong quy 3', status: true, doiSoatCode: '{"status":"SUCCESS","ftNumber":"FT23102680008"}' }
+                { stt: 4, vtcCode: '1100013340', merAcc: 'M123456', subAcc: 'SUB001', destBank: 'Techcombank', destAcc: '190333444555', benName: 'LE VAN C', amt: 150000, content: 'Thuong quy 3', status: true, doiSoatCode: '{"status":"SUCCESS","ftNumber":"FT23102680008"}' }
             ];
             renderBulkTable(mockRows);
         }
@@ -959,7 +960,7 @@
                 if (row.status) { valid++; totalMoney += row.amt; } else { invalid++; }
                 
                 // Added text-wrap to badges
-                const statusBadge = row.status ? `<span class="badge bg-warning text-dark text-wrap" id="result-status-${row.stt}">Chờ xử lý</span>` : '<span class="badge bg-secondary text-wrap">Bỏ qua</span>';
+                const statusBadge = row.status ? `<span class="badge bg-warning text-dark text-wrap" id="result-status-${row.stt}">Chờ xử lý</span>` : `<span class="badge bg-secondary text-wrap">Bỏ qua</span>`;
                 const vtcCodeDisplay = row.status ? `<span class="fw-bold text-primary text-break small">${row.vtcCode}</span>` : '<span class="text-muted">-</span>';
                 const doiSoatDisplay = row.status ? row.doiSoatCode : `<span class="text-danger fw-bold"><i class="fa-solid fa-triangle-exclamation"></i> Lỗi</span>`;
 
@@ -1020,7 +1021,7 @@
                     if (badge4) { badge4.className = 'badge bg-success text-wrap'; badge4.innerHTML = '<i class="fa-solid fa-check me-1"></i>Thành công'; }
 
                     const amount = 450000; 
-                    const newTx = { id: 'GD_BULK_' + Math.floor(Math.random() * 1000), time: new Date().toLocaleString('vi-VN'), srcAcc: document.getElementById('bulkSourceAccountInput').value || '020094055033', srcBank: document.getElementById('bulkSourceBankSelect').value, merAcc: 'M123456', subAcc: 'Nhiều Sub', destBank: 'Nhiều NH', destAcc: `Danh sách (${document.getElementById('bulkValidRows').innerText})`, benName: 'Danh sách', amount: amount, content: 'Chuyen tien theo lo', status: 'SUCCESS', note: '', doiSoatCode: '{"status":"PENDING"}' };
+                    const newTx = { id: '11000' + Math.floor(Math.random() * 100000), time: new Date().toLocaleString('vi-VN'), srcAcc: document.getElementById('bulkSourceAccountInput').value || '020094055033', srcBank: document.getElementById('bulkSourceBankSelect').value, merAcc: 'M123456', subAcc: 'Nhiều Sub', destBank: 'Nhiều NH', destAcc: `Danh sách (${document.getElementById('bulkValidRows').innerText})`, benName: 'Danh sách', amount: amount, content: 'Chuyen tien theo lo', status: 'SUCCESS', note: '', doiSoatCode: '{"status":"PENDING"}' };
                     transactionHistory.unshift(newTx);
                     
                     showAlert('Đã gửi yêu cầu xử lý lô chuyển tiền!');
