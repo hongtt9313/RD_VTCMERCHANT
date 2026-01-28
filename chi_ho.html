@@ -395,7 +395,7 @@
                                 
                                 <div class="col-12 text-center mt-3">
                                     <button class="btn btn-search text-white px-5" onclick="renderApprovalTable()">
-                                        <i class="fa-solid fa-filter me-2"></i> Lọc dữ liệu
+                                        <i class="fa-solid fa-magnifying-glass me-2"></i> Tra cứu
                                     </button>
                                 </div>
                             </div>
@@ -443,30 +443,30 @@
                         <table class="table table-hover table-bordered mb-0" id="approvalTable">
                             <!-- DEFINED COLUMN WIDTHS VIA COLGROUP -->
                             <colgroup>
-                                <col style="width: 6.5%"> <!-- Mã ĐH -->
-                                <col style="width: 6.5%"> <!-- Mã GD -->
-                                <col style="width: 6.5%"> <!-- Ngân Hàng -->
-                                <col style="width: 6.5%"> <!-- Số tiền -->
-                                <col style="width: 6.5%"> <!-- Tên TK -->
-                                <!-- Removed Time Col -->
-                                <col style="width: 6.5%"> <!-- Số TK NH -->
-                                <col style="width: 6.5%"> <!-- Tên TK NH -->
-                                <col style="width: 11%"> <!-- Nội dung (x2) -->
-                                <col style="width: 6.5%"> <!-- TG Gửi YC -->
-                                <col style="width: 6.5%"> <!-- TG Cập nhật -->
-                                <col style="width: 6.5%"> <!-- Người cập nhật -->
-                                <col style="width: 6.5%"> <!-- Trạng thái -->
-                                <col style="width: 11%"> <!-- Mô tả (x2) -->
-                                <col style="width: 8%"> <!-- Chức năng -->
+                                <col style="width: 6%"> <!-- Mã ĐH -->
+                                <col style="width: 6%"> <!-- Mã GD -->
+                                <col style="width: 6.5%"> <!-- Người gửi -->
+                                <col style="width: 6%"> <!-- Ngân Hàng -->
+                                <col style="width: 6%"> <!-- Số tiền -->
+                                <col style="width: 6%"> <!-- Tên TK -->
+                                <col style="width: 6%"> <!-- Số TK NH -->
+                                <col style="width: 6%"> <!-- Tên TK NH -->
+                                <col style="width: 9.5%"> <!-- Nội dung -->
+                                <col style="width: 6%"> <!-- TG Gửi YC -->
+                                <col style="width: 6%"> <!-- TG Cập nhật -->
+                                <col style="width: 6%"> <!-- Người cập nhật -->
+                                <col style="width: 6%"> <!-- Trạng thái -->
+                                <col style="width: 9.5%"> <!-- Mô tả -->
+                                <col style="width: 7.5%"> <!-- Chức năng -->
                             </colgroup>
                             <thead class="bg-light">
                                 <tr>
                                     <th>Mã ĐH</th>
                                     <th>Mã GD</th>
+                                    <th>Người gửi</th> <!-- NEW COLUMN -->
                                     <th>Ngân Hàng</th>
                                     <th>Số tiền</th>
                                     <th>Tên TK</th>
-                                    <!-- Removed header Time -->
                                     <th>Số TK Ngân Hàng</th>
                                     <th>Tên TK Ngân Hàng</th>
                                     <th>Nội dung</th>
@@ -546,10 +546,16 @@
                             <label class="form-label fw-bold small text-muted">Số tiền</label>
                             <input type="text" id="modalAmount" class="form-control form-control-sm bg-light fw-bold text-primary" readonly>
                         </div>
+                        <!-- REORDERED: Sender and Merchant Account on the same row -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Người gửi</label>
+                            <input type="text" id="modalSender" class="form-control form-control-sm bg-light" readonly>
+                        </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Tên TK Merchant</label>
                             <input type="text" id="modalMerAcc" class="form-control form-control-sm bg-light" readonly>
                         </div>
+                        <!-- End Reorder -->
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Số TK Ngân Hàng thụ hưởng</label>
                             <input type="text" id="modalDestAccNo" class="form-control form-control-sm bg-light" readonly>
@@ -724,7 +730,8 @@
                 transId: '2776248', 
                 bankName: 'Vietinbank', 
                 amount: 50000000, 
-                merAcc: 'NNVTC2C2PVOL', 
+                merAcc: 'NNVTC2C2PVOL',
+                sender: 'NNVTC2C2PVOL', 
                 time: '28/01/2026 10:00',
                 destAccNo: '1122334455', 
                 destAccName: 'NGUYEN VAN A',
@@ -742,6 +749,7 @@
                 bankName: 'Vietcombank', 
                 amount: 25000000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'NNVTC2C2PVOL',
                 time: '28/01/2026 09:30',
                 destAccNo: '001100998877', 
                 destAccName: 'TRAN THI B',
@@ -750,7 +758,7 @@
                 updatedTime: '-', 
                 user: '-', 
                 status: 'CREATED', 
-                note: 'Thông tin không hợp lệ hoặc không đầy đủ' 
+                note: 'Đã gửi yêu cầu' 
             },
             { 
                 id: 3, 
@@ -759,6 +767,7 @@
                 bankName: 'Techcombank', 
                 amount: 15500000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'admin',
                 time: '27/01/2026 15:45',
                 destAccNo: '190333444555', 
                 destAccName: 'LE VAN C',
@@ -776,6 +785,7 @@
                 bankName: 'BIDV', 
                 amount: 8500000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'hongtt',
                 time: '27/01/2026 10:20',
                 destAccNo: '12345678', 
                 destAccName: 'PHAM VAN D',
@@ -793,6 +803,7 @@
                 bankName: 'VPBank', 
                 amount: 3200000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'system',
                 time: '26/01/2026 14:00',
                 destAccNo: '999888777', 
                 destAccName: 'HOANG THI E',
@@ -810,6 +821,7 @@
                 bankName: 'MBBank', 
                 amount: 5000000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'NNVTC2C2PVOL',
                 time: '26/01/2026 09:45',
                 destAccNo: '888899990000', 
                 destAccName: 'VU VAN F',
@@ -827,6 +839,7 @@
                 bankName: 'Sacombank', 
                 amount: 120000000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'ktt',
                 time: '25/01/2026 11:15',
                 destAccNo: '020011223344', 
                 destAccName: 'NGO THI G',
@@ -844,6 +857,7 @@
                 bankName: 'Agribank', 
                 amount: 4500000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'admin',
                 time: '25/01/2026 16:20',
                 destAccNo: '333344445555', 
                 destAccName: 'DO VAN H',
@@ -861,6 +875,7 @@
                 bankName: 'BIDV', 
                 amount: 9000000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'NNVTC2C2PVOL',
                 time: '24/01/2026 10:00',
                 destAccNo: '211100009999', 
                 destAccName: 'BUI THI I',
@@ -878,6 +893,7 @@
                 bankName: 'Vietinbank', 
                 amount: 6000000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'hongtt',
                 time: '24/01/2026 15:30',
                 destAccNo: '101020203030', 
                 destAccName: 'DANG VAN K',
@@ -895,6 +911,7 @@
                 bankName: 'Agribank', 
                 amount: 7500000, 
                 merAcc: 'NNVTC2C2PVOL', 
+                sender: 'admin',
                 time: '23/01/2026 08:30',
                 destAccNo: '445566778899', 
                 destAccName: 'TRINH THI L',
@@ -1044,6 +1061,7 @@
                     bankName: document.getElementById('destBankInput').value || 'Vietinbank',
                     amount: parseInt(amount),
                     merAcc: 'NNVTC2C2PVOL', // Use fixed mock
+                    sender: 'hongtt', // Default sender for new request
                     time: formattedTime,
                     destAccNo: document.getElementById('destAccountInput').value,
                     destAccName: benName,
@@ -1121,10 +1139,10 @@
                 tr.innerHTML = `
                     <td class="col-id">${item.orderId}</td>
                     <td>${item.transId}</td>
+                    <td>${item.sender}</td> <!-- NEW COLUMN SENDER -->
                     <td>${item.bankName}</td>
                     <td class="col-money">${formatMoney(item.amount)}</td>
                     <td>${item.merAcc}</td>
-                    <!-- REMOVED TIME CELL -->
                     <td>${item.destAccNo}</td>
                     <td>${item.destAccName}</td>
                     <td>${item.content}</td>
@@ -1170,6 +1188,9 @@
             document.getElementById('modalTxId').value = item.id;
             document.getElementById('modalOrderId').value = item.orderId;
             document.getElementById('modalTransId').value = item.transId;
+            // Populate Sender
+            document.getElementById('modalSender').value = item.sender || ''; 
+            
             document.getElementById('modalBankName').value = item.bankName;
             document.getElementById('modalAmount').value = formatMoney(item.amount);
             document.getElementById('modalMerAcc').value = item.merAcc;
