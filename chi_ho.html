@@ -59,7 +59,7 @@
             text-decoration: none;
         }
         
-        .nav-btn:hover {
+        .nav-btn:hover, .nav-btn:focus {
             background-color: var(--vtc-blue-dark);
             color: white;
         }
@@ -68,6 +68,10 @@
             background-color: var(--vtc-blue-dark);
             box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
         }
+
+        /* Dropdown specific */
+        .dropdown-menu { font-size: 13px; border-radius: 0; margin-top: 0; }
+        .dropdown-item:active { background-color: var(--vtc-blue); }
 
         .user-info {
             color: var(--vtc-blue);
@@ -142,6 +146,14 @@
         .col-id { font-weight: bold; color: #555; }
         .col-date { white-space: normal; }
 
+        /* Badge Wrap Fix */
+        .badge {
+            white-space: normal !important;
+            display: inline-block;
+            line-height: 1.2;
+            padding: 5px 8px;
+        }
+
         .chi-ho-tabs .nav-link {
             color: #555;
             font-weight: 600;
@@ -213,9 +225,21 @@
                 <a href="#" class="nav-btn me-1 text-decoration-none">
                     <i class="fa-solid fa-arrow-left me-2"></i> Về trang chủ
                 </a>
-                <button id="nav-chiho" class="nav-btn active-tab me-1">
+                
+                <!-- MODULE 1: CHI HỘ -->
+                <button id="nav-chiho" class="nav-btn active-tab me-1" onclick="switchModule('chiho')">
                     <i class="fa-solid fa-paper-plane me-2"></i> Chi hộ
                 </button>
+
+                <!-- MODULE 2: BÁO CÁO (Dropdown) -->
+                <div class="dropdown d-inline-block">
+                    <button class="nav-btn dropdown-toggle" type="button" id="dropdownReport" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-chart-line me-2"></i> Báo cáo merchant
+                    </button>
+                    <ul class="dropdown-menu shadow" aria-labelledby="dropdownReport">
+                        <li><a class="dropdown-item" href="#" onclick="switchModule('report')"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Báo cáo chi hộ</a></li>
+                    </ul>
+                </div>
             </div>
         </div>
         
@@ -225,7 +249,7 @@
         </div>
     </div>
 
-    <!-- MODULE CHI HỘ CONTENT -->
+    <!-- === MODULE CHI HỘ CONTENT === -->
     <div id="module-chiho" class="module-section">
         <div class="page-title-bar">
             <i class="fa-solid fa-paper-plane me-2"></i> Quản lý Chi hộ / Chuyển tiền
@@ -248,7 +272,7 @@
 
             <div class="tab-content" id="chiHoTabContent">
                 
-                <!-- 1. TẠO YÊU CẦU CHI HỘ (Đổi tên từ Chuyển tiền đơn) -->
+                <!-- 1. TẠO YÊU CẦU CHI HỘ -->
                 <div class="tab-pane fade show active" id="single-transfer" role="tabpanel">
                     <div class="card shadow-sm border-0">
                         <div class="card-body">
@@ -348,10 +372,10 @@
                     </div>
                 </div>
 
-                <!-- 2. DUYỆT TIỀN CHI HỘ (Đổi tên và thiết kế lại hoàn toàn) -->
+                <!-- 2. DUYỆT TIỀN CHI HỘ -->
                 <div class="tab-pane fade" id="approval-transfer" role="tabpanel">
                     
-                    <!-- Filter Section UPDATED: Max 2 cols per row, DateTime Inputs -->
+                    <!-- Filter Section -->
                     <div class="filter-section border rounded py-3 mb-3 bg-light">
                         <div class="container-fluid">
                             <div class="row g-2">
@@ -368,7 +392,6 @@
                                 <!-- Row 2 -->
                                 <div class="col-md-6">
                                     <label class="fw-bold mb-1 small">Trạng thái</label>
-                                    <!-- REMOVED 'selected' from PENDING to show all by default -->
                                     <select id="filterStatus" class="form-select form-select-sm">
                                         <option value="" selected>Tất cả</option>
                                         <option value="CREATED">Khởi tạo</option>
@@ -426,7 +449,6 @@
                                 <ul class="dropdown-menu p-2 shadow" style="min-width: 200px; max-height: 300px; overflow-y: auto;">
                                     <li><label class="dropdown-item small"><input type="checkbox" checked> Mã ĐH</label></li>
                                     <li><label class="dropdown-item small"><input type="checkbox" checked> Mã GD</label></li>
-                                    <!-- Add more toggles here -->
                                 </ul>
                             </div>
                         </div>
@@ -434,7 +456,7 @@
                         <!-- Right Search -->
                         <div class="input-group input-group-sm" style="width: 250px;">
                             <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                            <input type="text" class="form-control" placeholder="Tìm kiếm trong bảng..." onkeyup="filterTableLocal(this.value)">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm trong bảng..." onkeyup="filterTableLocal(this.value, 'approvalTable')">
                         </div>
                     </div>
 
@@ -443,27 +465,28 @@
                         <table class="table table-hover table-bordered mb-0" id="approvalTable">
                             <!-- DEFINED COLUMN WIDTHS VIA COLGROUP -->
                             <colgroup>
-                                <col style="width: 6%"> <!-- Mã ĐH -->
-                                <col style="width: 6%"> <!-- Mã GD -->
-                                <col style="width: 6.5%"> <!-- Người gửi -->
-                                <col style="width: 6%"> <!-- Ngân Hàng -->
+                                <col style="width: 5.5%"> <!-- Mã ĐH -->
+                                <col style="width: 5.5%"> <!-- Mã GD -->
+                                <col style="width: 6%"> <!-- Người gửi -->
+                                <col style="width: 5.5%"> <!-- Ngân Hàng -->
                                 <col style="width: 6%"> <!-- Số tiền -->
-                                <col style="width: 6%"> <!-- Tên TK -->
-                                <col style="width: 6%"> <!-- Số TK NH -->
-                                <col style="width: 6%"> <!-- Tên TK NH -->
-                                <col style="width: 9.5%"> <!-- Nội dung -->
-                                <col style="width: 6%"> <!-- TG Gửi YC -->
-                                <col style="width: 6%"> <!-- TG Cập nhật -->
-                                <col style="width: 6%"> <!-- Người cập nhật -->
-                                <col style="width: 6%"> <!-- Trạng thái -->
-                                <col style="width: 9.5%"> <!-- Mô tả -->
-                                <col style="width: 7.5%"> <!-- Chức năng -->
+                                <col style="width: 5.5%"> <!-- Tên TK -->
+                                <col style="width: 5.5%"> <!-- Số TK NH -->
+                                <col style="width: 5.5%"> <!-- Tên TK NH -->
+                                <col style="width: 8.5%"> <!-- Nội dung -->
+                                <col style="width: 5.5%"> <!-- TG Gửi YC -->
+                                <col style="width: 5.5%"> <!-- TG Cập nhật -->
+                                <col style="width: 5.5%"> <!-- Người cập nhật -->
+                                <col style="width: 5.5%"> <!-- Trạng thái -->
+                                <col style="width: 8.5%"> <!-- Mô tả -->
+                                <col style="width: 8.5%"> <!-- Mã đối soát (NEW) -->
+                                <col style="width: 7%"> <!-- Chức năng -->
                             </colgroup>
                             <thead class="bg-light">
                                 <tr>
                                     <th>Mã ĐH</th>
                                     <th>Mã GD</th>
-                                    <th>Người gửi</th> <!-- NEW COLUMN -->
+                                    <th>Người gửi</th> 
                                     <th>Ngân Hàng</th>
                                     <th>Số tiền</th>
                                     <th>Tên TK</th>
@@ -475,6 +498,7 @@
                                     <th>Người cập nhật</th>
                                     <th>Trạng thái</th>
                                     <th>Mô tả</th>
+                                    <th>Mã đối soát</th> <!-- NEW COLUMN -->
                                     <th>Chức năng</th>
                                 </tr>
                             </thead>
@@ -497,6 +521,130 @@
                         </nav>
                     </div>
                 </div>
+            </div>
+        </div>
+    </div>
+
+    <!-- === MODULE BÁO CÁO CONTENT === -->
+    <div id="module-report" class="module-section d-none-custom">
+        <div class="page-title-bar">
+            <i class="fa-solid fa-file-invoice-dollar me-2"></i> Báo cáo Chi hộ
+        </div>
+
+        <div class="container-fluid">
+            <!-- Filter Section (Report) -->
+            <div class="filter-section border rounded py-3 mb-3 bg-light">
+                <div class="container-fluid">
+                    <div class="row g-2">
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Từ ngày</label>
+                            <input type="datetime-local" id="reportFromDate" class="form-control form-control-sm" step="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Đến ngày</label>
+                            <input type="datetime-local" id="reportToDate" class="form-control form-control-sm" step="1">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Số TK Merchant</label>
+                            <input type="text" id="reportMerAcc" class="form-control form-control-sm" placeholder="Nhập Tên TK (VD: NNVTC...)">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">NH thụ hưởng</label>
+                            <input class="form-control form-control-sm" list="bankListOptions" id="reportDestBank" placeholder="Tìm ngân hàng...">
+                        </div>
+                        <!-- NEW FILTERS FOR REPORT -->
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Số TK Ngân Hàng</label>
+                            <input type="text" id="reportBankAcc" class="form-control form-control-sm" placeholder="Nhập số TK/Thẻ">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Tên TK ngân hàng</label>
+                            <input type="text" id="reportBankAccName" class="form-control form-control-sm" placeholder="Nhập tên người thụ hưởng...">
+                        </div>
+                        <div class="col-12 text-center mt-3">
+                            <button class="btn btn-search text-white px-5" onclick="renderReportTable()">
+                                <i class="fa-solid fa-magnifying-glass me-2"></i> Tra cứu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Toolbar Actions (Report) -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex gap-2 align-items-center">
+                    <button class="btn btn-success btn-sm" onclick="showAlert('Đang xuất báo cáo...')">
+                        <i class="fa-solid fa-file-excel me-1"></i> Xuất báo cáo
+                    </button>
+                    <div class="d-flex align-items-center bg-white border rounded px-2 py-1">
+                        <span class="small me-2 text-muted">Hiển thị:</span>
+                        <select class="form-select form-select-sm border-0 py-0 ps-0 pe-4 w-auto" style="height: auto;">
+                            <option value="10">10</option>
+                            <option value="20">20</option>
+                            <option value="50">50</option>
+                        </select>
+                    </div>
+                </div>
+                <div class="input-group input-group-sm" style="width: 250px;">
+                    <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
+                    <input type="text" class="form-control" placeholder="Tìm kiếm..." onkeyup="filterTableLocal(this.value, 'reportTable')">
+                </div>
+            </div>
+
+            <!-- Data Table (Report) -->
+            <div class="table-responsive-custom border rounded bg-white">
+                <table class="table table-hover table-bordered mb-0" id="reportTable">
+                    <colgroup>
+                        <col style="width: 6%"> <!-- Mã ĐH -->
+                        <col style="width: 6%"> <!-- Mã GD -->
+                        <col style="width: 6%"> <!-- Kênh kết nối -->
+                        <col style="width: 6%"> <!-- Ngân Hàng -->
+                        <col style="width: 7%"> <!-- Số tiền -->
+                        <col style="width: 6%"> <!-- Tên TK -->
+                        <col style="width: 6%"> <!-- Số TK NH -->
+                        <col style="width: 6%"> <!-- Tên TK NH -->
+                        <col style="width: 14%"> <!-- Nội dung (Increased) -->
+                        <col style="width: 7%"> <!-- TG Gửi YC -->
+                        <col style="width: 7%"> <!-- TG Cập nhật -->
+                        <col style="width: 7%"> <!-- Người cập nhật -->
+                        <!-- Removed Status Col -->
+                        <col style="width: 14%"> <!-- Mô tả (Increased) -->
+                        <col style="width: 8%"> <!-- Mã đối soát -->
+                    </colgroup>
+                    <thead class="bg-light">
+                        <tr>
+                            <th>Mã ĐH</th>
+                            <th>Mã GD</th>
+                            <th>Kênh kết nối</th>
+                            <th>Ngân Hàng</th>
+                            <th>Số tiền</th>
+                            <th>Tên TK</th>
+                            <th>Số TK Ngân Hàng</th>
+                            <th>Tên TK Ngân Hàng</th>
+                            <th>Nội dung</th>
+                            <th>Thời gian gửi yêu cầu</th>
+                            <th>TG Cập nhật</th>
+                            <th>Người cập nhật</th>
+                            <!-- Removed Status Header -->
+                            <th>Mô tả</th>
+                            <th>Mã đối soát</th>
+                        </tr>
+                    </thead>
+                    <tbody id="reportTableBody">
+                        <!-- Data will be populated via JS -->
+                    </tbody>
+                </table>
+            </div>
+            
+            <div class="footer-pagination d-flex justify-content-between align-items-center mt-3">
+                <div class="text-muted small" id="reportPaginationInfo">Hiển thị <span class="fw-bold">0</span> bản ghi</div>
+                <nav>
+                    <ul class="pagination pagination-sm mb-0">
+                        <li class="page-item disabled"><a class="page-link" href="#">Trước</a></li>
+                        <li class="page-item active"><a class="page-link" href="#">1</a></li>
+                        <li class="page-item"><a class="page-link" href="#">Tiếp</a></li>
+                    </ul>
+                </nav>
             </div>
         </div>
     </div>
@@ -680,6 +828,26 @@
             modal.hide();
         }
 
+        function switchModule(moduleName) {
+            const chihoSection = document.getElementById('module-chiho');
+            const reportSection = document.getElementById('module-report');
+            const btnChiho = document.getElementById('nav-chiho');
+            const dropdownReport = document.getElementById('dropdownReport');
+
+            if (moduleName === 'chiho') {
+                chihoSection.classList.remove('d-none-custom');
+                reportSection.classList.add('d-none-custom');
+                btnChiho.classList.add('active-tab');
+                dropdownReport.classList.remove('active-tab', 'bg-primary', 'text-white'); // Removed active styles
+            } else if (moduleName === 'report') {
+                chihoSection.classList.add('d-none-custom');
+                reportSection.classList.remove('d-none-custom');
+                btnChiho.classList.remove('active-tab');
+                dropdownReport.classList.add('active-tab');
+                renderReportTable(); // Init report data
+            }
+        }
+
         const formatMoney = (amount) => new Intl.NumberFormat('vi-VN', { style: 'currency', currency: 'VND' }).format(amount);
 
         // Helper to format Date string to DD/MM/YYYY HH:MM:SS
@@ -764,7 +932,9 @@
                 updatedTime: '-', 
                 user: '-', 
                 status: 'PENDING', 
-                note: 'Đã gửi yêu cầu' 
+                note: 'Đã gửi yêu cầu',
+                reconcileCode: '',
+                channel: 'Sacombank'
             },
             { 
                 id: 2, 
@@ -782,7 +952,9 @@
                 updatedTime: '-', 
                 user: '-', 
                 status: 'CREATED', 
-                note: 'Đã gửi yêu cầu' 
+                note: 'Đã gửi yêu cầu',
+                reconcileCode: '',
+                channel: 'BIDV'
             },
             { 
                 id: 3, 
@@ -800,7 +972,9 @@
                 updatedTime: '27/01/2026 16:00', 
                 user: 'admin', 
                 status: 'SUCCESS', 
-                note: 'Chuyển tiền thành công' 
+                note: 'Chuyển tiền thành công',
+                reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680003"}',
+                channel: 'Sacombank'
             },
             { 
                 id: 4, 
@@ -818,7 +992,9 @@
                 updatedTime: '27/01/2026 10:30', 
                 user: 'hongtt', 
                 status: 'SUCCESS', 
-                note: 'Đã duyệt' 
+                note: 'Đã duyệt',
+                reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680004"}',
+                channel: 'MB'
             },
             { 
                 id: 5, 
@@ -836,7 +1012,9 @@
                 updatedTime: '26/01/2026 14:15', 
                 user: 'system', 
                 status: 'CANCELLED', 
-                note: 'Đối tác yêu cầu hủy' 
+                note: 'Đối tác yêu cầu hủy',
+                reconcileCode: '',
+                channel: 'Sacombank'
             },
             { 
                 id: 6, 
@@ -854,7 +1032,9 @@
                 updatedTime: '-', 
                 user: '-', 
                 status: 'PENDING', 
-                note: 'Đã gửi yêu cầu' 
+                note: 'Đã gửi yêu cầu',
+                reconcileCode: '',
+                channel: 'BIDV'
             },
             { 
                 id: 7, 
@@ -872,7 +1052,9 @@
                 updatedTime: '25/01/2026 11:30', 
                 user: 'ktt', 
                 status: 'SUCCESS', 
-                note: 'Chuyển tiền thành công' 
+                note: 'Chuyển tiền thành công',
+                reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680007"}',
+                channel: 'Sacombank'
             },
             { 
                 id: 8, 
@@ -890,7 +1072,9 @@
                 updatedTime: '25/01/2026 16:30', 
                 user: 'admin', 
                 status: 'CANCELLED', 
-                note: 'Sai thông tin tài khoản' 
+                note: 'Sai thông tin tài khoản',
+                reconcileCode: '',
+                channel: 'MB'
             },
             { 
                 id: 9, 
@@ -908,7 +1092,9 @@
                 updatedTime: '-', 
                 user: '-', 
                 status: 'PENDING', 
-                note: 'Đã gửi yêu cầu' 
+                note: 'Đã gửi yêu cầu',
+                reconcileCode: '',
+                channel: 'Sacombank'
             },
             { 
                 id: 10, 
@@ -926,7 +1112,9 @@
                 updatedTime: '24/01/2026 15:45', 
                 user: 'hongtt', 
                 status: 'SUCCESS', 
-                note: 'Đã duyệt' 
+                note: 'Đã duyệt',
+                reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680010"}',
+                channel: 'BIDV'
             },
             { 
                 id: 11, 
@@ -944,7 +1132,9 @@
                 updatedTime: '23/01/2026 08:30', 
                 user: 'admin', 
                 status: 'SUCCESS', 
-                note: 'Đối tác gửi yêu cầu' 
+                note: 'Đối tác gửi yêu cầu',
+                reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680011"}',
+                channel: 'Sacombank'
             }
         ];
 
@@ -1091,7 +1281,8 @@
                     destAccName: benName,
                     content: document.getElementById('transferReason').value,
                     createdTime: formattedTime,
-                    updatedTime: '-', user: '-', status: 'CREATED', note: 'Khởi tạo mới'
+                    updatedTime: '-', user: '-', status: 'CREATED', note: 'Khởi tạo mới',
+                    channel: 'Sacombank' // Default mock channel
                 };
                 approvalData.unshift(newReq);
                 renderApprovalTable(); // Refresh table in tab 2
@@ -1154,7 +1345,7 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="15" class="text-center py-4 text-muted">Không có dữ liệu</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="16" class="text-center py-4 text-muted">Không có dữ liệu</td></tr>';
                 return;
             }
 
@@ -1175,6 +1366,7 @@
                     <td>${item.user}</td>
                     <td class="col-status">${getStatusBadge(item.status)}</td>
                     <td>${item.note}</td>
+                    <td style="font-family: monospace; font-size: 10px; word-break: break-all;">${item.reconcileCode || ''}</td>
                     <td class="col-action sticky-col">${getActionButtons(item)}</td>
                 `;
                 tbody.appendChild(tr);
@@ -1187,10 +1379,10 @@
             }
         }
 
-        function filterTableLocal(query) {
+        function filterTableLocal(query, tableId) {
             // Very basic Client-side text filter
             const filter = query.toUpperCase();
-            const table = document.getElementById("approvalTable");
+            const table = document.getElementById(tableId);
             const tr = table.getElementsByTagName("tr");
             for (let i = 1; i < tr.length; i++) {
                 let txtValue = tr[i].textContent || tr[i].innerText;
@@ -1199,6 +1391,61 @@
                 } else {
                     tr[i].style.display = "none";
                 }
+            }
+        }
+
+        // --- REPORT LOGIC ---
+        function renderReportTable() {
+            const tbody = document.getElementById('reportTableBody');
+            tbody.innerHTML = '';
+            
+            // Filters
+            const fMer = document.getElementById('reportMerAcc').value.trim().toLowerCase();
+            const fBank = document.getElementById('reportDestBank').value.trim().toLowerCase();
+            const fBankAccNo = document.getElementById('reportBankAcc').value.trim();
+            const fBankAccName = document.getElementById('reportBankAccName').value.trim().toLowerCase();
+
+            // Filter ONLY SUCCESS + other criteria
+            const filtered = approvalData.filter(item => {
+                if (item.status !== 'SUCCESS') return false; // Strict filter
+                if (fMer && !item.merAcc.toLowerCase().includes(fMer)) return false; 
+                if (fBank && !item.bankName.toLowerCase().includes(fBank)) return false;
+                if (fBankAccNo && !item.destAccNo.includes(fBankAccNo)) return false;
+                if (fBankAccName && !item.destAccName.toLowerCase().includes(fBankAccName)) return false;
+                return true;
+            });
+
+            if (filtered.length === 0) {
+                tbody.innerHTML = '<tr><td colspan="14" class="text-center py-4 text-muted">Không có dữ liệu báo cáo</td></tr>';
+                return;
+            }
+
+            filtered.forEach(item => {
+                const tr = document.createElement('tr');
+                tr.innerHTML = `
+                    <td class="col-id">${item.orderId}</td>
+                    <td>${item.transId}</td>
+                    <td>${item.channel || '-'}</td>
+                    <td>${item.bankName}</td>
+                    <td class="col-money">${formatMoney(item.amount)}</td>
+                    <td>${item.merAcc}</td>
+                    <td>${item.destAccNo}</td>
+                    <td>${item.destAccName}</td>
+                    <td>${item.content}</td>
+                    <td class="col-date">${formatDateTime(item.createdTime)}</td>
+                    <td class="col-date">${formatDateTime(item.updatedTime)}</td>
+                    <td>${item.user}</td>
+                    <!-- Removed Status Cell -->
+                    <td>${item.note}</td>
+                    <td style="font-family: monospace; font-size: 10px; word-break: break-all;">${item.reconcileCode || ''}</td>
+                `;
+                tbody.appendChild(tr);
+            });
+            
+             // Update Pagination Text
+            const paginationInfo = document.getElementById('reportPaginationInfo');
+            if (paginationInfo) {
+                paginationInfo.innerHTML = `Hiển thị <span class="fw-bold">1-${filtered.length}</span> trên <span class="fw-bold">${filtered.length}</span> bản ghi`;
             }
         }
 
@@ -1265,7 +1512,9 @@
                 const formattedTime = now.toLocaleString('en-GB', { day: '2-digit', month: '2-digit', year: 'numeric', hour: '2-digit', minute: '2-digit', second: '2-digit' }).replace(',', '');
                 item.updatedTime = formattedTime;
                 item.user = 'hongtt';
-                item.note = note || 'Đã duyệt'; // Update note
+                item.note = note || 'Đã duyệt'; 
+                item.channel = channel; // Save approved channel
+                item.reconcileCode = `{"status":"SUCCESS","ftNumber":"FT${Math.floor(Date.now() / 1000)}"}`; // Mock reconcile code
                 
                 renderApprovalTable();
                 
