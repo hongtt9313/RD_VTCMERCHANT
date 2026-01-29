@@ -305,8 +305,12 @@
                                         <input type="hidden" id="isValidMerchant" value="false">
                                     </div>
 
-                                    <div class="col-md-6">
-                                        <!-- Placeholder to align layout -->
+                                    <!-- NEW PROFILE FIELD -->
+                                    <div class="col-md-6 d-none-custom" id="profileContainer">
+                                        <label class="form-label fw-bold">Profile <span class="text-danger">*</span></label>
+                                        <select id="profileSelect" class="form-select" required>
+                                            <option value="">-- Chọn Profile --</option>
+                                        </select>
                                     </div>
 
                                     <!-- NEW: Bank Selection & Account Input -->
@@ -465,21 +469,22 @@
                         <table class="table table-hover table-bordered mb-0" id="approvalTable">
                             <!-- DEFINED COLUMN WIDTHS VIA COLGROUP -->
                             <colgroup>
-                                <col style="width: 5.5%"> <!-- Mã ĐH -->
-                                <col style="width: 5.5%"> <!-- Mã GD -->
+                                <col style="width: 5%"> <!-- Mã ĐH -->
+                                <col style="width: 5%"> <!-- Mã GD -->
                                 <col style="width: 6%"> <!-- Người gửi -->
-                                <col style="width: 5.5%"> <!-- Ngân Hàng -->
+                                <col style="width: 5%"> <!-- Ngân Hàng -->
                                 <col style="width: 6%"> <!-- Số tiền -->
-                                <col style="width: 5.5%"> <!-- Tên TK -->
-                                <col style="width: 5.5%"> <!-- Số TK NH -->
-                                <col style="width: 5.5%"> <!-- Tên TK NH -->
-                                <col style="width: 8.5%"> <!-- Nội dung -->
-                                <col style="width: 5.5%"> <!-- TG Gửi YC -->
-                                <col style="width: 5.5%"> <!-- TG Cập nhật -->
-                                <col style="width: 5.5%"> <!-- Người cập nhật -->
-                                <col style="width: 5.5%"> <!-- Trạng thái -->
-                                <col style="width: 8.5%"> <!-- Mô tả -->
-                                <col style="width: 8.5%"> <!-- Mã đối soát (NEW) -->
+                                <col style="width: 5%"> <!-- Tên TK -->
+                                <col style="width: 7%"> <!-- Profile (NEW) -->
+                                <col style="width: 5%"> <!-- Số TK NH -->
+                                <col style="width: 5%"> <!-- Tên TK NH -->
+                                <col style="width: 8%"> <!-- Nội dung -->
+                                <col style="width: 5%"> <!-- TG Gửi YC -->
+                                <col style="width: 5%"> <!-- TG Cập nhật -->
+                                <col style="width: 5%"> <!-- Người cập nhật -->
+                                <col style="width: 5%"> <!-- Trạng thái -->
+                                <col style="width: 8%"> <!-- Mô tả -->
+                                <col style="width: 7%"> <!-- Mã đối soát -->
                                 <col style="width: 7%"> <!-- Chức năng -->
                             </colgroup>
                             <thead class="bg-light">
@@ -490,6 +495,7 @@
                                     <th>Ngân Hàng</th>
                                     <th>Số tiền</th>
                                     <th>Tên TK</th>
+                                    <th>Profile</th> <!-- NEW COLUMN -->
                                     <th>Số TK Ngân Hàng</th>
                                     <th>Tên TK Ngân Hàng</th>
                                     <th>Nội dung</th>
@@ -498,7 +504,7 @@
                                     <th>Người cập nhật</th>
                                     <th>Trạng thái</th>
                                     <th>Mô tả</th>
-                                    <th>Mã đối soát</th> <!-- NEW COLUMN -->
+                                    <th>Mã đối soát</th> 
                                     <th>Chức năng</th>
                                 </tr>
                             </thead>
@@ -595,37 +601,37 @@
             <div class="table-responsive-custom border rounded bg-white">
                 <table class="table table-hover table-bordered mb-0" id="reportTable">
                     <colgroup>
-                        <col style="width: 6%"> <!-- Mã ĐH -->
-                        <col style="width: 6%"> <!-- Mã GD -->
-                        <col style="width: 6%"> <!-- Kênh kết nối -->
-                        <col style="width: 6%"> <!-- Ngân Hàng -->
-                        <col style="width: 7%"> <!-- Số tiền -->
+                        <col style="width: 5%"> <!-- Mã ĐH -->
+                        <col style="width: 5%"> <!-- Mã GD -->
                         <col style="width: 6%"> <!-- Tên TK -->
+                        <col style="width: 7%"> <!-- Profile (NEW) -->
+                        <col style="width: 7%"> <!-- Tên Merchant -->
+                        <col style="width: 5%"> <!-- Kênh kết nối -->
+                        <col style="width: 5%"> <!-- Ngân Hàng -->
                         <col style="width: 6%"> <!-- Số TK NH -->
                         <col style="width: 6%"> <!-- Tên TK NH -->
-                        <col style="width: 14%"> <!-- Nội dung (Increased) -->
-                        <col style="width: 7%"> <!-- TG Gửi YC -->
-                        <col style="width: 7%"> <!-- TG Cập nhật -->
-                        <col style="width: 7%"> <!-- Người cập nhật -->
-                        <!-- Removed Status Col -->
-                        <col style="width: 14%"> <!-- Mô tả (Increased) -->
-                        <col style="width: 8%"> <!-- Mã đối soát -->
+                        <col style="width: 5%"> <!-- ID tích hợp -->
+                        <col style="width: 9%"> <!-- Nội dung -->
+                        <col style="width: 6%"> <!-- TG Thành công -->
+                        <col style="width: 7%"> <!-- Số tiền -->
+                        <col style="width: 10%"> <!-- Mô tả -->
+                        <col style="width: 7%"> <!-- Mã đối soát -->
                     </colgroup>
                     <thead class="bg-light">
                         <tr>
                             <th>Mã ĐH</th>
                             <th>Mã GD</th>
+                            <th>Tên TK</th>
+                            <th>Profile</th> <!-- NEW -->
+                            <th>Tên Merchant</th>
                             <th>Kênh kết nối</th>
                             <th>Ngân Hàng</th>
-                            <th>Số tiền</th>
-                            <th>Tên TK</th>
                             <th>Số TK Ngân Hàng</th>
                             <th>Tên TK Ngân Hàng</th>
+                            <th>ID tích hợp</th>
                             <th>Nội dung</th>
-                            <th>Thời gian gửi yêu cầu</th>
-                            <th>TG Cập nhật</th>
-                            <th>Người cập nhật</th>
-                            <!-- Removed Status Header -->
+                            <th>Thời gian thành công</th>
+                            <th>Số tiền</th>
                             <th>Mô tả</th>
                             <th>Mã đối soát</th>
                         </tr>
@@ -652,17 +658,17 @@
     <!-- Bootstrap Confirmation Modal -->
     <div class="modal fade" id="confirmModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header">
-                    <h5 class="modal-title"><i class="fa-solid fa-circle-question text-primary me-2"></i>Xác nhận</h5>
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light border-bottom-0">
+                    <h5 class="modal-title fw-bold" style="color: var(--vtc-blue);"><i class="fa-solid fa-circle-question me-2"></i>Xác nhận</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body" id="confirmModalBody">
-                    Bạn có chắc chắn?
+                <div class="modal-body text-secondary fs-6">
+                    <div id="confirmModalBody">Bạn có chắc chắn?</div>
                 </div>
-                <div class="modal-footer">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Hủy bỏ</button>
-                    <button type="button" class="btn btn-primary" onclick="onConfirmYes()">Đồng ý</button>
+                <div class="modal-footer border-top-0">
+                    <button type="button" class="btn btn-outline-secondary px-4" data-bs-dismiss="modal">Đóng</button>
+                    <button type="button" class="btn btn-primary px-4" onclick="onConfirmYes()">Đồng ý</button>
                 </div>
             </div>
         </div>
@@ -671,60 +677,62 @@
     <!-- Approval Modal -->
     <div class="modal fade" id="approveModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-lg modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-primary text-white">
-                    <h5 class="modal-title"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Phê duyệt yêu cầu chuyển tiền</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content border-0 shadow">
+                <!-- Changed header to minimal style: White/Light Grey background, Blue text -->
+                <div class="modal-header bg-light border-bottom">
+                    <h5 class="modal-title fw-bold" style="color: var(--vtc-blue);"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Phê duyệt yêu cầu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
                     <div class="row g-3">
+                        <!-- Inputs styled with bg-light for read-only look -->
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Mã đơn hàng</label>
-                            <input type="text" id="modalOrderId" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalOrderId" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Mã giao dịch</label>
-                            <input type="text" id="modalTransId" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalTransId" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Ngân hàng thụ hưởng</label>
-                            <input type="text" id="modalBankName" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalBankName" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Số tiền</label>
-                            <input type="text" id="modalAmount" class="form-control form-control-sm bg-light fw-bold text-primary" readonly>
+                            <input type="text" id="modalAmount" class="form-control form-control-sm bg-light fw-bold text-primary border-0" readonly>
                         </div>
                         <!-- REORDERED: Sender and Merchant Account on the same row -->
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Người gửi</label>
-                            <input type="text" id="modalSender" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalSender" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Tên TK Merchant</label>
-                            <input type="text" id="modalMerAcc" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalMerAcc" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <!-- End Reorder -->
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Số TK Ngân Hàng thụ hưởng</label>
-                            <input type="text" id="modalDestAccNo" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalDestAccNo" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Tên người thụ hưởng</label>
-                            <input type="text" id="modalDestAccName" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalDestAccName" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Thời gian gửi yêu cầu</label>
-                            <input type="text" id="modalCreatedTime" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalCreatedTime" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         <div class="col-12">
                             <label class="form-label fw-bold small text-muted">Nội dung</label>
-                            <input type="text" id="modalContent" class="form-control form-control-sm bg-light" readonly>
+                            <input type="text" id="modalContent" class="form-control form-control-sm bg-light text-dark border-0" readonly>
                         </div>
                         
-                        <div class="col-12"><hr class="my-1"></div>
+                        <div class="col-12"><hr class="my-1 text-muted opacity-25"></div>
                         
                         <div class="col-md-12">
-                            <label class="form-label fw-bold text-primary">Kênh kết nối (Nguồn tiền)</label>
+                            <label class="form-label fw-bold text-secondary">Kênh kết nối (Nguồn tiền)</label>
                             <select id="modalChannelSelect" class="form-select form-select-sm" onchange="updateApproveSourceAccount()">
                                 <option value="">-- Chọn ngân hàng nguồn --</option>
                                 <option value="Sacombank">Ngân hàng TMCP Sài Gòn thương tín (Sacombank)</option>
@@ -734,23 +742,23 @@
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Số tài khoản nguồn</label>
-                            <input type="text" id="modalSourceAcc" class="form-control form-control-sm bg-readonly" readonly>
+                            <input type="text" id="modalSourceAcc" class="form-control form-control-sm bg-light text-dark" readonly>
                         </div>
                         <div class="col-md-6">
                             <label class="form-label fw-bold small text-muted">Tên tài khoản nguồn</label>
-                            <input type="text" id="modalSourceName" class="form-control form-control-sm bg-readonly fw-bold" readonly>
+                            <input type="text" id="modalSourceName" class="form-control form-control-sm bg-light fw-bold text-dark" readonly>
                         </div>
                         
                         <div class="col-12">
-                            <label class="form-label fw-bold">Mô tả / Ghi chú</label>
+                            <label class="form-label fw-bold text-secondary">Mô tả / Ghi chú</label>
                             <textarea id="modalNote" class="form-control form-control-sm" rows="2" placeholder="Nhập ghi chú phê duyệt..."></textarea>
                         </div>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer bg-light border-top-0">
                     <input type="hidden" id="modalTxId">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal"><i class="fa-solid fa-arrow-left me-2"></i>Quay lại</button>
-                    <button type="button" class="btn btn-primary" onclick="confirmApprove()"><i class="fa-solid fa-check-double me-2"></i>Duyệt tiền</button>
+                    <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal"><i class="fa-solid fa-arrow-left me-2"></i>Quay lại</button>
+                    <button type="button" class="btn btn-primary px-4" onclick="confirmApprove()"><i class="fa-solid fa-check-double me-2"></i>Duyệt tiền</button>
                 </div>
             </div>
         </div>
@@ -759,22 +767,24 @@
     <!-- Cancel Modal -->
     <div class="modal fade" id="cancelModal" tabindex="-1" aria-hidden="true">
         <div class="modal-dialog modal-dialog-centered">
-            <div class="modal-content">
-                <div class="modal-header bg-danger text-white">
-                    <h5 class="modal-title"><i class="fa-solid fa-ban me-2"></i>Hủy yêu cầu chuyển tiền</h5>
-                    <button type="button" class="btn-close btn-close-white" data-bs-dismiss="modal" aria-label="Close"></button>
+            <div class="modal-content border-0 shadow">
+                <!-- Changed to Neutral/Grey Header -->
+                <div class="modal-header bg-light border-bottom-0">
+                    <h5 class="modal-title fw-bold text-dark"><i class="fa-solid fa-ban me-2 text-secondary"></i>Hủy yêu cầu</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
                 <div class="modal-body">
-                    <p>Bạn có chắc chắn muốn hủy giao dịch này không?</p>
+                    <p class="text-muted mb-3">Bạn có chắc chắn muốn hủy giao dịch này không?</p>
                     <div class="mb-3">
-                        <label for="cancelNote" class="form-label fw-bold">Lý do hủy / Mô tả <span class="text-danger">*</span></label>
-                        <textarea class="form-control" id="cancelNote" rows="3" placeholder="Nhập lý do hủy..."></textarea>
+                        <label for="cancelNote" class="form-label fw-bold text-secondary">Lý do hủy / Mô tả <span class="text-danger">*</span></label>
+                        <textarea class="form-control bg-light" id="cancelNote" rows="3" placeholder="Nhập lý do hủy..."></textarea>
                     </div>
                 </div>
-                <div class="modal-footer">
+                <div class="modal-footer border-top-0">
                     <input type="hidden" id="cancelTxId">
-                    <button type="button" class="btn btn-secondary" data-bs-dismiss="modal">Đóng</button>
-                    <button type="button" class="btn btn-danger" onclick="confirmCancel()">Xác nhận hủy</button>
+                    <button type="button" class="btn btn-outline-secondary px-3" data-bs-dismiss="modal">Đóng</button>
+                    <!-- Used btn-dark (Dark Grey) instead of Red for cancellation -->
+                    <button type="button" class="btn btn-dark px-4" onclick="confirmCancel()">Xác nhận hủy</button>
                 </div>
             </div>
         </div>
@@ -903,9 +913,18 @@
 
         // --- MOCK DATA ---
         const mockMerchants = {
-            'NNVTC2C2PVOL': { name: 'CTY CP CONG NGHE VOLTALITY' },
-            'M123456': { name: 'CÔNG TY CỔ PHẦN THƯƠNG MẠI DỊCH VỤ ABC' },
-            'M888888': { name: 'CÔNG TY TNHH MTV VẬN TẢI XYZ' }
+            'NNVTC2C2PVOL': { 
+                name: 'CTY CP CONG NGHE VOLTALITY',
+                profiles: ['Trạm sạc Long Biên', 'Trạm sạc Hai Bà Trưng', 'Trạm sạc Cầu Giấy', 'Trạm sạc Thanh Xuân']
+            },
+            'M123456': { 
+                name: 'CÔNG TY CỔ PHẦN THƯƠNG MẠI DỊCH VỤ ABC',
+                profiles: ['Chi nhánh Hà Nội', 'Chi nhánh HCM']
+            },
+            'M888888': { 
+                name: 'CÔNG TY TNHH MTV VẬN TẢI XYZ',
+                profiles: ['Kho vận Bắc', 'Kho vận Nam']
+            }
         };
 
         const sourceAccounts = {
@@ -934,7 +953,9 @@
                 status: 'PENDING', 
                 note: 'Đã gửi yêu cầu',
                 reconcileCode: '',
-                channel: 'Sacombank'
+                channel: 'Sacombank',
+                integrationId: '100020',
+                profile: 'Trạm sạc Hai Bà Trưng'
             },
             { 
                 id: 2, 
@@ -954,7 +975,9 @@
                 status: 'CREATED', 
                 note: 'Đã gửi yêu cầu',
                 reconcileCode: '',
-                channel: 'BIDV'
+                channel: 'BIDV',
+                integrationId: '100021',
+                profile: 'Trạm sạc Hải Phòng'
             },
             { 
                 id: 3, 
@@ -974,7 +997,9 @@
                 status: 'SUCCESS', 
                 note: 'Chuyển tiền thành công',
                 reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680003"}',
-                channel: 'Sacombank'
+                channel: 'Sacombank',
+                integrationId: '100022',
+                profile: 'Trạm sạc Long Biên'
             },
             { 
                 id: 4, 
@@ -994,7 +1019,9 @@
                 status: 'SUCCESS', 
                 note: 'Đã duyệt',
                 reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680004"}',
-                channel: 'MB'
+                channel: 'MB',
+                integrationId: '100023',
+                profile: 'Trạm sạc Cầu Giấy'
             },
             { 
                 id: 5, 
@@ -1014,7 +1041,9 @@
                 status: 'CANCELLED', 
                 note: 'Đối tác yêu cầu hủy',
                 reconcileCode: '',
-                channel: 'Sacombank'
+                channel: 'Sacombank',
+                integrationId: '100024',
+                profile: 'Trạm sạc Thanh Xuân'
             },
             { 
                 id: 6, 
@@ -1034,7 +1063,9 @@
                 status: 'PENDING', 
                 note: 'Đã gửi yêu cầu',
                 reconcileCode: '',
-                channel: 'BIDV'
+                channel: 'BIDV',
+                integrationId: '100025',
+                profile: 'Trạm sạc Đà Nẵng'
             },
             { 
                 id: 7, 
@@ -1054,7 +1085,9 @@
                 status: 'SUCCESS', 
                 note: 'Chuyển tiền thành công',
                 reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680007"}',
-                channel: 'Sacombank'
+                channel: 'Sacombank',
+                integrationId: '100026',
+                profile: 'Trạm sạc Quận 7'
             },
             { 
                 id: 8, 
@@ -1074,7 +1107,9 @@
                 status: 'CANCELLED', 
                 note: 'Sai thông tin tài khoản',
                 reconcileCode: '',
-                channel: 'MB'
+                channel: 'MB',
+                integrationId: '100027',
+                profile: 'Trạm sạc Cần Thơ'
             },
             { 
                 id: 9, 
@@ -1094,7 +1129,9 @@
                 status: 'PENDING', 
                 note: 'Đã gửi yêu cầu',
                 reconcileCode: '',
-                channel: 'Sacombank'
+                channel: 'Sacombank',
+                integrationId: '100028',
+                profile: 'Trạm sạc Nha Trang'
             },
             { 
                 id: 10, 
@@ -1114,7 +1151,9 @@
                 status: 'SUCCESS', 
                 note: 'Đã duyệt',
                 reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680010"}',
-                channel: 'BIDV'
+                channel: 'BIDV',
+                integrationId: '100029',
+                profile: 'Trạm sạc Vũng Tàu'
             },
             { 
                 id: 11, 
@@ -1134,7 +1173,9 @@
                 status: 'SUCCESS', 
                 note: 'Đối tác gửi yêu cầu',
                 reconcileCode: '{"status":"SUCCESS","ftNumber":"FT23102680011"}',
-                channel: 'Sacombank'
+                channel: 'Sacombank',
+                integrationId: '100030',
+                profile: 'Trạm sạc Thanh Trì'
             }
         ];
 
@@ -1177,6 +1218,22 @@
                     document.getElementById('merchantAccount').classList.add('is-valid-check');
                     document.getElementById('merchantResultContainer').style.display = 'block';
                     document.getElementById('merchantNameDisplay').innerText = data.name;
+                    
+                    // Populate Profile Select
+                    const profileSelect = document.getElementById('profileSelect');
+                    profileSelect.innerHTML = '<option value="">-- Chọn Profile --</option>';
+                    if (data.profiles && data.profiles.length > 0) {
+                        data.profiles.forEach(p => {
+                            const opt = document.createElement('option');
+                            opt.value = p;
+                            opt.text = p;
+                            profileSelect.appendChild(opt);
+                        });
+                        document.getElementById('profileContainer').classList.remove('d-none-custom');
+                    } else {
+                        document.getElementById('profileContainer').classList.add('d-none-custom');
+                    }
+
                 } else {
                     if (event && event.type === 'click') { showAlert("Không tìm thấy thông tin tài khoản!"); }
                     resetMerchantCheck();
@@ -1188,6 +1245,7 @@
             document.getElementById('isValidMerchant').value = "false";
             document.getElementById('merchantAccount').classList.remove('is-valid-check');
             document.getElementById('merchantResultContainer').style.display = 'none';
+            document.getElementById('profileContainer').classList.add('d-none-custom');
         }
 
         function resetBenName() {
@@ -1282,7 +1340,9 @@
                     content: document.getElementById('transferReason').value,
                     createdTime: formattedTime,
                     updatedTime: '-', user: '-', status: 'CREATED', note: 'Khởi tạo mới',
-                    channel: 'Sacombank' // Default mock channel
+                    channel: 'Sacombank', // Default mock channel
+                    integrationId: '100031',
+                    profile: document.getElementById('profileSelect').value || '-'
                 };
                 approvalData.unshift(newReq);
                 renderApprovalTable(); // Refresh table in tab 2
@@ -1345,7 +1405,7 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="16" class="text-center py-4 text-muted">Không có dữ liệu</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="17" class="text-center py-4 text-muted">Không có dữ liệu</td></tr>';
                 return;
             }
 
@@ -1358,6 +1418,7 @@
                     <td>${item.bankName}</td>
                     <td class="col-money">${formatMoney(item.amount)}</td>
                     <td>${item.merAcc}</td>
+                    <td>${item.profile || '-'}</td> <!-- NEW PROFILE -->
                     <td>${item.destAccNo}</td>
                     <td>${item.destAccName}</td>
                     <td>${item.content}</td>
@@ -1425,17 +1486,17 @@
                 tr.innerHTML = `
                     <td class="col-id">${item.orderId}</td>
                     <td>${item.transId}</td>
+                    <td>${item.merAcc}</td>
+                    <td>${item.profile || '-'}</td> <!-- NEW PROFILE -->
+                    <td>Công ty TNHH Voltality</td> <!-- Mock Merchant Name -->
                     <td>${item.channel || '-'}</td>
                     <td>${item.bankName}</td>
-                    <td class="col-money">${formatMoney(item.amount)}</td>
-                    <td>${item.merAcc}</td>
                     <td>${item.destAccNo}</td>
                     <td>${item.destAccName}</td>
+                    <td>${item.integrationId || '-'}</td> <!-- NEW INTEGRATION ID -->
                     <td>${item.content}</td>
-                    <td class="col-date">${formatDateTime(item.createdTime)}</td>
                     <td class="col-date">${formatDateTime(item.updatedTime)}</td>
-                    <td>${item.user}</td>
-                    <!-- Removed Status Cell -->
+                    <td class="col-money">${formatMoney(item.amount)}</td>
                     <td>${item.note}</td>
                     <td style="font-family: monospace; font-size: 10px; word-break: break-all;">${item.reconcileCode || ''}</td>
                 `;
