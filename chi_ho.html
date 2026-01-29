@@ -265,7 +265,7 @@
                 </li>
                 <li class="nav-item" role="presentation">
                     <button class="nav-link" id="approval-transfer-tab" data-bs-toggle="tab" data-bs-target="#approval-transfer" type="button" role="tab">
-                        <i class="fa-solid fa-check-to-slot me-2"></i>Duyệt chuyển tiền chi hộ
+                        <i class="fa-solid fa-check-to-slot me-2"></i>Duyệt tiền chi hộ
                     </button>
                 </li>
             </ul>
@@ -376,7 +376,7 @@
                     </div>
                 </div>
 
-                <!-- 2. DUYỆT CHUYỂN TIỀN CHI HỘ -->
+                <!-- 2. DUYỆT TIỀN CHI HỘ -->
                 <div class="tab-pane fade" id="approval-transfer" role="tabpanel">
                     
                     <!-- Filter Section -->
@@ -605,16 +605,15 @@
                         <col style="width: 5%"> <!-- Mã GD -->
                         <col style="width: 6%"> <!-- Tên TK -->
                         <col style="width: 7%"> <!-- Profile (NEW) -->
-                        <col style="width: 7%"> <!-- Tên Merchant -->
+                        <col style="width: 8%"> <!-- Tên Merchant -->
                         <col style="width: 5%"> <!-- Kênh kết nối -->
                         <col style="width: 5%"> <!-- Ngân Hàng -->
                         <col style="width: 6%"> <!-- Số TK NH -->
                         <col style="width: 6%"> <!-- Tên TK NH -->
-                        <col style="width: 5%"> <!-- ID tích hợp -->
-                        <col style="width: 9%"> <!-- Nội dung -->
-                        <col style="width: 6%"> <!-- TG Thành công -->
+                        <col style="width: 11%"> <!-- Nội dung -->
+                        <col style="width: 7%"> <!-- TG Thành công -->
                         <col style="width: 7%"> <!-- Số tiền -->
-                        <col style="width: 10%"> <!-- Mô tả -->
+                        <col style="width: 12%"> <!-- Mô tả -->
                         <col style="width: 7%"> <!-- Mã đối soát -->
                     </colgroup>
                     <thead class="bg-light">
@@ -628,7 +627,6 @@
                             <th>Ngân Hàng</th>
                             <th>Số TK Ngân Hàng</th>
                             <th>Tên TK Ngân Hàng</th>
-                            <th>ID tích hợp</th>
                             <th>Nội dung</th>
                             <th>Thời gian thành công</th>
                             <th>Số tiền</th>
@@ -1353,7 +1351,7 @@
             });
         }
 
-        // --- LOGIC TAB 2: DUYỆT CHUYỂN TIỀN CHI HỘ ---
+        // --- LOGIC TAB 2: DUYỆT TIỀN CHI HỘ ---
 
         function getStatusBadge(status) {
             switch(status) {
@@ -1493,7 +1491,6 @@
                     <td>${item.bankName}</td>
                     <td>${item.destAccNo}</td>
                     <td>${item.destAccName}</td>
-                    <td>${item.integrationId || '-'}</td> <!-- NEW INTEGRATION ID -->
                     <td>${item.content}</td>
                     <td class="col-date">${formatDateTime(item.updatedTime)}</td>
                     <td class="col-money">${formatMoney(item.amount)}</td>
@@ -1642,4 +1639,3 @@
     </script>
 </body>
 </html>
-
