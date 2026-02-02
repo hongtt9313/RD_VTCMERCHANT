@@ -17,6 +17,7 @@
             --vtc-blue-dark: #005691;
             --header-bg: #f8f9fa;
             --table-header-bg: #e9ecef;
+            --vtc-orange: #f36f21; /* VTC Orange color */
         }
 
         body {
@@ -201,6 +202,18 @@
             background-color: #26b6d4; color: white; border: none; padding: 6px 20px; border-radius: 3px; font-weight: bold; transition: background 0.2s;
         }
         .btn-search:hover { background-color: #1a9cb7; color: white; }
+        
+        /* Orange Button Icon */
+        .btn-icon-orange {
+            color: var(--vtc-orange);
+            background: transparent;
+            border: none;
+            font-size: 14px;
+            transition: color 0.2s;
+        }
+        .btn-icon-orange:hover {
+            color: #d65c16;
+        }
 
         /* Status Badges */
         .badge-pending-approval { background-color: #ffc107; color: #000; } /* Chờ duyệt */
@@ -232,12 +245,22 @@
                 </button>
 
                 <!-- MODULE 2: BÁO CÁO (Dropdown) -->
-                <div class="dropdown d-inline-block">
+                <div class="dropdown d-inline-block me-1">
                     <button class="nav-btn dropdown-toggle" type="button" id="dropdownReport" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-chart-line me-2"></i> Báo cáo merchant
                     </button>
                     <ul class="dropdown-menu shadow" aria-labelledby="dropdownReport">
                         <li><a class="dropdown-item" href="#" onclick="switchModule('report')"><i class="fa-solid fa-file-invoice-dollar me-2"></i>Báo cáo chi hộ</a></li>
+                    </ul>
+                </div>
+
+                <!-- MODULE 3: GIAO DỊCH (Dropdown - NEW) -->
+                <div class="dropdown d-inline-block">
+                    <button class="nav-btn dropdown-toggle" type="button" id="dropdownTransaction" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-money-bill-transfer me-2"></i> Giao dịch
+                    </button>
+                    <ul class="dropdown-menu shadow" aria-labelledby="dropdownTransaction">
+                        <li><a class="dropdown-item" href="#" onclick="switchModule('history')"><i class="fa-solid fa-clock-rotate-left me-2"></i>Tra cứu lịch sử</a></li>
                     </ul>
                 </div>
             </div>
@@ -378,10 +401,10 @@
 
                 <!-- 2. DUYỆT TIỀN CHI HỘ -->
                 <div class="tab-pane fade" id="approval-transfer" role="tabpanel">
-                    
-                    <!-- Filter Section -->
+                    <!-- ... Content for Approval (Tab 2) ... -->
                     <div class="filter-section border rounded py-3 mb-3 bg-light">
-                        <div class="container-fluid">
+                        <!-- ... filter ... -->
+                         <div class="container-fluid">
                             <div class="row g-2">
                                 <!-- Row 1 -->
                                 <div class="col-md-6">
@@ -428,15 +451,13 @@
                             </div>
                         </div>
                     </div>
-
-                    <!-- Toolbar Actions -->
+                    
+                     <!-- Toolbar Actions -->
                     <div class="d-flex justify-content-between align-items-center mb-2">
-                        <!-- Left Controls -->
                         <div class="d-flex gap-2 align-items-center">
                             <button class="btn btn-success btn-sm" onclick="showAlert('Đang xuất dữ liệu...')">
                                 <i class="fa-solid fa-file-excel me-1"></i> Xuất dữ liệu
                             </button>
-                            
                             <div class="d-flex align-items-center bg-white border rounded px-2 py-1">
                                 <span class="small me-2 text-muted">Hiển thị:</span>
                                 <select class="form-select form-select-sm border-0 py-0 ps-0 pe-4 w-auto" style="height: auto;">
@@ -445,22 +466,18 @@
                                     <option value="50">50</option>
                                 </select>
                             </div>
-
                             <div class="dropdown">
                                 <button class="btn btn-outline-secondary btn-sm dropdown-toggle" type="button" data-bs-toggle="dropdown">
                                     <i class="fa-solid fa-eye me-1"></i> Ẩn/Hiện cột
                                 </button>
-                                <ul class="dropdown-menu p-2 shadow" style="min-width: 200px; max-height: 300px; overflow-y: auto;">
+                                <ul class="dropdown-menu p-2 shadow">
                                     <li><label class="dropdown-item small"><input type="checkbox" checked> Mã ĐH</label></li>
-                                    <li><label class="dropdown-item small"><input type="checkbox" checked> Mã GD</label></li>
                                 </ul>
                             </div>
                         </div>
-
-                        <!-- Right Search -->
                         <div class="input-group input-group-sm" style="width: 250px;">
                             <span class="input-group-text bg-white"><i class="fa-solid fa-magnifying-glass text-muted"></i></span>
-                            <input type="text" class="form-control" placeholder="Tìm kiếm trong bảng..." onkeyup="filterTableLocal(this.value, 'approvalTable')">
+                            <input type="text" class="form-control" placeholder="Tìm kiếm..." onkeyup="filterTableLocal(this.value, 'approvalTable')">
                         </div>
                     </div>
 
@@ -475,7 +492,7 @@
                                 <col style="width: 5%"> <!-- Ngân Hàng -->
                                 <col style="width: 6%"> <!-- Số tiền -->
                                 <col style="width: 5%"> <!-- Tên TK -->
-                                <col style="width: 7%"> <!-- Profile (NEW) -->
+                                <col style="width: 7%"> <!-- Profile -->
                                 <col style="width: 5%"> <!-- Số TK NH -->
                                 <col style="width: 5%"> <!-- Tên TK NH -->
                                 <col style="width: 8%"> <!-- Nội dung -->
@@ -495,7 +512,7 @@
                                     <th>Ngân Hàng</th>
                                     <th>Số tiền</th>
                                     <th>Tên TK</th>
-                                    <th>Profile</th> <!-- NEW COLUMN -->
+                                    <th>Profile</th> 
                                     <th>Số TK Ngân Hàng</th>
                                     <th>Tên TK Ngân Hàng</th>
                                     <th>Nội dung</th>
@@ -513,8 +530,7 @@
                             </tbody>
                         </table>
                     </div>
-
-                    <!-- Pagination -->
+                    
                     <div class="footer-pagination d-flex justify-content-between align-items-center mt-3">
                         <div class="text-muted small" id="paginationInfo">Hiển thị <span class="fw-bold">1-11</span> trên <span class="fw-bold">11</span> bản ghi</div>
                         <nav>
@@ -526,6 +542,7 @@
                             </ul>
                         </nav>
                     </div>
+
                 </div>
             </div>
         </div>
@@ -601,20 +618,20 @@
             <div class="table-responsive-custom border rounded bg-white">
                 <table class="table table-hover table-bordered mb-0" id="reportTable">
                     <colgroup>
-                        <col style="width: 5%"> <!-- Mã ĐH -->
-                        <col style="width: 5%"> <!-- Mã GD -->
-                        <col style="width: 6%"> <!-- Tên TK -->
-                        <col style="width: 7%"> <!-- Profile (NEW) -->
-                        <col style="width: 8%"> <!-- Tên Merchant -->
-                        <col style="width: 5%"> <!-- Kênh kết nối -->
-                        <col style="width: 5%"> <!-- Ngân Hàng -->
-                        <col style="width: 6%"> <!-- Số TK NH -->
-                        <col style="width: 6%"> <!-- Tên TK NH -->
-                        <col style="width: 11%"> <!-- Nội dung -->
-                        <col style="width: 7%"> <!-- TG Thành công -->
-                        <col style="width: 7%"> <!-- Số tiền -->
-                        <col style="width: 12%"> <!-- Mô tả -->
-                        <col style="width: 7%"> <!-- Mã đối soát -->
+                        <col style="width: 6%"> <!-- Mã ĐH -->
+                        <col style="width: 6%"> <!-- Mã GD -->
+                        <col style="width: 7%"> <!-- Tên TK (Moved up) -->
+                        <col style="width: 9%"> <!-- Tên Merchant (NEW) -->
+                        <col style="width: 6%"> <!-- Kênh kết nối -->
+                        <col style="width: 6%"> <!-- Ngân Hàng -->
+                        <col style="width: 6.5%"> <!-- Số TK NH -->
+                        <col style="width: 7%"> <!-- Tên TK NH -->
+                        <col style="width: 6%"> <!-- ID tích hợp (NEW) -->
+                        <col style="width: 10%"> <!-- Nội dung -->
+                        <col style="width: 6.5%"> <!-- TG Thành công (Renamed) -->
+                        <col style="width: 7.5%"> <!-- Số tiền (Moved) -->
+                        <col style="width: 11%"> <!-- Mô tả -->
+                        <col style="width: 8%"> <!-- Mã đối soát -->
                     </colgroup>
                     <thead class="bg-light">
                         <tr>
@@ -627,9 +644,10 @@
                             <th>Ngân Hàng</th>
                             <th>Số TK Ngân Hàng</th>
                             <th>Tên TK Ngân Hàng</th>
+                            <!-- Removed Integration ID -->
                             <th>Nội dung</th>
-                            <th>Thời gian thành công</th>
-                            <th>Số tiền</th>
+                            <th>Thời gian thành công</th> <!-- Renamed -->
+                            <th>Số tiền</th> <!-- Moved here -->
                             <th>Mô tả</th>
                             <th>Mã đối soát</th>
                         </tr>
@@ -649,6 +667,114 @@
                         <li class="page-item"><a class="page-link" href="#">Tiếp</a></li>
                     </ul>
                 </nav>
+            </div>
+        </div>
+    </div>
+
+    <!-- === MODULE GIAO DỊCH CONTENT (Lịch sử) === -->
+    <div id="module-history" class="module-section d-none-custom">
+        <div class="page-title-bar">
+            <i class="fa-solid fa-clock-rotate-left me-2"></i> Tra cứu lịch sử giao dịch
+        </div>
+
+        <div class="container-fluid">
+            <!-- Filter Section -->
+            <div class="filter-section border rounded py-3 mb-3 bg-light">
+                <div class="container-fluid">
+                    <div class="row g-2">
+                        <!-- Row 1 -->
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Từ ngày</label>
+                            <input type="datetime-local" class="form-control form-control-sm">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Đến ngày</label>
+                            <input type="datetime-local" class="form-control form-control-sm">
+                        </div>
+                        <!-- Row 2 -->
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Mã giao dịch</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Nhập mã GD">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Loại giao dịch</label>
+                            <select class="form-select form-select-sm">
+                                <option value="">Tất cả</option>
+                                <option value="CK" selected>Chuyển khoản</option>
+                                <option value="NT">Nạp tiền</option>
+                                <option value="CTCH" selected>Chuyển tiền chi hộ</option>
+                            </select>
+                        </div>
+                        <!-- Row 3 -->
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Tài khoản Pay</label>
+                            <input type="text" class="form-control form-control-sm" value="NNVTC2C2PVOL" placeholder="Nhập tài khoản">
+                        </div>
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Mã đối tác</label>
+                            <input type="text" class="form-control form-control-sm bg-readonly" disabled>
+                        </div>
+                        <!-- Row 4 -->
+                        <div class="col-md-6">
+                            <label class="fw-bold mb-1 small">Mã đơn hàng</label>
+                            <input type="text" class="form-control form-control-sm" placeholder="Nhập mã đơn hàng">
+                        </div>
+                        <!-- Button moved to a separate centered row -->
+                        <div class="col-12 text-center mt-3">
+                            <button class="btn btn-search text-white px-5" onclick="renderHistoryLookupTable()">
+                                <i class="fa-solid fa-magnifying-glass me-2"></i> Tra cứu
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            </div>
+
+            <!-- Balance Info (Modified) -->
+            <div class="mb-3 ps-2">
+                <div class="mb-1"><span class="text-secondary fw-bold me-2">Số dư trước GD:</span> <span class="fw-bold text-dark">6.730.929 VND</span></div>
+                <div><span class="text-secondary fw-bold me-2">Số dư sau GD:</span> <span class="fw-bold text-primary">11.247.100 VND</span></div>
+            </div>
+
+            <!-- Toolbar -->
+            <div class="d-flex justify-content-between align-items-center mb-2">
+                <div class="d-flex gap-2">
+                    <button class="btn btn-success btn-sm"><i class="fa-solid fa-file-excel me-1"></i> Xuất dữ liệu</button>
+                    <div class="d-flex align-items-center bg-white border rounded px-2 py-1">
+                        <span class="small me-2 text-muted">Hiển thị:</span>
+                        <select class="form-select form-select-sm border-0 py-0 ps-0 pe-4 w-auto" style="height: auto;">
+                            <option value="25">25</option>
+                        </select>
+                    </div>
+                    <button class="btn btn-outline-secondary btn-sm"><i class="fa-solid fa-eye me-1"></i> Ẩn/Hiện cột</button>
+                </div>
+            </div>
+
+            <!-- Data Table (History) -->
+            <div class="table-responsive-custom border rounded bg-white">
+                <table class="table table-hover table-bordered mb-0">
+                    <thead class="bg-light">
+                        <tr>
+                            <th style="width: 4%">STT</th>
+                            <th style="width: 10%">Thời gian</th>
+                            <th style="width: 8%">Mã GD</th>
+                            <th style="width: 8%">Mã Đơn Hàng</th>
+                            <th style="width: 8%">Mã đối tác</th>
+                            <th style="width: 8%">TK Nhận</th>
+                            <th style="width: 8%">Loại giao dịch</th>
+                            <th style="width: 15%">Mô tả</th>
+                            <th style="width: 6%">Mã giảm giá</th>
+                            <th style="width: 8%">Số tiền giảm giá</th>
+                            <th style="width: 10%">Thành Tiền (VND)</th>
+                            <th style="width: 8%">TK Mua</th>
+                            <th style="width: 5%">Chức Năng</th>
+                        </tr>
+                    </thead>
+                    <tbody id="historyLookupBody"></tbody>
+                </table>
+            </div>
+            
+            <div class="footer-pagination mt-2">
+                <div class="text-muted small">Hiển thị 10 bản ghi</div>
             </div>
         </div>
     </div>
@@ -788,6 +914,83 @@
         </div>
     </div>
 
+    <!-- History Detail Modal (NEW) -->
+    <div class="modal fade" id="historyDetailModal" tabindex="-1" aria-hidden="true">
+        <div class="modal-dialog modal-lg modal-dialog-centered">
+            <div class="modal-content border-0 shadow">
+                <div class="modal-header bg-light border-bottom">
+                    <h5 class="modal-title fw-bold" style="color: var(--vtc-blue);"><i class="fa-solid fa-list-check me-2"></i>Chi tiết Lịch sử giao dịch</h5>
+                    <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
+                </div>
+                <div class="modal-body">
+                     <div class="row g-3">
+                        <!-- Left Col -->
+                        <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Mã GD</label>
+                            <input type="text" id="hist_transCode" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Mã Đơn Hàng</label>
+                            <input type="text" id="hist_orderCode" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Tài Khoản</label>
+                            <input type="text" id="hist_account" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Tài Khoản Mua</label>
+                            <input type="text" id="hist_buyAccount" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Loại GD</label>
+                            <input type="text" id="hist_type" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Loại xác thực</label>
+                            <input type="text" id="hist_authType" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Thông tin thiết bị</label>
+                            <input type="text" id="hist_device" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Mã giảm giá</label>
+                            <input type="text" id="hist_discountCode" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Số tiền giảm giá (VND)</label>
+                            <input type="text" id="hist_discountAmt" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Phí GD (VNĐ)</label>
+                            <input type="text" id="hist_fee" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Tiền GD (VNĐ)</label>
+                            <input type="text" id="hist_amount" class="form-control form-control-sm bg-light fw-bold text-primary border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Người Tạo</label>
+                            <input type="text" id="hist_creator" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-md-6">
+                            <label class="form-label fw-bold small text-muted">Thời gian</label>
+                            <input type="text" id="hist_time" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                         <div class="col-12">
+                            <label class="form-label fw-bold small text-muted">Mô tả</label>
+                            <input type="text" id="hist_desc" class="form-control form-control-sm bg-light text-dark border-0" readonly>
+                        </div>
+                     </div>
+                </div>
+                <div class="modal-footer bg-light border-top-0">
+                    <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
+                </div>
+            </div>
+        </div>
+    </div>
+
+
     <!-- Bootstrap JS Bundle -->
     <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 
@@ -839,20 +1042,32 @@
         function switchModule(moduleName) {
             const chihoSection = document.getElementById('module-chiho');
             const reportSection = document.getElementById('module-report');
+            const historySection = document.getElementById('module-history'); // NEW
+            
             const btnChiho = document.getElementById('nav-chiho');
             const dropdownReport = document.getElementById('dropdownReport');
+            const dropdownTransaction = document.getElementById('dropdownTransaction'); // NEW
+
+            // Reset all active states
+            chihoSection.classList.add('d-none-custom');
+            reportSection.classList.add('d-none-custom');
+            historySection.classList.add('d-none-custom');
+            
+            btnChiho.classList.remove('active-tab');
+            dropdownReport.classList.remove('active-tab', 'bg-primary', 'text-white');
+            dropdownTransaction.classList.remove('active-tab', 'bg-primary', 'text-white');
 
             if (moduleName === 'chiho') {
                 chihoSection.classList.remove('d-none-custom');
-                reportSection.classList.add('d-none-custom');
                 btnChiho.classList.add('active-tab');
-                dropdownReport.classList.remove('active-tab', 'bg-primary', 'text-white'); // Removed active styles
             } else if (moduleName === 'report') {
-                chihoSection.classList.add('d-none-custom');
                 reportSection.classList.remove('d-none-custom');
-                btnChiho.classList.remove('active-tab');
                 dropdownReport.classList.add('active-tab');
-                renderReportTable(); // Init report data
+                renderReportTable(); 
+            } else if (moduleName === 'history') { // NEW
+                historySection.classList.remove('d-none-custom');
+                dropdownTransaction.classList.add('active-tab');
+                renderHistoryLookupTable(); // Init history data
             }
         }
 
@@ -1177,6 +1392,56 @@
             }
         ];
 
+        // NEW: Mock Data for History Lookup Module
+        const mockHistoryData = [
+            {
+                stt: 1,
+                time: '19/01/2026 14:43:27',
+                transCode: 'PG-95561391',
+                orderCode: '81756241',
+                partnerCode: '',
+                destAcc: '', // Explicit destAcc
+                type: 'Chuyển tiền chi hộ',
+                desc: 'Thanh toán cho số thẻ TECHCOMBANK 190333444555 - LE VAN C',
+                discountCode: '',
+                discountAmt: 0,
+                amount: -50000000,
+                buyAccount: 'NNVTC2C2PVOL',
+                // Additional fields for Popup
+                authType: 'OTP',
+                device: 'Chrome/Windows',
+                fee: 0,
+                creator: 'system'
+            },
+             {
+                stt: 2,
+                time: '19/01/2026 14:40:10',
+                transCode: 'PG-95561380',
+                orderCode: '81756240',
+                partnerCode: '',
+                destAcc: '',
+                type: 'Chuyển tiền chi hộ',
+                desc: 'Thanh toán cho số thẻ VIETCOMBANK 001100998877 - TRAN THI B',
+                discountCode: '',
+                discountAmt: 0,
+                amount: -25000000,
+                buyAccount: 'NNVTC2C2PVOL',
+                 // Additional fields for Popup
+                authType: 'OTP',
+                device: 'Chrome/Windows',
+                fee: 0,
+                creator: 'system'
+            },
+            { stt: 3, time: '18/01/2026 09:15:20', transCode: 'PG-95561375', orderCode: '81756238', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ BIDV 1234567890 - PHAM VAN D', discountCode: '', discountAmt: 0, amount: -10000000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Mobile App', fee: 0, creator: 'hongtt' },
+            { stt: 4, time: '18/01/2026 10:20:00', transCode: 'PG-95561370', orderCode: '81756235', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ MB 888899990000 - VU VAN F', discountCode: '', discountAmt: 0, amount: -8500000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Chrome/Windows', fee: 0, creator: 'system' },
+            { stt: 5, time: '17/01/2026 16:00:00', transCode: 'PG-95561365', orderCode: '81756230', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ VPBANK 999888777 - HOANG THI E', discountCode: 'VOUCHER10', discountAmt: 10000, amount: -3200000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Safari/Mac', fee: 5000, creator: 'system' },
+            { stt: 6, time: '17/01/2026 11:30:45', transCode: 'PG-95561360', orderCode: '81756225', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ SACOMBANK 020011223344 - NGO THI G', discountCode: '', discountAmt: 0, amount: -20000000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Mobile App', fee: 0, creator: 'hongtt' },
+            { stt: 7, time: '16/01/2026 14:10:10', transCode: 'PG-95561355', orderCode: '81756220', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ AGRIBANK 333344445555 - DO VAN H', discountCode: '', discountAmt: 0, amount: -500000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Chrome/Windows', fee: 0, creator: 'system' },
+            { stt: 8, time: '16/01/2026 09:05:00', transCode: 'PG-95561350', orderCode: '81756215', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ BIDV 211100009999 - BUI THI I', discountCode: '', discountAmt: 0, amount: -15000000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Firefox/Windows', fee: 0, creator: 'system' },
+            { stt: 9, time: '15/01/2026 13:45:30', transCode: 'PG-95561345', orderCode: '81756210', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ VIETINBANK 101020203030 - DANG VAN K', discountCode: '', discountAmt: 0, amount: -5000000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Mobile App', fee: 0, creator: 'hongtt' },
+            { stt: 10, time: '15/01/2026 08:30:15', transCode: 'PG-95561340', orderCode: '81756205', partnerCode: '', destAcc: '', type: 'Chuyển tiền chi hộ', desc: 'Thanh toán cho số thẻ AGRIBANK 445566778899 - TRINH THI L', discountCode: '', discountAmt: 0, amount: -2000000, buyAccount: 'NNVTC2C2PVOL', authType: 'OTP', device: 'Chrome/Windows', fee: 0, creator: 'system' }
+        ];
+
         // --- ADDED MISSING FUNCTION ---
         function initMerchantList() {
             const datalist = document.getElementById('merchantListOptions');
@@ -1475,7 +1740,7 @@
             });
 
             if (filtered.length === 0) {
-                tbody.innerHTML = '<tr><td colspan="14" class="text-center py-4 text-muted">Không có dữ liệu báo cáo</td></tr>';
+                tbody.innerHTML = '<tr><td colspan="13" class="text-center py-4 text-muted">Không có dữ liệu báo cáo</td></tr>';
                 return;
             }
 
@@ -1491,6 +1756,7 @@
                     <td>${item.bankName}</td>
                     <td>${item.destAccNo}</td>
                     <td>${item.destAccName}</td>
+                    <!-- REMOVED INTEGRATION ID -->
                     <td>${item.content}</td>
                     <td class="col-date">${formatDateTime(item.updatedTime)}</td>
                     <td class="col-money">${formatMoney(item.amount)}</td>
@@ -1505,6 +1771,64 @@
             if (paginationInfo) {
                 paginationInfo.innerHTML = `Hiển thị <span class="fw-bold">1-${filtered.length}</span> trên <span class="fw-bold">${filtered.length}</span> bản ghi`;
             }
+        }
+
+        // --- NEW: HISTORY LOOKUP LOGIC ---
+        function renderHistoryLookupTable() {
+            const tbody = document.getElementById('historyLookupBody');
+            tbody.innerHTML = '';
+
+            mockHistoryData.forEach(item => {
+                const tr = document.createElement('tr');
+                const amtClass = item.amount < 0 ? 'text-danger' : 'text-success';
+                const formattedAmount = formatMoney(item.amount);
+
+                tr.innerHTML = `
+                    <td class="text-center">${item.stt}</td>
+                    <td class="text-center">${item.time}</td>
+                    <td>${item.transCode}</td>
+                    <td>${item.orderCode}</td>
+                    <td>${item.partnerCode || '-'}</td>
+                    <td>${item.destAcc || '-'}</td>
+                    <td>${item.type}</td>
+                    <td>${item.desc}</td>
+                    <td>${item.discountCode || '-'}</td>
+                    <td class="text-end">${formatMoney(item.discountAmt)}</td>
+                    <td class="text-end fw-bold ${amtClass}">${formattedAmount}</td>
+                    <td>${item.buyAccount}</td>
+                    <td class="text-center">
+                        <button class="btn-icon-orange" title="Chi tiết" onclick="viewHistoryDetail('${item.transCode}')">
+                            <i class="fa-solid fa-magnifying-glass"></i>
+                        </button>
+                    </td>
+                `;
+                tbody.appendChild(tr);
+            });
+        }
+
+        function viewHistoryDetail(transCode) {
+            const item = mockHistoryData.find(x => x.transCode === transCode);
+            if (!item) return;
+
+            // Fill popup fields (using IDs from popup HTML structure)
+            document.getElementById('hist_transCode').value = item.transCode;
+            document.getElementById('hist_orderCode').value = item.orderCode;
+            document.getElementById('hist_account').value = item.buyAccount; // Assuming 'Account' = 'Buy Account' for this context
+            document.getElementById('hist_buyAccount').value = item.buyAccount;
+            document.getElementById('hist_type').value = item.type;
+            document.getElementById('hist_authType').value = item.authType || '';
+            document.getElementById('hist_device').value = item.device || '';
+            document.getElementById('hist_discountCode').value = item.discountCode || '';
+            document.getElementById('hist_discountAmt').value = formatMoney(item.discountAmt || 0);
+            document.getElementById('hist_fee').value = formatMoney(item.fee || 0);
+            document.getElementById('hist_amount').value = formatMoney(Math.abs(item.amount)); // Show absolute value for "Tiền GD" usually
+            document.getElementById('hist_creator').value = item.creator || 'system';
+            document.getElementById('hist_time').value = item.time;
+            document.getElementById('hist_desc').value = item.desc;
+
+            // Show Modal
+            const modal = new bootstrap.Modal(document.getElementById('historyDetailModal'));
+            modal.show();
         }
 
         // --- NEW APPROVAL LOGIC WITH MODAL ---
