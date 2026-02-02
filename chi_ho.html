@@ -916,72 +916,69 @@
 
     <!-- History Detail Modal (NEW) -->
     <div class="modal fade" id="historyDetailModal" tabindex="-1" aria-hidden="true">
-        <div class="modal-dialog modal-lg modal-dialog-centered">
+        <div class="modal-dialog modal-dialog-centered">
             <div class="modal-content border-0 shadow">
                 <div class="modal-header bg-light border-bottom">
                     <h5 class="modal-title fw-bold" style="color: var(--vtc-blue);"><i class="fa-solid fa-list-check me-2"></i>Chi tiết Lịch sử giao dịch</h5>
                     <button type="button" class="btn-close" data-bs-dismiss="modal" aria-label="Close"></button>
                 </div>
-                <div class="modal-body">
-                     <div class="row g-3">
-                        <!-- Left Col -->
-                        <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Mã GD</label>
-                            <input type="text" id="hist_transCode" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Mã Đơn Hàng</label>
-                            <input type="text" id="hist_orderCode" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Tài Khoản</label>
-                            <input type="text" id="hist_account" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Tài Khoản Mua</label>
-                            <input type="text" id="hist_buyAccount" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Loại GD</label>
-                            <input type="text" id="hist_type" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Loại xác thực</label>
-                            <input type="text" id="hist_authType" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Thông tin thiết bị</label>
-                            <input type="text" id="hist_device" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Mã giảm giá</label>
-                            <input type="text" id="hist_discountCode" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Số tiền giảm giá (VND)</label>
-                            <input type="text" id="hist_discountAmt" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Phí GD (VNĐ)</label>
-                            <input type="text" id="hist_fee" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Tiền GD (VNĐ)</label>
-                            <input type="text" id="hist_amount" class="form-control form-control-sm bg-light fw-bold text-primary border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Người Tạo</label>
-                            <input type="text" id="hist_creator" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-md-6">
-                            <label class="form-label fw-bold small text-muted">Thời gian</label>
-                            <input type="text" id="hist_time" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                         <div class="col-12">
-                            <label class="form-label fw-bold small text-muted">Mô tả</label>
-                            <input type="text" id="hist_desc" class="form-control form-control-sm bg-light text-dark border-0" readonly>
-                        </div>
-                     </div>
+                <div class="modal-body p-4">
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Mã GD</span>
+                        <span class="text-dark fw-bold" id="hist_transCode"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Mã Đơn Hàng</span>
+                        <span class="text-dark" id="hist_orderCode"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Tài Khoản</span>
+                        <span class="text-dark" id="hist_account"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Tài Khoản Mua</span>
+                        <span class="text-dark" id="hist_buyAccount"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Loại GD</span>
+                        <span class="text-dark" id="hist_type"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Loại xác thực</span>
+                        <span class="text-dark" id="hist_authType"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Thông tin thiết bị</span>
+                        <span class="text-dark" id="hist_device"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Mã giảm giá</span>
+                        <span class="text-dark" id="hist_discountCode"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Số tiền giảm giá (VND)</span>
+                        <span class="text-dark" id="hist_discountAmt"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Phí GD (VNĐ)</span>
+                        <span class="text-dark" id="hist_fee"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Tiền GD (VNĐ)</span>
+                        <span class="text-primary fw-bold" id="hist_amount"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Người Tạo</span>
+                        <span class="text-dark" id="hist_creator"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-2 border-bottom pb-2">
+                        <span class="text-secondary fw-bold">Thời gian</span>
+                        <span class="text-dark" id="hist_time"></span>
+                    </div>
+                    <div class="d-flex justify-content-between mb-0">
+                        <span class="text-secondary fw-bold flex-shrink-0 me-3">Mô tả</span>
+                        <span class="text-dark text-end" id="hist_desc"></span>
+                    </div>
                 </div>
                 <div class="modal-footer bg-light border-top-0">
                     <button type="button" class="btn btn-outline-secondary" data-bs-dismiss="modal">Đóng</button>
@@ -1810,21 +1807,27 @@
             const item = mockHistoryData.find(x => x.transCode === transCode);
             if (!item) return;
 
-            // Fill popup fields (using IDs from popup HTML structure)
-            document.getElementById('hist_transCode').value = item.transCode;
-            document.getElementById('hist_orderCode').value = item.orderCode;
-            document.getElementById('hist_account').value = item.buyAccount; // Assuming 'Account' = 'Buy Account' for this context
-            document.getElementById('hist_buyAccount').value = item.buyAccount;
-            document.getElementById('hist_type').value = item.type;
-            document.getElementById('hist_authType').value = item.authType || '';
-            document.getElementById('hist_device').value = item.device || '';
-            document.getElementById('hist_discountCode').value = item.discountCode || '';
-            document.getElementById('hist_discountAmt').value = formatMoney(item.discountAmt || 0);
-            document.getElementById('hist_fee').value = formatMoney(item.fee || 0);
-            document.getElementById('hist_amount').value = formatMoney(Math.abs(item.amount)); // Show absolute value for "Tiền GD" usually
-            document.getElementById('hist_creator').value = item.creator || 'system';
-            document.getElementById('hist_time').value = item.time;
-            document.getElementById('hist_desc').value = item.desc;
+            // Helper to safe set text
+            const setText = (id, val) => {
+                const el = document.getElementById(id);
+                if (el) el.innerText = val;
+            };
+
+            // Fill popup fields using innerText instead of value
+            setText('hist_transCode', item.transCode);
+            setText('hist_orderCode', item.orderCode);
+            setText('hist_account', item.buyAccount);
+            setText('hist_buyAccount', item.buyAccount);
+            setText('hist_type', item.type);
+            setText('hist_authType', item.authType || '-');
+            setText('hist_device', item.device || '-');
+            setText('hist_discountCode', item.discountCode || '-');
+            setText('hist_discountAmt', formatMoney(item.discountAmt || 0));
+            setText('hist_fee', formatMoney(item.fee || 0));
+            setText('hist_amount', formatMoney(Math.abs(item.amount)));
+            setText('hist_creator', item.creator || 'system');
+            setText('hist_time', item.time);
+            setText('hist_desc', item.desc);
 
             // Show Modal
             const modal = new bootstrap.Modal(document.getElementById('historyDetailModal'));
