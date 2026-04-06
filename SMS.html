@@ -3,20 +3,423 @@
 <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title>Quản lý cấu hình mẫu SMS</title>
+    <title>Hệ Thống Quản Trị VTC Pay - Quản Lý SMS</title>
     
-    <!-- Tải Tailwind CSS -->
-    <script src="https://cdn.tailwindcss.com"></script>
+    <!-- Bootstrap CSS -->
+    <link href="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/css/bootstrap.min.css" rel="stylesheet">
+    <!-- Font Awesome -->
+    <link href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css" rel="stylesheet">
+    <!-- Google Fonts: Open Sans -->
+    <link rel="preconnect" href="https://fonts.googleapis.com">
+    <link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+    <link href="https://fonts.googleapis.com/css2?family=Open+Sans:wght@300;400;500;600;700&display=swap" rel="stylesheet">
     
     <!-- Tải React & ReactDOM -->
     <script crossorigin src="https://unpkg.com/react@18/umd/react.production.min.js"></script>
     <script crossorigin src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js"></script>
-    
-    <!-- Tải Babel để biên dịch JSX trực tiếp trên trình duyệt -->
+    <!-- Tải Babel -->
     <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
 
     <style>
-        body { margin: 0; padding: 0; background-color: #f1f2f7; font-family: ui-sans-serif, system-ui, -apple-system, BlinkMacSystemFont, "Segoe UI", Roboto, "Helvetica Neue", Arial, sans-serif; }
+        :root {
+            --vtc-blue: #0068ac;
+            --vtc-blue-dark: #005691;
+            --header-bg: #f8f9fa;
+            --table-header-bg: #e9ecef;
+        }
+
+        body {
+            font-family: "Helvetica Neue", Helvetica, Arial, "Open Sans", sans-serif;
+            background-color: #fff;
+            font-size: 13px;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* --- Top Navbar --- */
+        .top-nav {
+            background-color: #fff;
+            border-bottom: 1px solid #ddd;
+            padding: 10px 15px;
+            color: #333;
+            position: relative;
+            z-index: 1000;
+        }
+
+        .logo-text {
+            font-weight: 800;
+            font-size: 24px;
+            color: var(--vtc-blue);
+            font-style: italic;
+            text-decoration: none;
+            white-space: nowrap;
+        }
+
+        .nav-btn {
+            background-color: var(--vtc-blue);
+            color: white;
+            border: none;
+            border-radius: 3px;
+            padding: 6px 12px;
+            margin: 2px;
+            font-size: 13px;
+            transition: all 0.2s;
+            display: inline-flex;
+            align-items: center;
+            cursor: pointer;
+            text-decoration: none;
+        }
+        
+        .nav-btn:hover {
+            background-color: var(--vtc-blue-dark);
+            color: white;
+        }
+
+        .nav-btn.active-tab {
+            background-color: var(--vtc-blue-dark);
+            box-shadow: inset 0 2px 4px rgba(0,0,0,0.2);
+        }
+
+        .nav-dropdown .dropdown-toggle::after {
+            margin-left: 0.5em;
+        }
+        .nav-dropdown .dropdown-menu {
+            font-size: 13px;
+            border-radius: 0;
+            margin-top: 5px;
+            box-shadow: 0 4px 6px rgba(0,0,0,0.1);
+            border: 1px solid #ddd;
+        }
+        .nav-dropdown .dropdown-item:active, .nav-dropdown .dropdown-item.active {
+            background-color: var(--vtc-blue);
+        }
+        .nav-dropdown .dropdown-item {
+            padding: 8px 15px;
+            cursor: pointer;
+            text-decoration: none;
+            color: #212529;
+        }
+        .nav-dropdown .dropdown-item:hover {
+            background-color: #f8f9fa;
+        }
+
+        .user-info {
+            color: var(--vtc-blue);
+            font-weight: 500;
+            white-space: nowrap;
+        }
+        
+        .logout-btn {
+            color: #dc3545 !important;
+            transition: opacity 0.2s;
+        }
+        .logout-btn:hover {
+            opacity: 0.7;
+        }
+
+        /* --- Page Content --- */
+        .page-title-bar {
+            background-color: #337ab7;
+            color: white;
+            padding: 10px 15px;
+            font-weight: bold;
+            text-transform: uppercase;
+            margin-bottom: 20px;
+            border-left: 5px solid #1b5480;
+            font-size: 14px;
+        }
+
+        .filter-section {
+            padding: 0 15px;
+            margin-bottom: 20px;
+            background-color: #fff;
+        }
+
+        .filter-content-wrapper {
+            background-color: #f8f9fa;
+            padding: 15px;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            margin-bottom: 15px;
+        }
+
+        .filter-label {
+            font-weight: 600;
+            color: #0068ac;
+            display: flex;
+            align-items: center;
+            font-size: 13px;
+            padding-top: 6px;
+            white-space: nowrap;
+        }
+
+        .form-control, .form-select {
+            font-size: 13px;
+            border-radius: 3px;
+            padding: 5px 8px;
+        }
+
+        .btn-search {
+            background-color: #5bc0de;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-search:hover { background-color: #46b8da; color: white; }
+
+        .btn-add {
+            background-color: #5cb85c;
+            color: white;
+            border: none;
+            padding: 6px 15px;
+            border-radius: 3px;
+            font-weight: bold;
+            transition: background 0.2s;
+        }
+        .btn-add:hover { background-color: #4cae4c; color: white; }
+
+        .action-toolbar {
+            padding: 10px 15px;
+            margin-bottom: 10px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #eee;
+            border-bottom: 1px solid #eee;
+        }
+
+        .toolbar-btn {
+            font-size: 12px;
+            margin-right: 5px;
+            background-color: #fff;
+            border: 1px solid #ccc;
+            color: #333;
+            margin-bottom: 5px;
+            padding: 4px 8px;
+        }
+        .toolbar-btn:hover { background-color: #e2e6ea; }
+
+        /* --- Table --- */
+        .table {
+            font-size: 12px;
+            margin-bottom: 0;
+            border-collapse: separate;
+            border-spacing: 0;
+        }
+        .table th, .table td {
+            vertical-align: middle;
+            padding: 8px;
+            border-bottom: 1px solid #dee2e6;
+        }
+        .table thead th {
+            background-color: #dff0d8; /* Light green header matching index */
+            vertical-align: middle;
+            text-align: center;
+            border-bottom: 2px solid #aeccae;
+            border-top: 1px solid #dee2e6;
+            color: #333;
+            font-weight: bold;
+        }
+        .table-responsive-custom {
+            padding: 0 15px;
+            margin-bottom: 20px;
+        }
+
+        .status-badge {
+            padding: 3px 8px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            color: white;
+        }
+        .status-active { background-color: #28a745; }
+        .status-inactive { background-color: #6c757d; }
+
+        .action-btn-group button {
+            margin: 0 2px;
+            padding: 3px 8px;
+            font-size: 11px;
+            border-radius: 3px;
+            border: none;
+            color: white;
+            transition: opacity 0.2s;
+        }
+        .action-btn-group button:hover { opacity: 0.85; }
+        .btn-edit { background-color: #f0ad4e; }
+        .btn-delete { background-color: #d9534f; }
+
+        .footer-pagination {
+            padding: 15px;
+            background-color: #f8f9fa;
+            border-top: 1px solid #ddd;
+            font-size: 12px;
+        }
+
+        /* --- Tabs & Form --- */
+        .nav-tabs-custom {
+            border-bottom: 1px solid #ddd;
+            padding: 0 15px;
+            margin-bottom: 15px;
+            display: flex;
+            gap: 2px;
+        }
+        .tab-btn {
+            background-color: #e7e7e7;
+            border: 1px solid #ddd;
+            border-bottom: none;
+            padding: 8px 15px;
+            font-weight: bold;
+            color: #666;
+            border-radius: 4px 4px 0 0;
+            cursor: pointer;
+        }
+        .tab-btn.active {
+            background-color: #337ab7;
+            color: white;
+            border-color: #337ab7;
+        }
+        .tab-btn:not(.active):hover {
+            background-color: #d4d4d4;
+        }
+
+        .form-container {
+            padding: 0 15px;
+        }
+        .form-panel {
+            background: #fff;
+            border: 1px solid #ddd;
+            border-radius: 4px;
+            box-shadow: 0 1px 1px rgba(0,0,0,.05);
+        }
+        .form-panel-heading {
+            background-color: #337ab7;
+            color: #fff;
+            padding: 10px 15px;
+            font-weight: bold;
+            border-radius: 3px 3px 0 0;
+        }
+        .form-panel-body {
+            padding: 15px;
+        }
+        .form-group-row {
+            display: flex;
+            margin-bottom: 15px;
+            align-items: center;
+        }
+        .form-group-label {
+            width: 150px;
+            text-align: right;
+            padding-right: 15px;
+            font-weight: bold;
+            color: #333;
+        }
+        .form-group-content {
+            flex: 1;
+        }
+        .required-star { color: red; margin-left: 3px; }
+
+        .checkbox-grid {
+            border: 1px solid #ccc;
+            padding: 10px;
+            border-radius: 3px;
+            background: #fff;
+        }
+        .checkbox-item {
+            display: inline-flex;
+            align-items: center;
+            margin-right: 15px;
+            margin-bottom: 5px;
+            cursor: pointer;
+        }
+        .checkbox-item input { margin-right: 5px; }
+
+        .sms-editor-container {
+            border: 1px solid #ccc;
+            border-radius: 3px;
+        }
+        .sms-editor-toolbar {
+            background-color: #f5f5f5;
+            border-bottom: 1px solid #ccc;
+            padding: 8px;
+            display: flex;
+            flex-wrap: wrap;
+            gap: 5px;
+            align-items: center;
+        }
+        .var-btn {
+            background: #fff;
+            border: 1px solid #ccc;
+            color: #337ab7;
+            padding: 2px 6px;
+            font-size: 11px;
+            border-radius: 3px;
+            cursor: pointer;
+        }
+        .var-btn:hover { background: #e6f0f9; border-color: #b3d4f0; }
+        
+        .sms-textarea {
+            width: 100%;
+            height: 150px;
+            border: none;
+            padding: 10px;
+            resize: vertical;
+            font-family: monospace;
+            font-size: 13px;
+            background-color: #fff;
+        }
+        .sms-textarea:focus {
+            outline: none;
+            background-color: #ffffe0;
+        }
+        .sms-stats-bar {
+            background-color: #f9f9f9;
+            border-top: 1px solid #ccc;
+            padding: 8px;
+            display: flex;
+            justify-content: space-between;
+            font-size: 11px;
+            color: #666;
+        }
+
+        .form-actions {
+            background-color: #f5f5f5;
+            padding: 15px;
+            border-top: 1px solid #ddd;
+            text-align: center;
+        }
+        .btn-save { background-color: #337ab7; color: white; border: none; padding: 6px 20px; font-weight: bold; border-radius: 3px; margin-right: 10px; }
+        .btn-save:hover { background-color: #286090; }
+        .btn-back { background-color: #fff; color: #333; border: 1px solid #ccc; padding: 6px 20px; font-weight: bold; border-radius: 3px; }
+        .btn-back:hover { background-color: #e6e6e6; }
+
+        .alert-info-custom {
+            background-color: #f2dede;
+            color: #a94442;
+            border: 1px solid #ebccd1;
+            padding: 10px 15px;
+            margin-bottom: 15px;
+            border-radius: 3px;
+            font-size: 13px;
+        }
+        .alert-badge {
+            background-color: #d9534f;
+            color: white;
+            padding: 2px 6px;
+            border-radius: 3px;
+            font-size: 11px;
+            font-weight: bold;
+            margin-right: 5px;
+        }
+
+        /* Responsive Adjustments */
+        @media (max-width: 992px) {
+            .top-nav { flex-direction: column; align-items: flex-start !important; gap: 10px; }
+            .nav-menu-container { width: 100%; display: flex; flex-wrap: nowrap !important; gap: 8px; overflow-x: auto; padding-bottom: 5px; }
+            .user-info-container { width: 100%; justify-content: space-between; margin-top: 5px; border-top: 1px solid #eee; padding-top: 5px;}
+            .form-group-row { flex-direction: column; align-items: flex-start; }
+            .form-group-label { width: 100%; text-align: left; margin-bottom: 5px; }
+        }
     </style>
 </head>
 <body>
@@ -24,19 +427,6 @@
 
     <script type="text/babel">
         const { useState, useRef, useEffect } = React;
-
-        // --- BỘ ICON (Thay thế Lucide React để file chạy độc lập) ---
-        const IconSearch = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="11" cy="11" r="8"></circle><line x1="21" y1="21" x2="16.65" y2="16.65"></line></svg>;
-        const IconPlus = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><line x1="12" y1="5" x2="12" y2="19"></line><line x1="5" y1="12" x2="19" y2="12"></line></svg>;
-        const IconEdit = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M11 4H4a2 2 0 0 0-2 2v14a2 2 0 0 0 2 2h14a2 2 0 0 0 2-2v-7"></path><path d="M18.5 2.5a2.121 2.121 0 0 1 3 3L12 15l-4 1 1-4 9.5-9.5z"></path></svg>;
-        const IconTrash = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="3 6 5 6 21 6"></polyline><path d="M19 6v14a2 2 0 0 1-2 2H7a2 2 0 0 1-2-2V6m3 0V4a2 2 0 0 1 2-2h4a2 2 0 0 1 2 2v2"></path><line x1="10" y1="11" x2="10" y2="17"></line><line x1="14" y1="11" x2="14" y2="17"></line></svg>;
-        const IconSave = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M19 21H5a2 2 0 0 1-2-2V5a2 2 0 0 1 2-2h11l5 5v11a2 2 0 0 1-2 2z"></path><polyline points="17 21 17 13 7 13 7 21"></polyline><polyline points="7 3 7 8 15 8"></polyline></svg>;
-        const IconChevronLeft = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="15 18 9 12 15 6"></polyline></svg>;
-        const IconChevronDown = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><polyline points="6 9 12 15 18 9"></polyline></svg>;
-        const IconSettings = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="3"></circle><path d="M19.4 15a1.65 1.65 0 0 0 .33 1.82l.06.06a2 2 0 0 1 0 2.83 2 2 0 0 1-2.83 0l-.06-.06a1.65 1.65 0 0 0-1.82-.33 1.65 1.65 0 0 0-1 1.51V21a2 2 0 0 1-2 2 2 2 0 0 1-2-2v-.09A1.65 1.65 0 0 0 9 19.4a1.65 1.65 0 0 0-1.82.33l-.06.06a2 2 0 0 1-2.83 0 2 2 0 0 1 0-2.83l.06-.06a1.65 1.65 0 0 0 .33-1.82 1.65 1.65 0 0 0-1.51-1H3a2 2 0 0 1-2-2 2 2 0 0 1 2-2h.09A1.65 1.65 0 0 0 4.6 9a1.65 1.65 0 0 0-.33-1.82l-.06-.06a2 2 0 0 1 0-2.83 2 2 0 0 1 2.83 0l.06.06a1.65 1.65 0 0 0 1.82.33H9a1.65 1.65 0 0 0 1-1.51V3a2 2 0 0 1 2-2 2 2 0 0 1 2 2v.09a1.65 1.65 0 0 0 1 1.51 1.65 1.65 0 0 0 1.82-.33l.06-.06a2 2 0 0 1 2.83 0 2 2 0 0 1 0 2.83l-.06.06a1.65 1.65 0 0 0-.33 1.82V9a1.65 1.65 0 0 0 1.51 1H21a2 2 0 0 1 2 2 2 2 0 0 1-2 2h-.09a1.65 1.65 0 0 0-1.51 1z"></path></svg>;
-        const IconFileText = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M14 2H6a2 2 0 0 0-2 2v16a2 2 0 0 0 2 2h12a2 2 0 0 0 2-2V8z"></path><polyline points="14 2 14 8 20 8"></polyline><line x1="16" y1="13" x2="8" y2="13"></line><line x1="16" y1="17" x2="8" y2="17"></line><polyline points="10 9 9 9 8 9"></polyline></svg>;
-        const IconAlertCircle = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><circle cx="12" cy="12" r="10"></circle><line x1="12" y1="8" x2="12" y2="12"></line><line x1="12" y1="16" x2="12.01" y2="16"></line></svg>;
-        const IconMessageSquare = ({size=16, className=""}) => <svg width={size} height={size} className={className} xmlns="http://www.w3.org/2000/svg" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round"><path d="M21 15a2 2 0 0 1-2 2H7l-4 4V5a2 2 0 0 1 2-2h14a2 2 0 0 1 2 2z"></path></svg>;
 
         // --- MOCK DATA & CONSTANTS ---
         const INITIAL_DATA = [
@@ -61,7 +451,7 @@
           { tag: '{TIME}', name: 'Thời gian', maxLength: 19, desc: 'Định dạng DD/MM/YYYY HH:mm' },
         ];
 
-        // --- HELPER FUNCTION: Tính toán độ dài tin nhắn an toàn (Safe Margin) ---
+        // --- HELPER FUNCTION: Tính toán độ dài tin nhắn ---
         const calculateSmsStats = (text) => {
           let processedText = text;
           
@@ -117,10 +507,10 @@
             }
             
             if (formData.id) {
-              setData(data.map(item => item.id === formData.id ? { ...formData, updatedBy: 'admin_current' } : item));
+              setData(data.map(item => item.id === formData.id ? { ...formData, updatedBy: 'hongtt' } : item));
             } else {
               const newId = Math.floor(Math.random() * 100000);
-              setData([{ ...formData, id: newId, updatedBy: 'admin_current' }, ...data]);
+              setData([{ ...formData, id: newId, updatedBy: 'hongtt' }, ...data]);
             }
             goToList();
           };
@@ -178,117 +568,97 @@
             });
 
             return (
-              <div className="bg-white border border-gray-300 rounded shadow-sm">
-                <div className="p-4 border-b border-gray-200 bg-gray-50 flex flex-wrap gap-4 items-center justify-between">
-                  <div className="flex gap-4 items-center">
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-700">Trạng thái</span>
-                      <select 
-                        className="border border-gray-300 rounded px-3 py-1.5 text-sm focus:outline-none focus:border-blue-500"
-                        value={statusFilter}
-                        onChange={(e) => setStatusFilter(e.target.value)}
-                      >
-                        <option value="All">-- Tất cả --</option>
-                        <option value="Active">Active</option>
-                        <option value="Inactive">Inactive</option>
-                      </select>
+              <div>
+                <div className="filter-section">
+                    <div className="filter-content-wrapper">
+                        <div className="row align-items-center mb-2">
+                            <div className="col-lg-1 col-md-12 mb-1"><label className="filter-label"><i className="fa-solid fa-filter"></i> Trạng thái</label></div>
+                            <div className="col-lg-3 col-md-6 mb-2">
+                                <select className="form-select" value={statusFilter} onChange={(e) => setStatusFilter(e.target.value)}>
+                                    <option value="All">-- Tất cả --</option>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                            <div className="col-lg-1 col-md-12 mb-1"><label className="filter-label"><i className="fa-solid fa-magnifying-glass"></i> Từ khóa</label></div>
+                            <div className="col-lg-3 col-md-6 mb-2">
+                                <input type="text" className="form-control" placeholder="Nhập tên, nội dung mẫu..." value={searchTerm} onChange={(e) => setSearchTerm(e.target.value)} />
+                            </div>
+                            <div className="col-lg-4 col-md-12 mb-2 d-flex gap-2">
+                                <button className="btn-search"><i className="fa-solid fa-magnifying-glass me-1"></i> Tra Cứu</button>
+                                <button onClick={goToCreate} className="btn-add"><i className="fa-solid fa-plus me-1"></i> Thêm mới</button>
+                            </div>
+                        </div>
                     </div>
-                    
-                    <div className="flex items-center gap-2">
-                      <span className="text-sm font-medium text-gray-700">Từ khóa</span>
-                      <input 
-                        type="text" 
-                        placeholder="Nhập tên, nội dung mẫu..." 
-                        className="border border-gray-300 rounded px-3 py-1.5 text-sm w-64 focus:outline-none focus:border-blue-500"
-                        value={searchTerm}
-                        onChange={(e) => setSearchTerm(e.target.value)}
-                      />
-                    </div>
-                    
-                    <button className="bg-[#5bc0de] hover:bg-[#46b8da] text-white px-4 py-1.5 rounded flex items-center gap-2 text-sm">
-                      <IconSearch /> Tra Cứu
-                    </button>
-                  </div>
-                  
-                  <button 
-                    onClick={goToCreate}
-                    className="bg-[#5cb85c] hover:bg-[#4cae4c] text-white px-4 py-1.5 rounded flex items-center gap-2 text-sm font-medium"
-                  >
-                    <IconPlus /> Thêm mới
-                  </button>
                 </div>
 
-                <div className="p-3 flex justify-between items-center border-b border-gray-200">
-                  <div className="flex gap-2">
-                    <button className="border border-gray-300 bg-white text-gray-700 px-3 py-1 text-sm rounded flex items-center gap-1 hover:bg-gray-50">
-                      <IconFileText size={14} /> Hiện 25 dòng
-                    </button>
-                    <button className="border border-gray-300 bg-white text-gray-700 px-3 py-1 text-sm rounded flex items-center gap-1 hover:bg-gray-50">
-                      Ẩn/hiện cột
-                    </button>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <span className="text-sm text-gray-600">Tìm kiếm:</span>
-                    <input type="text" className="border border-gray-300 rounded px-2 py-1 text-sm w-48" />
-                  </div>
+                <div className="d-flex justify-content-between align-items-center action-toolbar mx-3">
+                    <div className="toolbar-left d-flex flex-wrap">
+                        <button className="btn toolbar-btn"><i className="fa-solid fa-bars text-primary"></i> Hiện 25 dòng</button>
+                        <button className="btn toolbar-btn"><i className="fa-solid fa-eye-slash text-primary"></i> Ẩn/hiện cột</button>
+                    </div>
+                    <div className="toolbar-right d-flex align-items-center">
+                        <span className="me-2 fw-bold text-secondary" style={{fontSize: '12px', whiteSpace: 'nowrap'}}>Tìm nhanh:</span>
+                        <input type="text" className="form-control form-control-sm" placeholder="Nhập từ khóa..." />
+                    </div>
                 </div>
 
-                <div className="overflow-x-auto">
-                  <table className="w-full text-sm text-left">
-                    <thead className="bg-[#e8f1f9] text-gray-700">
+                <div className="table-responsive-custom">
+                  <table className="table table-bordered table-striped table-hover align-middle">
+                    <thead>
                       <tr>
-                        <th className="px-4 py-2 border border-gray-200 font-bold text-center w-16">STT</th>
-                        <th className="px-4 py-2 border border-gray-200 font-bold w-24">ID</th>
-                        <th className="px-4 py-2 border border-gray-200 font-bold">Tên mẫu SMS</th>
-                        <th className="px-4 py-2 border border-gray-200 font-bold">SMS Event</th>
-                        <th className="px-4 py-2 border border-gray-200 font-bold text-center">Trạng thái</th>
-                        <th className="px-4 py-2 border border-gray-200 font-bold">Người Cập Nhật</th>
-                        <th className="px-4 py-2 border border-gray-200 font-bold text-center w-24">Chức Năng</th>
+                        <th style={{width: '50px'}}>STT</th>
+                        <th style={{width: '80px'}}>ID</th>
+                        <th>Tên mẫu SMS</th>
+                        <th>SMS Event</th>
+                        <th style={{width: '100px'}}>Trạng thái</th>
+                        <th style={{width: '120px'}}>Người Cập Nhật</th>
+                        <th className="sticky-col-right" style={{width: '80px'}}>Chức Năng</th>
                       </tr>
                     </thead>
                     <tbody>
                       {filteredData.map((item, index) => (
-                        <tr key={item.id} className="hover:bg-gray-50 border-b border-gray-200">
-                          <td className="px-4 py-2 border-r border-gray-200 text-center">{index + 1}</td>
-                          <td className="px-4 py-2 border-r border-gray-200">{item.id}</td>
-                          <td className="px-4 py-2 border-r border-gray-200 font-medium text-blue-600 cursor-pointer hover:underline" onClick={() => goToEdit(item)}>
+                        <tr key={item.id}>
+                          <td className="text-center">{index + 1}</td>
+                          <td className="text-center">{item.id}</td>
+                          <td className="fw-bold text-primary" style={{cursor: 'pointer'}} onClick={() => goToEdit(item)}>
                             {item.name}
                           </td>
-                          <td className="px-4 py-2 border-r border-gray-200">
+                          <td>
                             {(item.event || []).map(eVal => smsEvents.find(e => e.value === eVal)?.label || eVal).join(', ')}
                           </td>
-                          <td className="px-4 py-2 border-r border-gray-200 text-center">
-                            <span className={`px-2 py-0.5 rounded text-xs text-white ${item.status === 'Active' ? 'bg-green-500' : 'bg-gray-400'}`}>
+                          <td className="text-center">
+                            <span className={`status-badge ${item.status === 'Active' ? 'status-active' : 'status-inactive'}`}>
                               {item.status}
                             </span>
                           </td>
-                          <td className="px-4 py-2 border-r border-gray-200">{item.updatedBy}</td>
-                          <td className="px-4 py-2 flex justify-center gap-1">
-                            <button onClick={() => goToEdit(item)} className="bg-[#f0ad4e] hover:bg-[#ec971f] text-white p-1 rounded" title="Sửa">
-                              <IconEdit size={14} />
-                            </button>
-                            <button className="bg-[#d9534f] hover:bg-[#c9302c] text-white p-1 rounded" title="Xóa">
-                              <IconTrash size={14} />
-                            </button>
+                          <td>{item.updatedBy}</td>
+                          <td className="text-center sticky-col-right">
+                            <div className="action-btn-group">
+                                <button onClick={() => goToEdit(item)} className="btn-edit" title="Sửa"><i className="fa-solid fa-pen-to-square"></i></button>
+                                <button className="btn-delete" title="Xóa"><i className="fa-solid fa-trash"></i></button>
+                            </div>
                           </td>
                         </tr>
                       ))}
                       {filteredData.length === 0 && (
                         <tr>
-                          <td colSpan="7" className="px-4 py-8 text-center text-gray-500">Không tìm thấy dữ liệu.</td>
+                          <td colSpan="7" className="text-center text-muted py-4">Không tìm thấy dữ liệu.</td>
                         </tr>
                       )}
                     </tbody>
                   </table>
                 </div>
 
-                <div className="p-3 bg-gray-50 flex justify-between items-center text-sm text-gray-600 border-t border-gray-200">
-                  <div>Hiển thị từ 1 tới {filteredData.length} của {filteredData.length} bản ghi</div>
-                  <div className="flex border border-gray-300 rounded overflow-hidden">
-                    <button className="px-3 py-1 bg-white hover:bg-gray-100 border-r border-gray-300">Trước</button>
-                    <button className="px-3 py-1 bg-[#337ab7] text-white">1</button>
-                    <button className="px-3 py-1 bg-white hover:bg-gray-100 border-l border-gray-300">Tiếp</button>
-                  </div>
+                <div className="d-flex justify-content-between align-items-center footer-pagination">
+                    <div className="text-muted fw-bold">Hiển thị từ 1 tới {filteredData.length} của {filteredData.length} bản ghi</div>
+                    <nav>
+                        <ul className="pagination pagination-sm">
+                            <li className="page-item disabled"><a className="page-link" href="#"><i className="fa-solid fa-angle-left"></i> Trước</a></li>
+                            <li className="page-item active"><a className="page-link" href="#">1</a></li>
+                            <li className="page-item disabled"><a className="page-link" href="#">Tiếp <i className="fa-solid fa-angle-right"></i></a></li>
+                        </ul>
+                    </nav>
                 </div>
               </div>
             );
@@ -298,213 +668,184 @@
             const smsStats = calculateSmsStats(formData.content || '');
 
             return (
-              <div className="bg-white border border-gray-300 rounded shadow-sm">
-                <div className="bg-[#f2dede] text-[#a94442] px-4 py-3 text-sm flex items-center gap-2 border-b border-[#ebccd1]">
-                  <span className="bg-[#d9534f] text-white px-1.5 py-0.5 text-xs font-bold rounded">Chú ý!</span>
-                  Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
+              <div className="form-container">
+                <div className="alert-info-custom">
+                    <span className="alert-badge">Chú ý!</span>
+                    Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)
                 </div>
 
-                <div className="bg-[#337ab7] text-white px-4 py-2 font-medium flex items-center gap-2">
-                  <IconSettings /> {formData.id ? 'Cập nhật mẫu SMS' : 'Thêm mới mẫu SMS'}
-                </div>
-
-                <div className="p-6">
-                  <div className="grid grid-cols-[150px_1fr] gap-4 mb-4 items-center">
-                    <label className="text-right text-sm font-bold text-[#333] tracking-wide">
-                      Tên mẫu SMS<span className="text-red-500 ml-1">*</span>
-                    </label>
-                    <input 
-                      type="text" 
-                      className="border border-gray-300 rounded px-3 py-1.5 w-full focus:outline-none focus:border-blue-500 focus:ring-1 focus:ring-blue-500 text-sm"
-                      value={formData.name || ''}
-                      onChange={(e) => setFormData({...formData, name: e.target.value})}
-                      placeholder="VD: Nhắc nhở thanh toán hóa đơn..."
-                    />
-                  </div>
-
-                  <div className="grid grid-cols-[150px_1fr] gap-4 mb-4 items-center">
-                    <label className="text-right text-sm font-bold text-[#333] tracking-wide">
-                      SMS Event
-                    </label>
-                    <div className="flex flex-col gap-2 border border-gray-300 rounded px-3 py-2 bg-white">
-                      <div className="flex flex-wrap gap-4 items-center">
-                        {smsEvents.map(ev => (
-                          <label key={ev.value} className="flex items-center gap-1.5 cursor-pointer text-sm">
-                            <input 
-                              type="checkbox"
-                              checked={(formData.event || []).includes(ev.value)}
-                              onChange={(e) => {
-                                const currentEvents = formData.event || [];
-                                if (e.target.checked) {
-                                  setFormData({...formData, event: [...currentEvents, ev.value]});
-                                } else {
-                                  setFormData({...formData, event: currentEvents.filter(val => val !== ev.value)});
-                                }
-                              }}
-                              className="cursor-pointer w-4 h-4 text-blue-600 focus:ring-blue-500 border-gray-300 rounded"
-                            />
-                            {ev.label}
-                          </label>
-                        ))}
-                      </div>
-                      <div className="flex items-center gap-2 mt-1 pt-2 border-t border-gray-100">
-                        <input
-                          type="text"
-                          placeholder="Nhập tên nghiệp vụ mới..."
-                          className="border border-gray-300 rounded px-2 py-1 text-sm focus:outline-none focus:border-blue-500 w-64"
-                          value={newEventName}
-                          onChange={e => setNewEventName(e.target.value)}
-                          onKeyDown={e => {
-                            if (e.key === 'Enter') {
-                              e.preventDefault();
-                              handleAddEvent(e);
-                            }
-                          }}
-                        />
-                        <button
-                          onClick={handleAddEvent}
-                          className="bg-[#5cb85c] hover:bg-[#4cae4c] text-white px-3 py-1 rounded text-sm flex items-center gap-1 transition-colors"
-                        >
-                          <IconPlus size={14} /> Thêm nghiệp vụ
-                        </button>
-                      </div>
+                <div className="form-panel">
+                    <div className="form-panel-heading">
+                        <i className="fa-solid fa-gear me-2"></i> {formData.id ? 'CẬP NHẬT MẪU SMS' : 'THÊM MỚI MẪU SMS'}
                     </div>
-                  </div>
-
-                  <div className="grid grid-cols-[150px_1fr] gap-4 mb-4 items-center">
-                    <label className="text-right text-sm font-bold text-[#333] tracking-wide">
-                      Trạng thái
-                    </label>
-                    <select 
-                      className="border border-gray-300 rounded px-3 py-1.5 w-32 focus:outline-none focus:border-blue-500 text-sm"
-                      value={formData.status || 'Active'}
-                      onChange={(e) => setFormData({...formData, status: e.target.value})}
-                    >
-                      <option value="Active">Active</option>
-                      <option value="Inactive">Inactive</option>
-                    </select>
-                  </div>
-
-                  <div className="grid grid-cols-[150px_1fr] gap-4 mb-4 items-start">
-                    <div className="text-right mt-2">
-                      <label className="text-sm font-bold text-[#333] tracking-wide block">
-                        Nội dung SMS<span className="text-red-500 ml-1">*</span>
-                      </label>
-                    </div>
-                    
-                    <div className="border border-gray-300 rounded p-1 bg-white">
-                      <div className="bg-[#f5f5f5] border-b border-gray-300 p-2 flex flex-wrap gap-2 items-center rounded-t">
-                        <span className="text-xs font-bold text-gray-600 mr-2 flex items-center gap-1">
-                          <IconPlus size={12} /> Chèn biến:
-                        </span>
-                        {VARIABLES.map(v => (
-                          <button 
-                            key={v.tag}
-                            onClick={(e) => { e.preventDefault(); insertVariable(v.tag); }}
-                            className="bg-white border border-gray-300 hover:bg-blue-50 hover:border-blue-300 text-blue-700 text-xs px-2 py-1 rounded transition-colors"
-                            title={v.desc}
-                          >
-                            {v.tag}
-                          </button>
-                        ))}
-                      </div>
-
-                      <textarea 
-                        ref={textAreaRef}
-                        className="w-full h-40 p-3 focus:outline-none focus:bg-[#ffffe0] resize-y text-sm font-mono text-gray-800"
-                        value={formData.content || ''}
-                        onChange={(e) => setFormData({...formData, content: e.target.value})}
-                        placeholder="Nhập nội dung tin nhắn dạng chữ thuần túy (Plain text)..."
-                      ></textarea>
-                      
-                      <div className="bg-[#f9f9f9] border-t border-gray-200 p-2 flex justify-between items-center rounded-b text-xs">
-                        <div className="flex gap-4">
-                          <span className="text-gray-600">
-                            Ký tự (Bao gồm độ dài max của biến): <strong className={smsStats.length > 0 ? "text-blue-600" : ""}>{smsStats.length}</strong>
-                          </span>
-                          <span className="text-gray-600">
-                            Số tin nhắn dự kiến (Max): <strong className={smsStats.parts > 1 ? "text-red-600" : "text-green-600"}>{smsStats.parts}</strong>
-                          </span>
+                    <div className="form-panel-body">
+                        
+                        <div className="form-group-row">
+                            <div className="form-group-label">
+                                Tên mẫu SMS<span className="required-star">*</span>
+                            </div>
+                            <div className="form-group-content">
+                                <input type="text" className="form-control" value={formData.name || ''} onChange={(e) => setFormData({...formData, name: e.target.value})} placeholder="VD: Nhắc nhở thanh toán hóa đơn..." />
+                            </div>
                         </div>
-                        <div className="flex gap-2 items-center">
-                          {smsStats.isUnicode ? (
-                             <span className="bg-yellow-100 text-yellow-800 px-2 py-0.5 rounded border border-yellow-200 flex items-center gap-1" title="Giới hạn 70 ký tự/tin">
-                               <IconAlertCircle size={12}/> Có dấu (Unicode)
-                             </span>
-                          ) : (
-                            <span className="bg-gray-100 text-gray-600 px-2 py-0.5 rounded border border-gray-200" title="Giới hạn 160 ký tự/tin">
-                              Không dấu (GSM)
-                            </span>
-                          )}
+
+                        <div className="form-group-row">
+                            <div className="form-group-label">
+                                SMS Event
+                            </div>
+                            <div className="form-group-content">
+                                <div className="checkbox-grid">
+                                    <div className="d-flex flex-wrap mb-2">
+                                        {smsEvents.map(ev => (
+                                            <label key={ev.value} className="checkbox-item">
+                                                <input 
+                                                    type="checkbox" 
+                                                    checked={(formData.event || []).includes(ev.value)}
+                                                    onChange={(e) => {
+                                                        const currentEvents = formData.event || [];
+                                                        if (e.target.checked) {
+                                                            setFormData({...formData, event: [...currentEvents, ev.value]});
+                                                        } else {
+                                                            setFormData({...formData, event: currentEvents.filter(val => val !== ev.value)});
+                                                        }
+                                                    }}
+                                                />
+                                                {ev.label}
+                                            </label>
+                                        ))}
+                                    </div>
+                                    <div className="d-flex align-items-center gap-2 pt-2 border-top">
+                                        <input type="text" className="form-control form-control-sm" style={{width: '250px'}} placeholder="Nhập tên nghiệp vụ mới..." value={newEventName} onChange={e => setNewEventName(e.target.value)} onKeyDown={e => { if (e.key === 'Enter') handleAddEvent(e); }} />
+                                        <button onClick={handleAddEvent} className="btn btn-sm btn-success fw-bold"><i className="fa-solid fa-plus"></i> Thêm nghiệp vụ</button>
+                                    </div>
+                                </div>
+                            </div>
                         </div>
-                      </div>
+
+                        <div className="form-group-row">
+                            <div className="form-group-label">
+                                Trạng thái
+                            </div>
+                            <div className="form-group-content">
+                                <select className="form-select" style={{maxWidth: '150px'}} value={formData.status || 'Active'} onChange={(e) => setFormData({...formData, status: e.target.value})}>
+                                    <option value="Active">Active</option>
+                                    <option value="Inactive">Inactive</option>
+                                </select>
+                            </div>
+                        </div>
+
+                        <div className="form-group-row" style={{alignItems: 'flex-start'}}>
+                            <div className="form-group-label" style={{marginTop: '10px'}}>
+                                Nội dung SMS<span className="required-star">*</span>
+                            </div>
+                            <div className="form-group-content">
+                                <div className="sms-editor-container">
+                                    <div className="sms-editor-toolbar">
+                                        <span className="fw-bold me-2"><i className="fa-solid fa-link"></i> Chèn biến:</span>
+                                        {VARIABLES.map(v => (
+                                            <button key={v.tag} onClick={(e) => { e.preventDefault(); insertVariable(v.tag); }} className="var-btn" title={v.desc}>
+                                                {v.tag}
+                                            </button>
+                                        ))}
+                                    </div>
+                                    <textarea 
+                                        ref={textAreaRef}
+                                        className="sms-textarea"
+                                        value={formData.content || ''}
+                                        onChange={(e) => setFormData({...formData, content: e.target.value})}
+                                        placeholder="Nhập nội dung tin nhắn dạng chữ thuần túy (Plain text)..."
+                                    ></textarea>
+                                    <div className="sms-stats-bar">
+                                        <div>
+                                            Ký tự (Đã tính biến): <strong style={{color: smsStats.length > 0 ? '#0068ac' : 'inherit'}}>{smsStats.length}</strong> | 
+                                            Số tin (Max): <strong style={{color: smsStats.parts > 1 ? 'red' : 'green'}}>{smsStats.parts}</strong>
+                                        </div>
+                                        <div>
+                                            {smsStats.isUnicode ? (
+                                                <span style={{color: '#8a6d3b', fontWeight: 'bold'}} title="Giới hạn 70 ký tự/tin"><i className="fa-solid fa-triangle-exclamation"></i> Có dấu (Unicode)</span>
+                                            ) : (
+                                                <span title="Giới hạn 160 ký tự/tin">Không dấu (GSM)</span>
+                                            )}
+                                        </div>
+                                    </div>
+                                </div>
+                            </div>
+                        </div>
+
                     </div>
-                  </div>
-
-                </div>
-
-                <div className="bg-[#f5f5f5] px-6 py-4 border-t border-gray-200 flex justify-center gap-3">
-                  <button 
-                    onClick={handleSave}
-                    className="bg-[#337ab7] hover:bg-[#286090] text-white px-5 py-1.5 rounded flex items-center gap-2 text-sm font-medium shadow-sm transition-colors"
-                  >
-                    <IconSave /> Lưu lại
-                  </button>
-                  <button 
-                    onClick={goToList}
-                    className="bg-white border border-gray-300 hover:bg-gray-100 text-gray-700 px-5 py-1.5 rounded flex items-center gap-2 text-sm font-medium transition-colors"
-                  >
-                    <IconChevronLeft /> Quay lại
-                  </button>
+                    <div className="form-actions">
+                        <button onClick={handleSave} className="btn-save"><i className="fa-solid fa-floppy-disk me-1"></i> Lưu lại</button>
+                        <button onClick={goToList} className="btn-back"><i className="fa-solid fa-rotate-left me-1"></i> Quay lại</button>
+                    </div>
                 </div>
               </div>
             );
           };
 
           return (
-            <div className="w-full min-h-screen bg-[#f1f2f7] font-sans flex flex-col">
-              
-              {/* Header */}
-              <header className="bg-white border-b border-gray-200 shadow-sm px-4 py-2 flex items-center gap-4">
-                <div className="text-[#337ab7] font-black text-2xl italic tracking-tighter mr-4">
-                  VTC<span className="text-red-500 font-medium">pay</span>
-                </div>
-                <div className="flex text-sm text-gray-600 font-bold gap-2">
-                   <button className="bg-[#337ab7] text-white px-3 py-1.5 rounded flex items-center gap-1">
-                     <IconSettings size={14}/> Hệ thống <IconChevronDown size={14} />
-                   </button>
-                </div>
-              </header>
+            <div style={{ display: 'flex', flexDirection: 'column', minHeight: '100vh' }}>
+                {/* --- Top Navbar --- */}
+                <div className="d-flex justify-content-between align-items-center top-nav">
+                    <div className="d-flex align-items-center flex-wrap w-100 overflow-hidden" style={{overflow: 'visible !important'}}>
+                        <a href="index.html" className="logo-text me-3 flex-shrink-0">
+                            <i className="fa-solid fa-wifi fa-rotate-90 me-1" style={{fontSize: '18px'}}></i>VTC<span style={{color: '#00a0e3'}}>Pay</span>
+                        </a>
+                        
+                        <div className="ms-md-3 nav-menu-container d-flex align-items-center">
+                            <a href="index.html" className="nav-btn me-1 text-decoration-none">
+                                <i className="fa-solid fa-money-bill me-2"></i> Duyệt tiền công
+                            </a>
+                            
+                            <div className="dropdown nav-dropdown d-inline-block me-1">
+                                <button className="nav-btn dropdown-toggle" type="button" id="transactionDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i className="fa-solid fa-money-check-dollar me-2"></i> Giao dịch
+                                </button>
+                                <ul className="dropdown-menu" aria-labelledby="transactionDropdown">
+                                    <li><a className="dropdown-item" href="chi_ho.html"><i className="fa-solid fa-money-bill-transfer me-2 text-success"></i> Chuyển tiền chi hộ</a></li>
+                                </ul>
+                            </div>
 
-              {/* Nội dung chính */}
-              <main className="p-4 mx-auto w-full flex-grow" style={{ maxWidth: '1400px' }}>
-                
-                <div className="bg-[#337ab7] text-white px-4 py-2.5 rounded-t font-medium text-sm flex items-center gap-2 uppercase">
-                   <IconMessageSquare /> Hệ thống &gt; Quản lý SMS &gt; Quản lý cấu hình mẫu SMS
-                </div>
-                
-                <div className="bg-white border-x border-gray-300 px-4 pt-2">
-                  <div className="flex gap-1 border-b border-gray-200 pb-[1px]">
-                    <button 
-                      onClick={goToList}
-                      className={`px-4 py-2 text-sm font-bold flex items-center gap-2 rounded-t ${view === 'list' ? 'bg-[#337ab7] text-white' : 'bg-[#e7e7e7] text-gray-600 hover:bg-gray-200'}`}
-                    >
-                      <IconFileText /> DANH SÁCH
-                    </button>
-                    <button 
-                      onClick={() => view === 'form' ? null : goToCreate()}
-                      className={`px-4 py-2 text-sm font-bold flex items-center gap-2 rounded-t ${view === 'form' ? 'bg-[#337ab7] text-white' : 'bg-[#e7e7e7] text-gray-600 hover:bg-gray-200'}`}
-                    >
-                      <IconSettings /> DỮ LIỆU
-                    </button>
-                  </div>
+                            <div className="dropdown nav-dropdown d-inline-block me-1">
+                                <button className="nav-btn dropdown-toggle" type="button" id="reportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i className="fa-solid fa-chart-pie me-2"></i> Báo cáo
+                                </button>
+                                <ul className="dropdown-menu" aria-labelledby="reportDropdown">
+                                    <li><a className="dropdown-item" href="index.html"><i className="fa-solid fa-chart-bar me-2 text-primary"></i>Tổng hợp Merchant</a></li>
+                                </ul>
+                            </div>
+
+                            <div className="dropdown nav-dropdown d-inline-block">
+                                <button className="nav-btn active-tab dropdown-toggle" type="button" id="systemDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                                    <i className="fa-solid fa-gear me-2"></i> Hệ thống
+                                </button>
+                                <ul className="dropdown-menu dropdown-menu-end" aria-labelledby="systemDropdown">
+                                    <li><a className="dropdown-item active" href="SMS.html"><i className="fa-solid fa-comment-sms me-2 text-primary"></i> Quản lý SMS</a></li>
+                                </ul>
+                            </div>
+                        </div>
+                    </div>
+                    
+                    <div className="d-flex align-items-center user-info-container ms-3">
+                        <span className="user-info me-2"><i className="fa-solid fa-circle-user me-1"></i> hongtt</span>
+                        <a href="#" className="logout-btn" title="Đăng xuất"><i className="fa-solid fa-right-from-bracket"></i></a>
+                    </div>
                 </div>
 
-                <div className="bg-white border-x border-b border-gray-300 p-4 rounded-b">
-                  {view === 'list' ? renderList() : renderForm()}
-                </div>
+                {/* --- Main Content --- */}
+                <div style={{ flex: 1, backgroundColor: '#fff' }}>
+                    <div className="page-title-bar shadow-sm">
+                        <i className="fa-solid fa-comment-sms me-2"></i> QUẢN LÝ CẤU HÌNH MẪU SMS
+                    </div>
 
-              </main>
+                    <div className="nav-tabs-custom">
+                        <button onClick={goToList} className={`tab-btn ${view === 'list' ? 'active' : ''}`}><i className="fa-solid fa-list"></i> DANH SÁCH</button>
+                        <button onClick={() => view === 'form' ? null : goToCreate()} className={`tab-btn ${view === 'form' ? 'active' : ''}`}><i className="fa-solid fa-database"></i> DỮ LIỆU</button>
+                    </div>
+
+                    <div>
+                        {view === 'list' ? renderList() : renderForm()}
+                    </div>
+                </div>
             </div>
           );
         }
@@ -512,5 +853,8 @@
         const root = ReactDOM.createRoot(document.getElementById('root'));
         root.render(<App />);
     </script>
+
+    <!-- Bootstrap Bundle with Popper -->
+    <script src="https://cdn.jsdelivr.net/npm/bootstrap@5.3.0/dist/js/bootstrap.bundle.min.js"></script>
 </body>
 </html>
