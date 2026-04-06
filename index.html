@@ -486,7 +486,7 @@
                 </div>
 
                 <!-- Báo cáo Dropdown -->
-                <div class="dropdown nav-dropdown d-inline-block">
+                <div class="dropdown nav-dropdown d-inline-block me-1">
                     <button class="nav-btn dropdown-toggle" type="button" id="reportDropdown" data-bs-toggle="dropdown" aria-expanded="false">
                         <i class="fa-solid fa-chart-pie me-2"></i> Báo cáo
                     </button>
@@ -498,6 +498,20 @@
                         <li><a class="dropdown-item" id="nav-refund-detail-report" onclick="switchTab('refund-detail-report')"><i class="fa-solid fa-file-invoice-dollar me-2 text-warning"></i>Hoàn tiền chi tiết</a></li>
                         <li><hr class="dropdown-divider"></li>
                         <li><a class="dropdown-item" href="Report_chi_ho.html"><i class="fa-solid fa-file-invoice text-info me-2"></i>Báo cáo Chuyển tiền chi hộ</a></li>
+                    </ul>
+                </div>
+
+                <!-- Hệ thống Dropdown (MỚI THÊM) -->
+                <div class="dropdown nav-dropdown d-inline-block">
+                    <button class="nav-btn dropdown-toggle" type="button" id="systemDropdown" data-bs-toggle="dropdown" aria-expanded="false">
+                        <i class="fa-solid fa-gear me-2"></i> Hệ thống
+                    </button>
+                    <ul class="dropdown-menu dropdown-menu-end" aria-labelledby="systemDropdown">
+                        <li>
+                            <a class="dropdown-item" href="SMS.html">
+                                <i class="fa-solid fa-comment-sms me-2 text-primary"></i> Quản lý SMS
+                            </a>
+                        </li>
                     </ul>
                 </div>
             </div>
@@ -1184,13 +1198,13 @@
                 document.querySelectorAll('.dropdown-item').forEach(item => item.classList.remove('active'));
                 document.getElementById('nav-' + tabName).classList.add('active');
             } else {
-                document.getElementById('nav-' + tabName).classList.add('active-tab');
+                document.getElementById('nav-' + tabName)?.classList.add('active-tab');
             }
 
             // Show/Hide Sections
             document.querySelectorAll('[id^="section-"]').forEach(el => el.classList.add('d-none-custom'));
             
-            document.getElementById('section-' + tabName).classList.remove('d-none-custom');
+            document.getElementById('section-' + tabName)?.classList.remove('d-none-custom');
             
             // Re-init resizers for visible table
             setTimeout(initColumnResize, 100);
@@ -1246,7 +1260,7 @@
             { time: "21/01/2026 10:20:45", merch: "Shop Thời Trang Eva", merchAcc: "EVAFASHION", subMerchAcc: "EVAONLINE", transId: "26012110204502", orderId: "ORD-2026-002", vtcTrans: "VTC-88273646", partner: "PART002", cust: "Trần Văn Hùng", custAcc: "0903***456", method: "Ví điện tử", val: 250000, feeCust: 0, feeMerch: 2500, disc: 10000, promo: 5000, bankTransId: "VTC.88273646", channel: "App" },
             { time: "21/01/2026 10:45:10", merch: "Nhà Sách Trí Tuệ", merchAcc: "TRITUEBOOKS", subMerchAcc: "TTCAUGIAY", transId: "26012110451003", orderId: "ORD-2026-003", vtcTrans: "VTC-88273647", partner: "PART003", cust: "Lê Thu Hà", custAcc: "0987***123", method: "QR Code", val: 120000, feeCust: 0, feeMerch: 1200, disc: 0, promo: 0, bankTransId: "MB.98765432", channel: "POS" },
             { time: "21/01/2026 11:05:30", merch: "Siêu Thị Điện Máy Xanh", merchAcc: "DMXCORP", subMerchAcc: "DMXWEB", transId: "26012111053004", orderId: "ORD-2026-004", vtcTrans: "VTC-88273648", partner: "PART004", cust: "Phạm Minh Tuấn", custAcc: "0933***555", method: "Thẻ quốc tế", val: 5500000, feeCust: 0, feeMerch: 110000, disc: 0, promo: 200000, bankTransId: "VISA.11223344", channel: "Website" },
-            { time: "21/01/2026 11:30:00", merch: "Cửa Hàng Tiện Lợi 24h", merchAcc: "CIRCLEK", subMerchAcc: "0911222333", transId: "26012111300005", orderId: "ORD-2026-005", vtcTrans: "VTC-88273649", partner: "PART005", cust: "Vũ Thị Lan", custAcc: "0944***222", method: "Ví điện tử", val: 45000, feeCust: 0, feeMerch: 450, disc: 0, promo: 0, bankTransId: "VTC.88273649", channel: "App" },
+            { time: "21/01/2026 11:30:00", merch: "Cửa Hàng Tiện Lợi 24h", merchAcc: "CIRCLEK", subMerchAcc: "0911222333", transId: "26012113000005", orderId: "ORD-2026-005", vtcTrans: "VTC-88273649", partner: "PART005", cust: "Vũ Thị Lan", custAcc: "0944***222", method: "Ví điện tử", val: 45000, feeCust: 0, feeMerch: 450, disc: 0, promo: 0, bankTransId: "VTC.88273649", channel: "App" },
             { time: "21/01/2026 12:15:15", merch: "Công Ty Du Lịch Việt", merchAcc: "VIETRAVEL", subMerchAcc: "TOURINBOUND", transId: "26012112151506", orderId: "ORD-2026-006", vtcTrans: "VTC-88273650", partner: "PART006", cust: "Hoàng Văn Nam", custAcc: "0911***333", method: "Thẻ nội địa", val: 3200000, feeCust: 11000, feeMerch: 0, disc: 0, promo: 0, bankTransId: "TCB.55667788", channel: "Website" },
             { time: "21/01/2026 13:00:00", merch: "Shop Mỹ Phẩm Hana", merchAcc: "HANACOSMETIC", subMerchAcc: "HANASHOPEE", transId: "26012113000007", orderId: "ORD-2026-007", vtcTrans: "VTC-88273651", partner: "PART007", cust: "Đặng Thị Thảo", custAcc: "0977***888", method: "QR Code", val: 890000, feeCust: 0, feeMerch: 8900, disc: 50000, promo: 0, bankTransId: "CTG.99887766", channel: "App" },
             { time: "21/01/2026 13:45:50", merch: "Nhà Hàng Biển Đông", merchAcc: "BIENDONG", subMerchAcc: "0909123123", transId: "26012113455008", orderId: "ORD-2026-008", vtcTrans: "VTC-88273652", partner: "PART008", cust: "Bùi Văn Long", custAcc: "0988***999", method: "Thẻ quốc tế", val: 2150000, feeCust: 0, feeMerch: 43000, disc: 0, promo: 0, bankTransId: "MC.44332211", channel: "POS" },
@@ -1505,4 +1519,3 @@
     </script>
 </body>
 </html>
-
