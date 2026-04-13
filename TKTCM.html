@@ -1,0 +1,999 @@
+import React, { useState, useEffect } from 'react';
+import { User, Wrench, Calendar, X, AlertTriangle, Save, LogOut, CreditCard, DollarSign, UserPlus, Settings, Plus, Edit, Trash2, ShieldCheck, List, Eye, Smartphone, ChevronLeft, Home, Lock, CheckCircle2, Megaphone } from 'lucide-react';
+
+// --- COMPONENT CHÍNH ---
+export default function App() {
+  // Trạng thái điều hướng trang ('thay_doi_thong_tin', 'tao_tai_khoan', 'quan_ly_han_muc', 'mobile_app')
+  const [currentView, setCurrentView] = useState('thay_doi_thong_tin');
+  // Trạng thái hiển thị Dropdown menu
+  const [isTaiKhoanOpen, setIsTaiKhoanOpen] = useState(false);
+  const [isHeThongOpen, setIsHeThongOpen] = useState(false);
+
+  // Xử lý chuyển trang
+  const navigateTo = (view) => {
+    setCurrentView(view);
+    setIsTaiKhoanOpen(false);
+    setIsHeThongOpen(false);
+  };
+
+  return (
+    <div className="min-h-screen bg-gray-100 flex flex-col text-sm" style={{ fontFamily: '"Helvetica Neue", Helvetica, Arial, sans-serif' }}>
+      {/* Topbar */}
+      <header className="bg-white w-full border-b border-gray-200">
+        <div className="flex justify-between items-center px-4 py-3">
+          <div className="flex items-center space-x-4">
+            {/* Logo */}
+            <div className="text-[#00a8e6] italic font-extrabold text-2xl flex items-center tracking-tight cursor-pointer mr-4">
+              <span className="mr-1 text-xl">.))</span> VTCPay
+            </div>
+            
+            {/* Tab Hệ thống */}
+            <div className="relative">
+              <button
+                onClick={() => {setIsHeThongOpen(!isHeThongOpen); setIsTaiKhoanOpen(false);}}
+                className={`text-white px-3 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold focus:outline-none transition-colors shadow-sm bg-[#0060a8] hover:bg-[#004d86]`}
+              >
+                <Settings size={16} />
+                <span>Hệ thống</span>
+              </button>
+              {/* Dropdown Menu Hệ Thống */}
+              {isHeThongOpen && (
+                <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 shadow-lg rounded-sm z-50 py-1">
+                  <button className="w-full text-left block px-4 py-2.5 text-gray-700 hover:bg-gray-100 hover:text-[#0060a8] transition-colors">
+                    Cấu hình chung
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* Tab Tài khoản */}
+            <div className="relative">
+              <button
+                onClick={() => {setIsTaiKhoanOpen(!isTaiKhoanOpen); setIsHeThongOpen(false);}}
+                className={`text-white px-3 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold focus:outline-none transition-colors shadow-sm ${['thay_doi_thong_tin', 'tao_tai_khoan', 'quan_ly_han_muc'].includes(currentView) ? 'bg-[#004d86]' : 'bg-[#0060a8] hover:bg-[#004d86]'}`}
+              >
+                <CreditCard size={16} />
+                <span>Tài khoản</span>
+              </button>
+              {/* Dropdown Menu Tài Khoản */}
+              {isTaiKhoanOpen && (
+                <div className="absolute top-full left-0 mt-1 w-64 bg-white border border-gray-200 shadow-lg rounded-sm z-50 py-1">
+                  <button 
+                    onClick={() => navigateTo('tao_tai_khoan')}
+                    className={`w-full text-left block px-4 py-2.5 hover:bg-gray-100 hover:text-[#0060a8] transition-colors border-b border-gray-100 ${currentView === 'tao_tai_khoan' ? 'text-[#0060a8] font-bold bg-blue-50' : 'text-gray-700'}`}
+                  >
+                    Tạo tài khoản
+                  </button>
+                  <div className="w-full text-left block px-4 py-2.5 text-gray-800 font-bold bg-gray-50 border-b border-gray-200 uppercase text-xs tracking-wider">
+                    Tra cứu thông tin tài khoản
+                  </div>
+                  <button 
+                    onClick={() => navigateTo('thay_doi_thong_tin')}
+                    className={`w-full text-left block pl-8 pr-4 py-2.5 hover:bg-gray-100 hover:text-[#0060a8] transition-colors border-b border-gray-100 ${currentView === 'thay_doi_thong_tin' ? 'text-[#0060a8] font-bold bg-blue-50' : 'text-gray-600'}`}
+                  >
+                    - Thay đổi thông tin
+                  </button>
+                  <button 
+                    onClick={() => navigateTo('quan_ly_han_muc')}
+                    className={`w-full text-left block px-4 py-2.5 hover:bg-gray-100 hover:text-[#0060a8] transition-colors ${currentView === 'quan_ly_han_muc' ? 'text-[#0060a8] font-bold bg-blue-50' : 'text-gray-700'}`}
+                  >
+                    Quản lý hạn mức xác thực
+                  </button>
+                </div>
+              )}
+            </div>
+
+            {/* BỔ SUNG Tab Mobile App */}
+            <div className="relative ml-2">
+              <button
+                onClick={() => {navigateTo('mobile_app');}}
+                className={`text-white px-3 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold focus:outline-none transition-colors shadow-sm ${currentView === 'mobile_app' ? 'bg-[#004d86]' : 'bg-[#0060a8] hover:bg-[#004d86]'}`}
+              >
+                <Smartphone size={16} />
+                <span>Mobile App</span>
+              </button>
+            </div>
+          </div>
+          {/* User Info */}
+          <div className="flex items-center space-x-2 text-[#0060a8] text-sm font-semibold">
+            <User size={16} />
+            <span>hongtt</span>
+            <LogOut size={16} className="text-red-600 cursor-pointer ml-2" title="Đăng xuất" />
+          </div>
+        </div>
+        
+        {/* Breadcrumb Bar */}
+        <div className="bg-[#337ab7] text-white px-4 py-2 text-sm font-bold flex items-center shadow-sm uppercase">
+          <DollarSign size={14} className="mr-2" />
+          {currentView === 'thay_doi_thong_tin' && 'TRA CỨU THÔNG TIN TÀI KHOẢN > THAY ĐỔI THÔNG TIN'}
+          {currentView === 'tao_tai_khoan' && 'TÀI KHOẢN > TẠO TÀI KHOẢN'}
+          {currentView === 'quan_ly_han_muc' && 'TÀI KHOẢN > QUẢN LÝ HẠN MỨC XÁC THỰC'}
+          {currentView === 'mobile_app' && 'GIẢ LẬP MOBILE APP > RÚT TIỀN 247 (LIVENESS & OTP)'}
+        </div>
+      </header>
+
+      {/* Main Content Area */}
+      <div className="flex-1 p-4 flex justify-center items-start">
+        {currentView === 'thay_doi_thong_tin' && <FormThayDoiThongTin />}
+        {currentView === 'tao_tai_khoan' && <FormTaoTaiKhoan />}
+        {currentView === 'quan_ly_han_muc' && <QuanLyHanMucXacThuc />}
+        {currentView === 'mobile_app' && <MobileAppSimulator />}
+      </div>
+
+      {/* Styles nội bộ */}
+      <style dangerouslySetInnerHTML={{__html: `
+        .form-input, .form-select {
+          width: 100%;
+          border: 1px solid #ccc;
+          border-radius: 3px;
+          padding: 6px 12px;
+          color: #555;
+          outline: none;
+          transition: border-color 0.15s ease-in-out, box-shadow 0.15s ease-in-out;
+        }
+        .form-input:disabled, .form-select:disabled, input[type="radio"]:disabled, input[type="checkbox"]:disabled {
+          background-color: #f3f4f6;
+          cursor: not-allowed;
+          color: #6b7280;
+        }
+        .form-input:focus, .form-select:focus {
+          border-color: #66afe9;
+          box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
+        }
+      `}} />
+    </div>
+  );
+}
+
+// --- COMPONENT: QUẢN LÝ HẠN MỨC XÁC THỰC ---
+function QuanLyHanMucXacThuc() {
+  const [viewMode, setViewMode] = useState('list'); // 'list', 'add', 'edit', 'view'
+  const [currentPolicy, setCurrentPolicy] = useState(null);
+  const [policies, setPolicies] = useState([
+    { id: 1, tenTK: '', nhomTK: '', loaiTK: 'Tài khoản cá nhân', loaiXacThuc: 'OTP Liveness và OTP Pay', minTx: '10.000.000', minDaily: '20.000.000', maxDaily: '', start: '2023-01-01 00:00:00', end: '2033-01-01 00:00:00', active: true },
+    { id: 2, tenTK: '', nhomTK: '', loaiTK: 'Tài khoản tổ chức', loaiXacThuc: 'OTP App', minTx: '1.000', minDaily: '', maxDaily: '10.000.000.000', start: '2023-01-01 00:00:00', end: '2033-01-01 00:00:00', active: true },
+    { id: 3, tenTK: '', nhomTK: 'Tổ chức mới', loaiTK: '', loaiXacThuc: 'OTP Liveness và OTP App', minTx: '50.000.000', minDaily: '100.000.000', maxDaily: '10.000.000.000', start: '2023-01-01 00:00:00', end: '2033-01-01 00:00:00', active: true }
+  ]);
+
+  const handleDelete = (id) => {
+    if(window.confirm('Bạn có chắc chắn muốn xóa thiết lập này?')) {
+      setPolicies(policies.filter(p => p.id !== id));
+    }
+  };
+
+  const handleEdit = (policy) => {
+    setCurrentPolicy(policy);
+    setViewMode('edit');
+  };
+
+  const handleView = (policy) => {
+    setCurrentPolicy(policy);
+    setViewMode('view');
+  };
+
+  const handleAddNew = () => {
+    setCurrentPolicy(null);
+    setViewMode('add');
+  };
+
+  if (viewMode === 'list') {
+    return (
+      <div className="bg-white w-full max-w-[1200px] shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
+        <div className="bg-[#337ab7] text-white p-3 font-semibold flex justify-between items-center rounded-t-sm">
+          <div className="flex items-center"><List size={16} className="mr-2" /> Danh sách thiết lập hạn mức xác thực</div>
+          <button onClick={handleAddNew} className="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded shadow flex items-center text-xs transition-colors">
+            <Plus size={14} className="mr-1" /> Thêm mới
+          </button>
+        </div>
+        {/* Container bảng cho phép bẻ dòng chữ để không cuộn ngang */}
+        <div className="p-4 w-full">
+          <table className="w-full text-left border-collapse border border-gray-400 table-auto break-words">
+            <thead>
+              <tr className="bg-gray-200 text-gray-800 text-center text-[11px] uppercase font-bold border-b border-gray-400">
+                <th rowSpan="2" className="p-1 border border-gray-400 w-8">STT</th>
+                <th colSpan="3" className="p-1 border border-gray-400">Đối tượng</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-32">Loại xác thực</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-20">GD tối thiểu<br/>(VNĐ)</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-24">Tổng GD ngày<br/>(VNĐ)</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-24">Tổng GD tối đa<br/>ngày (VNĐ)</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-20">Bắt đầu</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-20">Kết thúc</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-16">Trạng thái</th>
+                <th rowSpan="2" className="p-1 border border-gray-400 w-[72px]">Hành động</th>
+              </tr>
+              <tr className="bg-gray-100 text-gray-800 text-center text-[11px] font-bold border-b border-gray-400">
+                <th className="p-1 border border-gray-400">Tên TK</th>
+                <th className="p-1 border border-gray-400">Nhóm TK</th>
+                <th className="p-1 border border-gray-400">Loại TK</th>
+              </tr>
+            </thead>
+            <tbody className="text-[12px] text-gray-700">
+              {policies.length === 0 ? (
+                <tr><td colSpan="12" className="p-4 text-center text-gray-500">Chưa có thiết lập nào.</td></tr>
+              ) : policies.map((p, index) => (
+                <tr key={p.id} className="border-b border-gray-300 hover:bg-gray-50">
+                  <td className="p-1 border border-gray-300 text-center">{index + 1}</td>
+                  <td className="p-1 border border-gray-300 break-words">{p.tenTK}</td>
+                  <td className="p-1 border border-gray-300 break-words">{p.nhomTK}</td>
+                  <td className="p-1 border border-gray-300 break-words">{p.loaiTK}</td>
+                  <td className="p-1 border border-gray-300">{p.loaiXacThuc}</td>
+                  <td className="p-1 border border-gray-300 text-right">{p.minTx}</td>
+                  <td className="p-1 border border-gray-300 text-right text-red-600">{p.minDaily}</td>
+                  <td className="p-1 border border-gray-300 text-right text-purple-600">{p.maxDaily}</td>
+                  <td className="p-1 border border-gray-300 text-center text-[11px] text-gray-500">{p.start}</td>
+                  <td className="p-1 border border-gray-300 text-center text-[11px] text-gray-500">{p.end}</td>
+                  <td className="p-1 border border-gray-300 text-center text-[11px] font-bold text-green-600">
+                    {p.active ? 'Hoạt động' : 'Tạm dừng'}
+                  </td>
+                  <td className="p-1 border border-gray-300 text-center">
+                    <div className="flex items-center justify-center space-x-1">
+                      <button onClick={() => handleView(p)} className="text-gray-500 hover:text-gray-800" title="Xem chi tiết"><Eye size={14} /></button>
+                      <button onClick={() => handleEdit(p)} className="text-blue-600 hover:text-blue-800" title="Cập nhật"><Edit size={14} /></button>
+                      <button onClick={() => handleDelete(p.id)} className="text-red-600 hover:text-red-800" title="Xóa"><Trash2 size={14} /></button>
+                    </div>
+                  </td>
+                </tr>
+              ))}
+            </tbody>
+          </table>
+        </div>
+      </div>
+    );
+  }
+
+  // View Form (Add/Edit/View)
+  return <FormHanMuc policy={currentPolicy} isReadOnly={viewMode === 'view'} onSave={() => setViewMode('list')} onCancel={() => setViewMode('list')} />;
+}
+
+// Form dùng chung cho Thêm mới, Cập nhật và Xem
+function FormHanMuc({ policy, isReadOnly, onSave, onCancel }) {
+  // Utility format number with comma
+  const formatNumber = (val) => {
+    if (!val) return '';
+    const cleanVal = val.toString().replace(/\D/g, '');
+    return cleanVal.replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  };
+
+  const [formData, setFormData] = useState(policy || {
+    doiTuong: 'Hệ thống',
+    loaiXacThuc: 'OTP Liveness và OTP Pay',
+    minTx: '',
+    minDaily: '',
+    maxDaily: '', // Biến mới
+    start: '',
+    end: '',
+    nghiepVuTx: [],
+    nghiepVuDaily: []
+  });
+
+  const nghiepVuOptions = [
+    'Nạp tiền',
+    'Thanh toán số dư Ví',
+    'Thanh toán, chuyển tiền bằng token',
+    'Chuyển tiền Ví',
+    'Chuyển tiền 247',
+    'Rút tiền'
+  ];
+
+  const handleCheckboxChange = (type, value) => {
+    if (isReadOnly) return;
+    const currentList = formData[type];
+    if (currentList.includes(value)) {
+      setFormData({ ...formData, [type]: currentList.filter(item => item !== value) });
+    } else {
+      setFormData({ ...formData, [type]: [...currentList, value] });
+    }
+  };
+
+  const titleText = isReadOnly ? 'Xem chi tiết thiết lập' : (policy ? 'Cập nhật thiết lập' : 'Thêm mới thiết lập hạn mức');
+
+  return (
+    <div className="bg-white w-full max-w-4xl shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
+      <div className="bg-[#337ab7] text-white p-3 font-semibold flex justify-between items-center rounded-t-sm">
+        <div className="flex items-center">
+          {isReadOnly ? <Eye size={16} className="mr-2" /> : <ShieldCheck size={16} className="mr-2" />} 
+          {titleText}
+        </div>
+        <button onClick={onCancel} className="text-white hover:text-gray-200 transition-colors"><X size={20} /></button>
+      </div>
+
+      <div className="p-6 space-y-4">
+        <FormRow label="1. Đối tượng" required={!isReadOnly}>
+          <select 
+            className="form-select w-64" 
+            value={formData.doiTuong} 
+            onChange={(e) => setFormData({...formData, doiTuong: e.target.value})}
+            disabled={isReadOnly}
+          >
+            <option>Hệ thống</option>
+            <option>Loại tài khoản</option>
+            <option>Nhóm tài khoản</option>
+            <option>Tài khoản</option>
+          </select>
+        </FormRow>
+
+        <FormRow label="2. Loại xác thực" required={!isReadOnly}>
+          <select 
+            className="form-select w-64"
+            value={formData.loaiXacThuc}
+            onChange={(e) => setFormData({...formData, loaiXacThuc: e.target.value})}
+            disabled={isReadOnly}
+          >
+            <option>OTP Liveness và OTP Pay</option>
+            <option>OTP Liveness và OTP App</option>
+            <option>OTP Pay</option>
+            <option>OTP App</option>
+            <option>OTP Liveness</option>
+          </select>
+        </FormRow>
+
+        <div className="border-t border-gray-200 my-4 pt-4"></div>
+
+        <FormRow label="3. Giá trị giao dịch tối thiểu (phải xác thực)" required={!isReadOnly}>
+          <div className="flex items-center space-x-2 w-full">
+            <input 
+              type="text" 
+              className="form-input w-48 font-bold text-blue-700" 
+              placeholder="Nhập số tiền..."
+              value={formData.minTx}
+              onChange={(e) => setFormData({...formData, minTx: formatNumber(e.target.value)})}
+              disabled={isReadOnly}
+            />
+            <span className="text-gray-500 font-bold">VNĐ</span>
+          </div>
+        </FormRow>
+        
+        <FormRow label="Nghiệp vụ áp dụng">
+          <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+            {nghiepVuOptions.map((nv) => (
+              <label key={`tx-${nv}`} className={`flex items-center ${isReadOnly ? 'cursor-not-allowed' : 'cursor-pointer'} text-gray-700`}>
+                <input 
+                  type="checkbox" 
+                  className="mr-2 h-4 w-4 text-[#337ab7]" 
+                  checked={formData.nghiepVuTx?.includes(nv)}
+                  onChange={() => handleCheckboxChange('nghiepVuTx', nv)}
+                  disabled={isReadOnly}
+                />
+                {nv}
+              </label>
+            ))}
+          </div>
+        </FormRow>
+
+        <div className="border-t border-gray-200 my-4 pt-4"></div>
+
+        {/* Khung Section 4 được gom nhóm lại */}
+        <div className="bg-gray-50 p-4 rounded border border-gray-200 shadow-sm space-y-4">
+          <h3 className="font-bold text-[#104e8b]">4. Hạn mức tổng giá trị giao dịch ngày</h3>
+          
+          <FormRow label="Tổng GD ngày tối thiểu (phải xác thực)" required={!isReadOnly}>
+            <div className="flex items-center space-x-2 w-full">
+              <input 
+                type="text" 
+                className="form-input w-48 font-bold text-red-600" 
+                placeholder="Nhập số tiền..."
+                value={formData.minDaily}
+                onChange={(e) => setFormData({...formData, minDaily: formatNumber(e.target.value)})}
+                disabled={isReadOnly}
+              />
+              <span className="text-gray-500 font-bold">VNĐ</span>
+            </div>
+          </FormRow>
+
+          <FormRow label="Tổng giá trị GD tối đa ngày" required={!isReadOnly}>
+            <div className="flex items-center space-x-2 w-full">
+              <input 
+                type="text" 
+                className="form-input w-48 font-bold text-purple-600" 
+                placeholder="Nhập tối đa..."
+                value={formData.maxDaily}
+                onChange={(e) => setFormData({...formData, maxDaily: formatNumber(e.target.value)})}
+                disabled={isReadOnly}
+              />
+              <span className="text-gray-500 font-bold">VNĐ</span>
+            </div>
+          </FormRow>
+
+          <FormRow label="Nghiệp vụ áp dụng">
+            <div className="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+              {nghiepVuOptions.map((nv) => (
+                <label key={`daily-${nv}`} className={`flex items-center ${isReadOnly ? 'cursor-not-allowed' : 'cursor-pointer'} text-gray-700`}>
+                  <input 
+                    type="checkbox" 
+                    className="mr-2 h-4 w-4 text-[#337ab7]" 
+                    checked={formData.nghiepVuDaily?.includes(nv)}
+                    onChange={() => handleCheckboxChange('nghiepVuDaily', nv)}
+                    disabled={isReadOnly}
+                  />
+                  {nv}
+                </label>
+              ))}
+            </div>
+          </FormRow>
+        </div>
+
+        <div className="border-t border-gray-200 my-4 pt-4"></div>
+
+        <FormRow label="5. Thời gian thiết lập" required={!isReadOnly}>
+          <div className="flex items-center space-x-4">
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500 mb-1">Bắt đầu:</span>
+              <input type="text" className="form-input w-40" placeholder="YYYY-MM-DD" value={formData.start} onChange={e => setFormData({...formData, start: e.target.value})} disabled={isReadOnly} />
+            </div>
+            <div className="flex flex-col">
+              <span className="text-xs text-gray-500 mb-1">Kết thúc:</span>
+              <input type="text" className="form-input w-40" placeholder="YYYY-MM-DD" value={formData.end} onChange={e => setFormData({...formData, end: e.target.value})} disabled={isReadOnly} />
+            </div>
+          </div>
+        </FormRow>
+      </div>
+
+      {/* Footer Buttons */}
+      <div className="bg-[#f5f5f5] border-t border-gray-200 p-4 flex justify-end space-x-3">
+        <button onClick={onCancel} className="bg-white border border-gray-300 text-gray-700 px-6 py-2 rounded shadow-sm hover:bg-gray-50 transition-colors">
+          {isReadOnly ? 'Đóng lại' : 'Hủy bỏ'}
+        </button>
+        {!isReadOnly && (
+          <button onClick={onSave} className="bg-[#337ab7] hover:bg-[#286090] text-white px-6 py-2 rounded shadow-sm flex items-center transition-colors">
+            <Save size={16} className="mr-2" /> Lưu chính sách
+          </button>
+        )}
+      </div>
+    </div>
+  );
+}
+
+// --- COMPONENT: FORM TẠO TÀI KHOẢN ---
+function FormTaoTaiKhoan() {
+  const [isVerifiedStandard, setIsVerifiedStandard] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const handleToggleClick = (e) => {
+    e.preventDefault();
+    if (!isVerifiedStandard) setShowConfirmModal(true);
+    else setIsVerifiedStandard(false);
+  };
+
+  return (
+    <div className="bg-white w-full max-w-4xl shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
+      <div className="p-4 bg-gray-50">
+        <div className="bg-[#f2dede] border border-[#ebccd1] text-[#a94442] px-4 py-3 rounded mb-4 flex items-center shadow-sm">
+          <span className="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-xs mr-2 border border-red-700">Chú ý!</span>
+          <span>Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)</span>
+        </div>
+
+        <div className="border border-[#337ab7] bg-white rounded-sm">
+          <div className="bg-[#337ab7] text-white p-2 font-semibold flex items-center rounded-t-sm">
+            <UserPlus size={16} className="mr-2" /> Tạo Tài Khoản
+          </div>
+
+          <div className="p-6 space-y-3">
+            <FormRow label="Loại Tài khoản" required><select className="form-select w-64"><option>Tài Khoản Doanh Nghiệp</option><option>Tài Khoản Cá Nhân</option></select></FormRow>
+            <FormRow label="Loại tài khoản" required>
+              <div className="flex items-center space-x-4 pt-1">
+                <label className="flex items-center cursor-pointer"><input type="radio" name="loai_tk_radio" className="mr-1.5" defaultChecked />Thông thường</label>
+                <label className="flex items-center cursor-pointer"><input type="radio" name="loai_tk_radio" className="mr-1.5" />Chuyển khoản</label>
+              </div>
+            </FormRow>
+            <FormRow label="Số Tài Khoản" required><input type="text" className="form-input" placeholder="Số Tài Khoản" /></FormRow>
+            <FormRow label="Password" required><input type="password" className="form-input" placeholder="Nhập mật khẩu" /></FormRow>
+            <FormRow label="Nhập lại Password" required><input type="password" className="form-input" placeholder="Nhập lại mật khẩu" /></FormRow>
+            <FormRow label="Ngân hàng" required><select className="form-select w-48"><option>Chọn ngân hàng</option></select></FormRow>
+            <FormRow label="Loại tài khoản/thẻ NH" required><select className="form-select w-48"><option>Chọn loại</option></select></FormRow>
+            <FormRow label="Số tài khoản/thẻ NH" required><input type="text" className="form-input" placeholder="Nhập số tk/thẻ ngân hàng" /></FormRow>
+            <FormRow label="Tên chủ tài khoản/thẻ" required><input type="text" className="form-input" placeholder="Nhập họ tên" /></FormRow>
+            <FormRow label="Tên doanh nghiệp" required><input type="text" className="form-input" placeholder="Tên Doanh Nghiệp" /></FormRow>
+            <FormRow label="Người đại diện" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Loại giấy tờ" required><select className="form-select w-48"><option>Căn cước công dân</option></select></FormRow>
+            <FormRow label="Ngày sinh" required><input type="date" className="form-input w-48" /></FormRow>
+            <FormRow label="Số giấy tờ" required><input type="text" className="form-input" placeholder="Nhập CMND" /></FormRow>
+            <FormRow label="Ngày Cấp" required><input type="date" className="form-input w-48" /></FormRow>
+            <FormRow label="Nơi cấp" required><input type="text" className="form-input" placeholder="Vui lòng nhập nơi cấp" /></FormRow>
+            <FormRow label="Ảnh CMND 1"><input type="file" className="text-gray-600 text-sm file:rounded file:border file:border-gray-300" /></FormRow>
+            <FormRow label="Ảnh CMND 2"><input type="file" className="text-gray-600 text-sm file:rounded file:border file:border-gray-300" /></FormRow>
+            <FormRow label="TT Người đại diện kế toán"><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Ngày sinh"><input type="date" className="form-input w-48" /></FormRow>
+            <FormRow label="Số CCCD đại diện kế toán"><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Ngày cấp"><input type="date" className="form-input w-48" /></FormRow>
+            <FormRow label="Nơi cấp"><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Ảnh CMND kế toán 1"><input type="file" className="text-gray-600 text-sm file:rounded" /></FormRow>
+            <FormRow label="Ảnh CMND kế toán 2"><input type="file" className="text-gray-600 text-sm file:rounded" /></FormRow>
+            <FormRow label="Giấy chứng nhận ĐKKD" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Mã số Thuế" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Điện Thoại" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Email" required><input type="email" className="form-input" /></FormRow>
+            <FormRow label="Fax" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Địa chỉ giao dịch" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Địa chỉ ĐK Kinh Doanh" required><input type="text" className="form-input" /></FormRow>
+            <FormRow label="Thời hạn ĐKKD">
+              <div className="flex flex-col space-y-3 w-full">
+                <input type="date" className="form-input w-48" />
+                <input type="file" className="text-gray-600 text-sm file:rounded" />
+              </div>
+            </FormRow>
+            <FormRow label="Lĩnh vực kinh doanh"><select className="form-select w-48"><option>Lĩnh vực kinh doanh</option></select></FormRow>
+
+            <div className="border-t border-gray-200 my-4 pt-4"></div>
+
+            <FormRow label="Ngày thiết lập" required><input type="date" className="form-input w-48" /></FormRow>
+            <FormRow label="Ngoại lệ Tổ chức mới">
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#337ab7] focus:ring-offset-2 ${isVerifiedStandard ? 'bg-[#337ab7]' : 'bg-gray-300'}`}
+                  onClick={handleToggleClick}
+                >
+                  <span aria-hidden="true" className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${isVerifiedStandard ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+                <span className="ml-3 text-sm text-gray-700 italic">Xác nhận là Tổ chức thông thường</span>
+              </div>
+            </FormRow>
+            <FormRow label="Chính chủ / Ủy quyền">
+               <div className="flex space-x-6 items-center h-full pt-2">
+                  <label className="flex items-center cursor-pointer"><input type="radio" name="ownership_tao" className="mr-2" defaultChecked />Chính chủ</label>
+                  <label className="flex items-center cursor-pointer"><input type="radio" name="ownership_tao" className="mr-2" />Ủy quyền</label>
+               </div>
+            </FormRow>
+          </div>
+
+          <div className="bg-[#f5f5f5] border-t border-gray-200 p-4 flex justify-center">
+            <button className="bg-[#337ab7] hover:bg-[#286090] text-white px-6 py-2 rounded shadow flex items-center transition-colors">
+              <Save size={16} className="mr-2" /> Lưu lại
+            </button>
+          </div>
+        </div>
+      </div>
+      {showConfirmModal && <ConfirmModal onConfirm={() => { setIsVerifiedStandard(true); setShowConfirmModal(false); }} onCancel={() => setShowConfirmModal(false)} />}
+    </div>
+  );
+}
+
+// --- COMPONENT: FORM THAY ĐỔI THÔNG TIN ---
+function FormThayDoiThongTin() {
+  const [isVerifiedStandard, setIsVerifiedStandard] = useState(false);
+  const [showConfirmModal, setShowConfirmModal] = useState(false);
+
+  const handleToggleClick = (e) => {
+    e.preventDefault();
+    if (!isVerifiedStandard) setShowConfirmModal(true);
+    else setIsVerifiedStandard(false);
+  };
+
+  return (
+    <div className="bg-white w-full max-w-4xl shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
+      <div className="bg-white p-3 border-b border-gray-200 flex justify-between items-center">
+        <h2 className="text-lg font-bold text-gray-700">Thay đổi thông tin tài khoản</h2>
+        <button className="text-gray-400 hover:text-gray-600"><X size={20} /></button>
+      </div>
+
+      <div className="p-4 bg-gray-50">
+        <div className="bg-[#f2dede] border border-[#ebccd1] text-[#a94442] px-4 py-3 rounded mb-4 flex items-center shadow-sm">
+          <span className="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-xs mr-2 border border-red-700">Chú ý!</span>
+          <span>Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)</span>
+        </div>
+
+        <div className="border border-[#337ab7] bg-white rounded-sm">
+          <div className="bg-[#337ab7] text-white p-2 font-semibold flex items-center rounded-t-sm">
+            <User size={16} className="mr-2" /> Thay đổi thông tin tài khoản
+          </div>
+          <div className="bg-[#d9edf7] text-[#31708f] p-2 font-semibold flex items-center border-b border-gray-200 text-xs">
+            <Wrench size={14} className="mr-2" /> Thông Tin Cơ Bản
+          </div>
+
+          <div className="p-6 space-y-3">
+            <FormRow label="Họ và tên" required><input type="text" className="form-input" defaultValue="CÔNG TY VTC CÔNG NGHỆ VÀ NỘI DUNG SỐ" /></FormRow>
+            <FormRow label="Quốc Tịch"><select className="form-select"><option>Vietnam</option></select></FormRow>
+            <FormRow label="Ngày sinh" required><input type="date" className="form-input w-48" defaultValue="1977-12-30" /></FormRow>
+            <FormRow label="Ngày thiết lập" required><input type="date" className="form-input w-48" /></FormRow>
+            <FormRow label="Email"><input type="email" className="form-input" defaultValue="vtcintecom@gmail.com" /></FormRow>
+            <FormRow label="Loại giấy tờ" required><select className="form-select"><option>Căn cước công dân</option></select></FormRow>
+            <FormRow label="Số giấy tờ" required><input type="text" className="form-input" defaultValue="001077020575" /></FormRow>
+            <FormRow label="Giới tính"><select className="form-select"><option>Nam</option></select></FormRow>
+            <FormRow label="Địa Chỉ" required><input type="text" className="form-input" defaultValue="T08 1901 Times City, Hà Nội" /></FormRow>
+            <FormRow label="Điện Thoại" required><input type="text" className="form-input" defaultValue="02444551530" /></FormRow>
+            <FormRow label="Fax"><input type="text" className="form-input" /></FormRow>
+            <FormRow label="TT Người đại diện" required><input type="text" className="form-input" defaultValue="Đỗ Anh Tú" /></FormRow>
+            <FormRow label="Tên Giao dịch" required><input type="text" className="form-input" defaultValue="CÔNG TY VTC CÔNG NGHỆ VÀ NỘI DUNG SỐ" /></FormRow>
+            <FormRow label="TT Người đại diện kế toán"><input type="text" className="form-input" defaultValue="Hoàng Bích Huệ" /></FormRow>
+            <FormRow label="Số CCCD đại diện kế toán"><input type="text" className="form-input" defaultValue="033172003131" /></FormRow>
+            <FormRow label="Địa chỉ ĐK Kinh Doanh" required><input type="text" className="form-input" defaultValue="Số 65 phố Lạc Trung, Hà Nội" /></FormRow>
+            <FormRow label="Mã số Thuế"><input type="text" className="form-input" defaultValue="0100110006-028" /></FormRow>
+            <FormRow label="Địa chỉ giao dịch" required><input type="text" className="form-input" defaultValue="Số 65 phố Lạc Trung, Hà Nội" /></FormRow>
+            <FormRow label="Giấy chứng nhận ĐKKD"><input type="text" className="form-input" defaultValue="0100110006-028" /></FormRow>
+            <FormRow label="Thời hạn ĐKKD">
+              <div className="flex flex-col space-y-3 w-full">
+                <input type="date" className="form-input w-48" />
+                <div className="flex flex-col space-y-1">
+                  <input type="file" className="text-gray-600 text-sm w-full file:rounded" />
+                  <span className="text-gray-500 text-xs">Chưa có chứng nhận ĐKKD</span>
+                </div>
+              </div>
+            </FormRow>
+            <FormRow label="Lĩnh vực kinh doanh"><select className="form-select"><option>Công nghệ thông tin</option></select></FormRow>
+
+            <div className="border-t border-gray-200 my-4 pt-4"></div>
+
+            <FormRow label="Ngoại lệ Tổ chức mới">
+              <div className="flex items-center">
+                <button
+                  type="button"
+                  className={`relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none focus:ring-2 focus:ring-[#337ab7] focus:ring-offset-2 ${isVerifiedStandard ? 'bg-[#337ab7]' : 'bg-gray-300'}`}
+                  onClick={handleToggleClick}
+                >
+                  <span aria-hidden="true" className={`pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out ${isVerifiedStandard ? 'translate-x-5' : 'translate-x-0'}`} />
+                </button>
+                <span className="ml-3 text-sm text-gray-700 italic">Xác nhận là Tổ chức thông thường</span>
+              </div>
+            </FormRow>
+            <FormRow label="Chính chủ / Ủy quyền">
+               <div className="flex space-x-6 items-center h-full pt-2">
+                  <label className="flex items-center cursor-pointer"><input type="radio" name="ownership" className="mr-2" defaultChecked />Chính chủ</label>
+                  <label className="flex items-center cursor-pointer"><input type="radio" name="ownership" className="mr-2" />Ủy quyền</label>
+               </div>
+            </FormRow>
+          </div>
+
+          <div className="bg-[#f5f5f5] border-t border-gray-200 p-4 flex justify-center">
+            <button className="bg-[#337ab7] hover:bg-[#286090] text-white px-6 py-2 rounded shadow flex items-center transition-colors">
+              <Save size={16} className="mr-2" /> Xác nhận
+            </button>
+          </div>
+        </div>
+      </div>
+      {showConfirmModal && <ConfirmModal onConfirm={() => { setIsVerifiedStandard(true); setShowConfirmModal(false); }} onCancel={() => setShowConfirmModal(false)} />}
+    </div>
+  );
+}
+
+// --- COMPONENT HỖ TRỢ CHUNG ---
+function FormRow({ label, required, children }) {
+  return (
+    <div className="flex flex-col sm:flex-row sm:items-start">
+      <div className="sm:w-1/3 sm:text-right sm:pr-4 pt-1 mb-1 sm:mb-0">
+        <label className="font-bold text-[#104e8b] text-[13px]">
+          {label}: {required && <span className="text-red-600">*</span>}
+        </label>
+      </div>
+      <div className="sm:w-2/3 flex items-center">
+        {children}
+      </div>
+    </div>
+  );
+}
+
+function ConfirmModal({ onConfirm, onCancel }) {
+  return (
+    <div className="fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
+      <div className="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden animate-in fade-in zoom-in-95 duration-200">
+        <div className="bg-yellow-500 text-white px-4 py-3 flex items-center">
+          <AlertTriangle className="mr-2" size={20} />
+          <h3 className="font-bold text-lg">Xác nhận thao tác</h3>
+        </div>
+        <div className="p-5 text-gray-700 text-base leading-relaxed">
+          Bạn đang xác nhận Khách hàng này là Tổ chức thông thường (Bỏ qua điều kiện 12 tháng). Bạn có chắc chắn muốn thực hiện?
+        </div>
+        <div className="bg-gray-100 px-4 py-3 flex justify-end space-x-3 rounded-b-lg border-t border-gray-200">
+          <button onClick={onCancel} className="px-4 py-2 bg-white border border-gray-300 text-gray-700 rounded hover:bg-gray-50 transition-colors">Hủy bỏ</button>
+          <button onClick={onConfirm} className="px-4 py-2 bg-[#337ab7] hover:bg-[#286090] text-white rounded transition-colors">Đồng ý</button>
+        </div>
+      </div>
+    </div>
+  );
+}
+
+// --- COMPONENT MỚI: GIẢ LẬP MOBILE APP ---
+function MobileAppSimulator() {
+  const [step, setStep] = useState(0);
+  const [otp, setOtp] = useState('');
+  const [flowType, setFlowType] = useState('pay'); // 'pay' hoặc 'app'
+
+  // Tự động chuyển từ Quét khuôn mặt sang Nhập OTP sau 3 giây giả lập
+  useEffect(() => {
+    if (step === 3) {
+      const timer = setTimeout(() => {
+        setStep(4);
+      }, 3000);
+      return () => clearTimeout(timer);
+    }
+  }, [step]);
+
+  // Tự động chuyển sang màn hình thành công khi nhập đủ 6 số OTP
+  useEffect(() => {
+    if (step === 4 && otp.length === 6) {
+      const timer = setTimeout(() => {
+        setStep(5);
+      }, 500); // Đợi nửa giây cho đẹp mắt trước khi chuyển
+      return () => clearTimeout(timer);
+    }
+  }, [step, otp]);
+
+  const handleNumpadPress = (num) => {
+    if (otp.length < 6) {
+      setOtp(prev => prev + num);
+    }
+  };
+
+  const handleBackspace = () => {
+    setOtp(prev => prev.slice(0, -1));
+  };
+
+  // Icon Backspace tùy chỉnh để tránh lỗi thiếu icon trong thư viện
+  const BackspaceIcon = () => (
+    <svg width="24" height="24" viewBox="0 0 24 24" fill="none" stroke="currentColor" strokeWidth="2" strokeLinecap="round" strokeLinejoin="round">
+      <path d="M21 4H8l-7 8 7 8h13a2 2 0 0 0 2-2V6a2 2 0 0 0-2-2z"></path>
+      <line x1="18" y1="9" x2="12" y2="15"></line>
+      <line x1="12" y1="9" x2="18" y2="15"></line>
+    </svg>
+  );
+
+  return (
+    <div className="w-[375px] h-[812px] bg-white border-[8px] border-gray-900 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col mt-4 font-sans text-gray-800 shrink-0">
+      
+      {/* Top Status Bar (Fake) */}
+      <div className="h-10 w-full flex justify-between items-center px-6 pt-2 bg-transparent absolute top-0 z-50 text-xs font-semibold">
+        <span>15:45</span>
+        <div className="flex space-x-1 items-center">
+          <span className="font-bold">5G</span>
+          <div className="w-6 h-3 bg-black rounded-sm border border-gray-300 relative">
+            <div className="w-4 h-full bg-black rounded-sm"></div>
+            <div className="w-0.5 h-1.5 bg-gray-300 absolute -right-1 top-0.5 rounded-r-sm"></div>
+          </div>
+        </div>
+      </div>
+
+      {/* ---------------- STEP 0: Chọn luồng giả lập ---------------- */}
+      {step === 0 && (
+        <div className="flex-1 flex flex-col pt-12 bg-gray-50 h-full relative items-center justify-center px-6 space-y-4">
+          <div className="w-16 h-16 bg-blue-100 rounded-full flex items-center justify-center mb-2 shadow-inner">
+            <Smartphone className="text-blue-600" size={32} />
+          </div>
+          <h2 className="text-lg font-bold text-blue-900 mb-6 text-center">Chọn kịch bản giả lập</h2>
+          <button onClick={() => {setFlowType('pay'); setStep(1);}} className="w-full py-4 bg-[#004aad] text-white rounded-xl font-bold shadow-md active:bg-blue-800 transition-colors flex flex-col items-center">
+              <span className="text-[15px]">Xác thực OTP Liveness</span>
+              <span className="text-xs font-normal opacity-90 mt-1">+ OTP Pay (Email)</span>
+          </button>
+          <button onClick={() => {setFlowType('app'); setStep(1);}} className="w-full py-4 bg-[#00a8e6] text-white rounded-xl font-bold shadow-md active:bg-blue-600 transition-colors flex flex-col items-center">
+              <span className="text-[15px]">Xác thực OTP Liveness</span>
+              <span className="text-xs font-normal opacity-90 mt-1">+ OTP App (Authenticator)</span>
+          </button>
+        </div>
+      )}
+
+      {/* ---------------- STEP 1 & 2: Xác nhận giao dịch ---------------- */}
+      {(step === 1 || step === 2) && (
+        <div className="flex-1 flex flex-col pt-12 bg-gray-50 h-full relative">
+          {/* Header */}
+          <div className="flex items-center px-4 py-2 border-b border-gray-200 bg-white shadow-sm z-10">
+            <button onClick={() => setStep(0)} className="p-1"><ChevronLeft size={24} className="text-gray-600" /></button>
+            <h1 className="flex-1 text-center font-bold text-[15px] text-gray-800">Rút tiền nhanh 247</h1>
+            <button className="p-1"><Home size={20} className="text-gray-600" /></button>
+          </div>
+
+          <div className="p-4 flex-1 overflow-y-auto pb-24">
+            <h2 className="text-xs font-semibold text-gray-500 mb-2 mt-2">Chuyển đến</h2>
+            <div className="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center mb-6">
+              <div className="w-12 h-12 bg-red-600 text-white font-bold flex items-center justify-center rounded-lg mr-4">
+                <span className="text-[10px]">TECH</span>
+              </div>
+              <span className="font-bold text-gray-700">Techcombank</span>
+            </div>
+
+            <h2 className="text-xs font-semibold text-gray-500 mb-3">Chi tiết giao dịch</h2>
+            <div className="space-y-4 bg-transparent mb-6 text-[13px]">
+              <div className="flex justify-between border-b border-gray-200 pb-3 border-dashed">
+                <span className="text-gray-500">Dịch vụ</span>
+                <span className="font-semibold text-gray-800">Rút tiền nhanh 247</span>
+              </div>
+              <div className="flex justify-between border-b border-gray-200 pb-3 border-dashed">
+                <span className="text-gray-500">Số thẻ</span>
+                <span className="font-semibold text-right text-gray-800">19032853925012</span>
+              </div>
+              <div className="flex justify-between border-b border-gray-200 pb-3 border-dashed">
+                <span className="text-gray-500">Tên chủ tài khoản</span>
+                <span className="font-semibold text-gray-800">TRAN THUY HONG</span>
+              </div>
+              <div className="flex justify-between border-b border-gray-200 pb-3 border-dashed">
+                <span className="text-gray-500">Số tiền</span>
+                <span className="font-semibold text-gray-800">100.000 đ</span>
+              </div>
+              <div className="flex justify-between border-b border-gray-200 pb-3 border-dashed">
+                <span className="text-gray-500">Phí giao dịch</span>
+                <span className="font-semibold text-gray-800">Miễn phí</span>
+              </div>
+              <div className="flex justify-between pt-2">
+                <span className="text-gray-600 font-bold">Tổng tiền</span>
+                <span className="font-bold text-[#1e40af] text-lg">100.000 đ</span>
+              </div>
+            </div>
+            
+            <div className="flex items-start bg-green-50 p-3 rounded-lg border border-green-100 mt-8">
+               <ShieldCheck className="text-green-600 mr-2 flex-shrink-0" size={18} />
+               <p className="text-[10px] text-gray-500 leading-relaxed">
+                 VTC Pay áp dụng tiêu chuẩn bảo mật PCI DSS, mọi giao dịch đều được mã hóa an toàn.
+               </p>
+            </div>
+          </div>
+
+          <div className="absolute bottom-0 left-0 right-0 p-4 bg-white border-t border-gray-100">
+            <button onClick={() => setStep(2)} className="w-full bg-[#004aad] text-white font-bold py-3.5 rounded-xl shadow-md active:bg-blue-800 transition-colors">
+              Xác nhận
+            </button>
+          </div>
+
+          {/* Overlay Popup Step 2 */}
+          {step === 2 && (
+            <div className="absolute inset-0 bg-black/50 z-20 flex items-center justify-center p-6">
+              <div className="bg-white rounded-2xl w-full p-6 flex flex-col items-center text-center animate-in zoom-in-95 duration-200 shadow-2xl">
+                <div className="w-16 h-16 bg-red-100 rounded-full flex items-center justify-center mb-4">
+                  <Megaphone className="text-red-600" size={32} />
+                </div>
+                <h3 className="text-[17px] font-bold text-blue-900 mb-3">Thông báo</h3>
+                <p className="text-[13px] text-gray-600 mb-8 px-2 leading-relaxed">
+                  GD phải xác thực sinh trắc học định danh theo quy định của NHNN
+                </p>
+                <div className="flex space-x-3 w-full">
+                  <button onClick={() => setStep(1)} className="flex-1 py-3 border border-gray-300 rounded-xl text-gray-700 font-bold active:bg-gray-100 transition-colors">
+                    Để sau
+                  </button>
+                  <button onClick={() => setStep(3)} className="flex-1 py-3 bg-[#004aad] text-white rounded-xl font-bold active:bg-blue-800 shadow-md transition-colors">
+                    Xác thực
+                  </button>
+                </div>
+              </div>
+            </div>
+          )}
+        </div>
+      )}
+
+      {/* ---------------- STEP 3: Sinh trắc học (Liveness) ---------------- */}
+      {step === 3 && (
+        <div className="flex-1 bg-gray-900 h-full relative overflow-hidden flex flex-col">
+          {/* Nền giả lập camera */}
+          <div className="absolute inset-0 opacity-30 mix-blend-overlay pointer-events-none" style={{ backgroundImage: 'repeating-linear-gradient(45deg, #4b5563 25%, transparent 25%, transparent 75%, #4b5563 75%, #4b5563), repeating-linear-gradient(45deg, #4b5563 25%, transparent 25%, transparent 75%, #4b5563 75%, #4b5563)', backgroundSize: '20px 20px', backgroundPosition: '0 0, 10px 10px' }}></div>
+          
+          <div className="pt-12 px-4 relative z-10 flex justify-between items-center">
+            <button onClick={() => setStep(1)} className="text-white p-2 active:bg-gray-800 rounded-full"><X size={24} /></button>
+            <div className="w-2 h-2 bg-green-500 rounded-full shadow-[0_0_8px_#22c55e]"></div>
+            <div className="w-8"></div>
+          </div>
+
+          <div className="flex-1 flex flex-col items-center justify-center relative z-10 pb-20">
+            <div className="w-[280px] h-[280px] border-[6px] border-dashed border-white/90 rounded-full animate-[spin_12s_linear_infinite] flex items-center justify-center relative shadow-[0_0_50px_rgba(255,255,255,0.1)]">
+              {/* Giả lập quét face scanning line */}
+              <div className="absolute inset-0 bg-white/5 rounded-full blur-sm"></div>
+              <div className="w-full h-1 bg-green-400 absolute top-1/2 left-0 animate-[ping_2s_ease-in-out_infinite] shadow-[0_0_15px_#4ade80]"></div>
+            </div>
+            
+            <div className="mt-20 bg-white/20 backdrop-blur-md text-white px-6 py-2.5 rounded-full text-[13px] font-medium tracking-wide">
+              Đang xác định khuôn mặt
+            </div>
+          </div>
+        </div>
+      )}
+
+      {/* ---------------- STEP 4: Nhập OTP ---------------- */}
+      {step === 4 && (
+        <div className="flex-1 flex flex-col bg-white h-full relative pt-12 animate-in fade-in duration-300">
+          <div className="flex items-center px-4 py-2">
+            <button onClick={() => {setStep(1); setOtp('');}} className="p-1 active:bg-gray-100 rounded-full"><ChevronLeft size={24} className="text-gray-600" /></button>
+            <div className="flex-1"></div>
+            <span className="text-gray-500 text-[13px] font-medium px-2">Trợ giúp</span>
+          </div>
+
+          <div className="flex flex-col items-center px-6 mt-12 flex-1">
+            <div className="w-16 h-16 bg-orange-100 rounded-full flex items-center justify-center mb-6">
+              <Lock className="text-orange-500" size={28} />
+            </div>
+            <p className="text-center text-[13px] text-gray-500 mb-8 px-2 leading-relaxed">
+              {flowType === 'pay' ? (
+                <>
+                  Vui lòng nhập mã xác thực OTP đã gửi về<br/>
+                  <span className="font-semibold text-gray-800">thu********@gmail.com</span>
+                </>
+              ) : (
+                <>
+                  Vui lòng nhập mã xác thực OTP trên<br/>
+                  <span className="font-semibold text-gray-800">ứng dụng Authenticator</span>
+                </>
+              )}
+            </p>
+
+            {/* OTP Input Boxes */}
+            <div className="flex justify-center space-x-2 w-full mb-10">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className={`w-11 h-12 border ${otp.length > i ? 'border-blue-600 text-gray-800' : (otp.length === i ? 'border-blue-300' : 'border-blue-100 text-transparent')} rounded-lg flex items-center justify-center text-2xl font-bold bg-white shadow-sm transition-all duration-150`}>
+                  {otp[i] || ''}
+                </div>
+              ))}
+            </div>
+
+            <button className="flex items-center text-gray-500 bg-gray-100 px-5 py-2 rounded-full text-xs font-bold active:bg-gray-200 transition-colors">
+              <span className="mr-1 text-sm">↻</span> Nhận lại
+            </button>
+          </div>
+
+          {/* Fake Numpad */}
+          <div className="bg-[#e5e7eb] w-full pt-3 pb-8 px-2 grid grid-cols-3 gap-2 absolute bottom-0 left-0 rounded-t-xl">
+            {[
+              { num: 1, text: '' }, { num: 2, text: 'ABC' }, { num: 3, text: 'DEF' },
+              { num: 4, text: 'GHI' }, { num: 5, text: 'JKL' }, { num: 6, text: 'MNO' },
+              { num: 7, text: 'PQRS' }, { num: 8, text: 'TUV' }, { num: 9, text: 'WXYZ' }
+            ].map(k => (
+              <button key={k.num} onClick={() => handleNumpadPress(k.num)} className="bg-white rounded-lg py-1 shadow-sm flex flex-col items-center justify-center active:bg-gray-300 transition-colors h-11">
+                <span className="text-xl font-normal leading-none">{k.num}</span>
+                <span className="text-[8px] text-gray-500 font-bold uppercase tracking-widest leading-none mt-1">{k.text || ' '}</span>
+              </button>
+            ))}
+            <div className="bg-transparent"></div>
+            <button onClick={() => handleNumpadPress(0)} className="bg-white rounded-lg py-1 shadow-sm flex flex-col items-center justify-center active:bg-gray-300 transition-colors h-11">
+              <span className="text-xl font-normal leading-none">0</span>
+            </button>
+            <button onClick={handleBackspace} className="bg-transparent rounded-lg py-1 flex flex-col items-center justify-center active:bg-gray-400 transition-colors h-11">
+              <BackspaceIcon />
+            </button>
+          </div>
+        </div>
+      )}
+
+      {/* ---------------- STEP 5: Thành công ---------------- */}
+      {step === 5 && (
+        <div className="flex-1 flex flex-col bg-white h-full relative pt-12">
+          {/* Header nền phía dưới */}
+          <div className="flex items-center px-4 py-2">
+            <button className="p-1 rounded-full"><ChevronLeft size={24} className="text-gray-300" /></button>
+            <div className="flex-1"></div>
+            <span className="text-gray-300 text-[13px] font-medium px-2">Trợ giúp</span>
+          </div>
+
+          {/* Nội dung nền OTP phía dưới (được giữ lại để làm nền) */}
+          <div className="flex flex-col items-center px-6 mt-12 flex-1 relative">
+            <div className="w-16 h-16 bg-orange-50 rounded-full flex items-center justify-center mb-6">
+              <Lock className="text-orange-300" size={28} />
+            </div>
+            <p className="text-center text-[13px] text-gray-400 mb-8 px-2 leading-relaxed">
+              {flowType === 'pay' ? (
+                <>
+                  Vui lòng nhập mã xác thực OTP đã gửi về<br/>
+                  <span className="font-semibold text-gray-400">thu********@gmail.com</span>
+                </>
+              ) : (
+                <>
+                  Vui lòng nhập mã xác thực OTP trên<br/>
+                  <span className="font-semibold text-gray-400">ứng dụng Authenticator</span>
+                </>
+              )}
+            </p>
+
+            <div className="flex justify-center space-x-2 w-full mb-10 opacity-60">
+              {[...Array(6)].map((_, i) => (
+                <div key={i} className="w-11 h-12 border border-blue-400 text-gray-600 rounded-lg flex items-center justify-center text-2xl font-bold bg-white shadow-sm">
+                  {otp[i] || ''}
+                </div>
+              ))}
+            </div>
+          </div>
+
+          {/* LỚP MỜ VÀ POPUP THÔNG BÁO THÀNH CÔNG */}
+          <div className="absolute inset-0 bg-black/60 z-50 flex items-center justify-center p-6 animate-in fade-in duration-300 backdrop-blur-[2px]">
+            {/* Thẻ trắng nổi lên thông báo thành công */}
+            <div className="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-[320px] flex flex-col items-center text-center animate-in zoom-in-95 duration-500">
+              <div className="w-[72px] h-[72px] bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-[0_4px_14px_rgba(34,197,94,0.4)]">
+                <CheckCircle2 className="text-white" size={40} strokeWidth={3} />
+              </div>
+              <h3 className="text-lg font-bold text-[#1e3a8a] mb-8">Rút tiền thành công</h3>
+              
+              <div className="flex space-x-3 w-full">
+                <button onClick={() => {setStep(0); setOtp('');}} className="flex-1 py-3 border border-gray-300 rounded-xl text-gray-700 font-bold text-[13px] active:bg-gray-100 transition-colors">
+                  Về trang chủ
+                </button>
+                <button onClick={() => {setStep(1); setOtp('');}} className="flex-1 py-3 bg-[#004aad] text-white rounded-xl font-bold text-[13px] shadow-md active:bg-blue-800 transition-colors">
+                  Rút thêm
+                </button>
+              </div>
+            </div>
+          </div>
+        </div>
+      )}
+    </div>
+  );
+}
