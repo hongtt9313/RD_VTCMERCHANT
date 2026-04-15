@@ -28,21 +28,24 @@
             border-color: #66afe9;
             box-shadow: inset 0 1px 1px rgba(0,0,0,.075), 0 0 8px rgba(102,175,233,.6);
         }
+        /* Ẩn thanh cuộn nhưng vẫn cho phép cuộn ngang (Dành cho Topbar trên mobile) */
+        .hide-scrollbar::-webkit-scrollbar { display: none; }
+        .hide-scrollbar { -ms-overflow-style: none; scrollbar-width: none; }
     </style>
 </head>
 <body class="bg-gray-100 min-h-screen flex flex-col text-sm">
 
     <!-- Topbar -->
     <header class="bg-white w-full border-b border-gray-200">
-        <div class="flex justify-between items-center px-4 py-3">
-            <div class="flex items-center space-x-4">
+        <div class="flex flex-col md:flex-row justify-between items-start md:items-center px-4 py-3 gap-3 md:gap-0 w-full">
+            <div class="flex items-center space-x-2 sm:space-x-4 w-full md:w-auto overflow-x-auto hide-scrollbar pb-1 md:pb-0">
                 <!-- Logo -->
-                <div class="text-[#00a8e6] italic font-extrabold text-2xl flex items-center tracking-tight cursor-pointer mr-4">
-                    <span class="mr-1 text-xl">.))</span> VTCPay
+                <div class="text-[#00a8e6] italic font-extrabold text-xl sm:text-2xl flex items-center tracking-tight cursor-pointer mr-2 sm:mr-4 shrink-0">
+                    <span class="mr-1 text-lg sm:text-xl">.))</span> VTCPay
                 </div>
                 
                 <!-- Tab Hệ thống -->
-                <div class="relative">
+                <div class="relative shrink-0">
                     <button id="btn-he-thong" onclick="toggleDropdown('he-thong')" class="text-white px-3 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold focus:outline-none transition-colors shadow-sm bg-[#0060a8] hover:bg-[#004d86]">
                         <i data-lucide="settings" class="w-4 h-4"></i>
                         <span>Hệ thống</span>
@@ -56,7 +59,7 @@
                 </div>
 
                 <!-- Tab Tài khoản -->
-                <div class="relative">
+                <div class="relative shrink-0">
                     <button id="btn-tai-khoan" onclick="toggleDropdown('tai-khoan')" class="text-white px-3 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold focus:outline-none transition-colors shadow-sm bg-[#004d86]">
                         <i data-lucide="credit-card" class="w-4 h-4"></i>
                         <span>Tài khoản</span>
@@ -79,15 +82,16 @@
                 </div>
 
                 <!-- Tab Mobile App -->
-                <div class="relative ml-2">
+                <div class="relative shrink-0 ml-0 sm:ml-2">
                     <button id="btn-mobile-app" onclick="navigateTo('mobile_app')" class="text-white px-3 py-1.5 rounded flex items-center space-x-2 text-sm font-semibold focus:outline-none transition-colors shadow-sm bg-[#0060a8] hover:bg-[#004d86]">
                         <i data-lucide="smartphone" class="w-4 h-4"></i>
                         <span>Mobile App</span>
                     </button>
                 </div>
             </div>
+            
             <!-- User Info -->
-            <div class="flex items-center space-x-2 text-[#0060a8] text-sm font-semibold">
+            <div class="flex items-center space-x-2 text-[#0060a8] text-sm font-semibold shrink-0 w-full md:w-auto justify-end mt-2 md:mt-0 border-t md:border-0 border-gray-100 pt-2 md:pt-0">
                 <i data-lucide="user" class="w-4 h-4"></i>
                 <span>hongtt</span>
                 <i data-lucide="log-out" class="w-4 h-4 text-red-600 cursor-pointer ml-2" title="Đăng xuất"></i>
@@ -96,13 +100,13 @@
         
         <!-- Breadcrumb Bar -->
         <div class="bg-[#337ab7] text-white px-4 py-2 text-sm font-bold flex items-center shadow-sm uppercase">
-            <i data-lucide="dollar-sign" class="w-3.5 h-3.5 mr-2"></i>
-            <span id="breadcrumb-text">TRA CỨU THÔNG TIN TÀI KHOẢN > THAY ĐỔI THÔNG TIN</span>
+            <i data-lucide="dollar-sign" class="w-3.5 h-3.5 mr-2 shrink-0"></i>
+            <span id="breadcrumb-text" class="truncate">TRA CỨU THÔNG TIN TÀI KHOẢN > THAY ĐỔI THÔNG TIN</span>
         </div>
     </header>
 
     <!-- Main Content Area -->
-    <div class="flex-1 p-4 flex justify-center items-start">
+    <div class="flex-1 p-2 sm:p-4 flex justify-center items-start w-full">
         
         <!-- ================= VIEW: THAY ĐỔI THÔNG TIN ================= -->
         <div id="view-thay-doi-thong-tin" class="view-section bg-white w-full max-w-4xl shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
@@ -110,19 +114,19 @@
                 <h2 class="text-lg font-bold text-gray-700">Thay đổi thông tin tài khoản</h2>
                 <button class="text-gray-400 hover:text-gray-600"><i data-lucide="x" class="w-5 h-5"></i></button>
             </div>
-            <div class="p-4 bg-gray-50">
-                <div class="bg-[#f2dede] border border-[#ebccd1] text-[#a94442] px-4 py-3 rounded mb-4 flex items-center shadow-sm">
-                    <span class="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-xs mr-2 border border-red-700">Chú ý!</span>
-                    <span>Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)</span>
+            <div class="p-3 sm:p-4 bg-gray-50">
+                <div class="bg-[#f2dede] border border-[#ebccd1] text-[#a94442] px-3 sm:px-4 py-3 rounded mb-4 flex items-start sm:items-center shadow-sm">
+                    <span class="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-xs mr-2 border border-red-700 mt-0.5 sm:mt-0 shrink-0">Chú ý!</span>
+                    <span class="text-xs sm:text-sm">Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)</span>
                 </div>
                 <div class="border border-[#337ab7] bg-white rounded-sm">
                     <div class="bg-[#337ab7] text-white p-2 font-semibold flex items-center rounded-t-sm">
-                        <i data-lucide="user" class="w-4 h-4 mr-2"></i> Thay đổi thông tin tài khoản
+                        <i data-lucide="user" class="w-4 h-4 mr-2 shrink-0"></i> Thay đổi thông tin tài khoản
                     </div>
                     <div class="bg-[#d9edf7] text-[#31708f] p-2 font-semibold flex items-center border-b border-gray-200 text-xs">
-                        <i data-lucide="wrench" class="w-3.5 h-3.5 mr-2"></i> Thông Tin Cơ Bản
+                        <i data-lucide="wrench" class="w-3.5 h-3.5 mr-2 shrink-0"></i> Thông Tin Cơ Bản
                     </div>
-                    <div class="p-6 space-y-3" id="form-container-thay-doi">
+                    <div class="p-4 sm:p-6 space-y-3" id="form-container-thay-doi">
                         <!-- Rendered via JS to save space -->
                     </div>
                     <div class="bg-[#f5f5f5] border-t border-gray-200 p-4 flex justify-center">
@@ -136,16 +140,16 @@
 
         <!-- ================= VIEW: TẠO TÀI KHOẢN ================= -->
         <div id="view-tao-tai-khoan" class="view-section hidden bg-white w-full max-w-4xl shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
-            <div class="p-4 bg-gray-50">
-                <div class="bg-[#f2dede] border border-[#ebccd1] text-[#a94442] px-4 py-3 rounded mb-4 flex items-center shadow-sm">
-                    <span class="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-xs mr-2 border border-red-700">Chú ý!</span>
-                    <span>Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)</span>
+            <div class="p-3 sm:p-4 bg-gray-50">
+                <div class="bg-[#f2dede] border border-[#ebccd1] text-[#a94442] px-3 sm:px-4 py-3 rounded mb-4 flex items-start sm:items-center shadow-sm">
+                    <span class="bg-red-500 text-white font-bold px-1.5 py-0.5 rounded text-xs mr-2 border border-red-700 mt-0.5 sm:mt-0 shrink-0">Chú ý!</span>
+                    <span class="text-xs sm:text-sm">Hãy chắc chắn nhập vào đầy đủ thông tin tại các mục bắt buộc đánh dấu (*)</span>
                 </div>
                 <div class="border border-[#337ab7] bg-white rounded-sm">
                     <div class="bg-[#337ab7] text-white p-2 font-semibold flex items-center rounded-t-sm">
-                        <i data-lucide="user-plus" class="w-4 h-4 mr-2"></i> Tạo Tài Khoản
+                        <i data-lucide="user-plus" class="w-4 h-4 mr-2 shrink-0"></i> Tạo Tài Khoản
                     </div>
-                    <div class="p-6 space-y-3" id="form-container-tao-tk">
+                    <div class="p-4 sm:p-6 space-y-3" id="form-container-tao-tk">
                         <!-- Rendered via JS -->
                     </div>
                     <div class="bg-[#f5f5f5] border-t border-gray-200 p-4 flex justify-center">
@@ -162,14 +166,15 @@
             
             <!-- List View -->
             <div id="qlhm-list-view" class="bg-white w-full max-w-[1200px] shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
-                <div class="bg-[#337ab7] text-white p-3 font-semibold flex justify-between items-center rounded-t-sm">
-                    <div class="flex items-center"><i data-lucide="list" class="w-4 h-4 mr-2"></i> Danh sách thiết lập hạn mức xác thực</div>
-                    <button onclick="handleAddNewPolicy()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded shadow flex items-center text-xs transition-colors">
-                        <i data-lucide="plus" class="w-3.5 h-3.5 mr-1"></i> Thêm mới
+                <div class="bg-[#337ab7] text-white p-3 font-semibold flex flex-col sm:flex-row justify-between items-start sm:items-center rounded-t-sm gap-2 sm:gap-0">
+                    <div class="flex items-center"><i data-lucide="list" class="w-4 h-4 mr-2 shrink-0"></i> Danh sách thiết lập hạn mức xác thực</div>
+                    <button onclick="handleAddNewPolicy()" class="bg-green-600 hover:bg-green-700 text-white px-3 py-1 rounded shadow flex items-center text-xs transition-colors shrink-0">
+                        <i data-lucide="plus" class="w-3.5 h-3.5 mr-1 shrink-0"></i> Thêm mới
                     </button>
                 </div>
-                <div class="p-4 w-full">
-                    <table class="w-full text-left border-collapse border border-gray-400 table-auto break-words">
+                <!-- Container bọc bảng có overflow-x-auto để cuộn ngang trên thiết bị nhỏ -->
+                <div class="p-2 sm:p-4 w-full overflow-x-auto hide-scrollbar">
+                    <table class="w-full text-left border-collapse border border-gray-400 table-auto break-words min-w-[900px]">
                         <thead>
                             <tr class="bg-gray-200 text-gray-800 text-center text-[11px] uppercase font-bold border-b border-gray-400">
                                 <th rowspan="2" class="p-1 border border-gray-400 w-8">STT</th>
@@ -199,14 +204,14 @@
             <!-- Form View (Add/Edit/View) -->
             <div id="qlhm-form-view" class="hidden bg-white w-full max-w-4xl shadow-xl border border-gray-300 rounded-sm overflow-hidden mb-8">
                 <div class="bg-[#337ab7] text-white p-3 font-semibold flex justify-between items-center rounded-t-sm">
-                    <div class="flex items-center" id="qlhm-form-title">
-                        <i data-lucide="shield-check" class="w-4 h-4 mr-2" id="qlhm-form-icon"></i>
-                        <span id="qlhm-title-text">Thêm mới thiết lập hạn mức</span>
+                    <div class="flex items-center truncate" id="qlhm-form-title">
+                        <i data-lucide="shield-check" class="w-4 h-4 mr-2 shrink-0" id="qlhm-form-icon"></i>
+                        <span id="qlhm-title-text" class="truncate">Thêm mới thiết lập hạn mức</span>
                     </div>
-                    <button onclick="closePolicyForm()" class="text-white hover:text-gray-200 transition-colors"><i data-lucide="x" class="w-5 h-5"></i></button>
+                    <button onclick="closePolicyForm()" class="text-white hover:text-gray-200 transition-colors shrink-0"><i data-lucide="x" class="w-5 h-5"></i></button>
                 </div>
 
-                <div class="p-6 space-y-4" id="qlhm-form-content">
+                <div class="p-4 sm:p-6 space-y-4" id="qlhm-form-content">
                     <!-- HTML generated via JS for reusability -->
                 </div>
 
@@ -215,7 +220,7 @@
                         Hủy bỏ
                     </button>
                     <button id="qlhm-btn-save" onclick="savePolicy()" class="bg-[#337ab7] hover:bg-[#286090] text-white px-6 py-2 rounded shadow-sm flex items-center transition-colors">
-                        <i data-lucide="save" class="w-4 h-4 mr-2"></i> Lưu chính sách
+                        <i data-lucide="save" class="w-4 h-4 mr-2 shrink-0"></i> Lưu chính sách
                     </button>
                 </div>
             </div>
@@ -223,7 +228,8 @@
         </div>
 
         <!-- ================= VIEW: MOBILE APP SIMULATOR ================= -->
-        <div id="view-mobile-app" class="view-section hidden w-[375px] h-[812px] bg-white border-[8px] border-gray-900 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col mt-4 text-gray-800 shrink-0">
+        <!-- Đặt max-w-[375px] và mx-auto để căn giữa, co giãn nếu màn hình rất nhỏ -->
+        <div id="view-mobile-app" class="view-section hidden w-full max-w-[375px] h-[812px] mx-auto bg-white border-[8px] border-gray-900 rounded-[3rem] shadow-2xl relative overflow-hidden flex flex-col mt-4 text-gray-800 shrink-0">
             <!-- Top Status Bar -->
             <div class="h-10 w-full flex justify-between items-center px-6 pt-2 bg-transparent absolute top-0 z-50 text-xs font-semibold">
                 <span>15:45</span>
@@ -263,7 +269,7 @@
                 <div class="p-4 flex-1 overflow-y-auto pb-24">
                     <h2 class="text-xs font-semibold text-gray-500 mb-2 mt-2">Chuyển đến</h2>
                     <div class="bg-white rounded-xl shadow-sm border border-gray-100 p-4 flex items-center mb-6">
-                        <div class="w-12 h-12 bg-red-600 text-white font-bold flex items-center justify-center rounded-lg mr-4">
+                        <div class="w-12 h-12 bg-red-600 text-white font-bold flex items-center justify-center rounded-lg mr-4 shrink-0">
                             <span class="text-[10px]">TECH</span>
                         </div>
                         <span class="font-bold text-gray-700">Techcombank</span>
@@ -272,22 +278,22 @@
                     <h2 class="text-xs font-semibold text-gray-500 mb-3">Chi tiết giao dịch</h2>
                     <div class="space-y-4 bg-transparent mb-6 text-[13px]">
                         <div class="flex justify-between border-b border-gray-200 pb-3 border-dashed">
-                            <span class="text-gray-500">Dịch vụ</span><span class="font-semibold text-gray-800">Rút tiền nhanh 247</span>
+                            <span class="text-gray-500 shrink-0 mr-2">Dịch vụ</span><span class="font-semibold text-gray-800 text-right">Rút tiền nhanh 247</span>
                         </div>
                         <div class="flex justify-between border-b border-gray-200 pb-3 border-dashed">
-                            <span class="text-gray-500">Số thẻ</span><span class="font-semibold text-right text-gray-800">19032853925012</span>
+                            <span class="text-gray-500 shrink-0 mr-2">Số thẻ</span><span class="font-semibold text-right text-gray-800 break-all">19032853925012</span>
                         </div>
                         <div class="flex justify-between border-b border-gray-200 pb-3 border-dashed">
-                            <span class="text-gray-500">Tên chủ tài khoản</span><span class="font-semibold text-gray-800">TRAN THUY HONG</span>
+                            <span class="text-gray-500 shrink-0 mr-2">Tên chủ TK</span><span class="font-semibold text-gray-800 text-right">TRAN THUY HONG</span>
                         </div>
                         <div class="flex justify-between border-b border-gray-200 pb-3 border-dashed">
-                            <span class="text-gray-500">Số tiền</span><span class="font-semibold text-gray-800">100.000 đ</span>
+                            <span class="text-gray-500 shrink-0 mr-2">Số tiền</span><span class="font-semibold text-gray-800 text-right">100.000 đ</span>
                         </div>
                         <div class="flex justify-between border-b border-gray-200 pb-3 border-dashed">
-                            <span class="text-gray-500">Phí giao dịch</span><span class="font-semibold text-gray-800">Miễn phí</span>
+                            <span class="text-gray-500 shrink-0 mr-2">Phí giao dịch</span><span class="font-semibold text-gray-800 text-right">Miễn phí</span>
                         </div>
                         <div class="flex justify-between pt-2">
-                            <span class="text-gray-600 font-bold">Tổng tiền</span><span class="font-bold text-[#1e40af] text-lg">100.000 đ</span>
+                            <span class="text-gray-600 font-bold shrink-0 mr-2">Tổng tiền</span><span class="font-bold text-[#1e40af] text-lg text-right">100.000 đ</span>
                         </div>
                     </div>
                     
@@ -381,8 +387,8 @@
                     </button>
                 </div>
 
-                <!-- OVERLAY THÀNH CÔNG -->
-                <div id="mobile-popup-success" class="hidden absolute inset-0 bg-black/60 z-50 flex items-center justify-center p-6 backdrop-blur-[2px]">
+                <!-- OVERLAY THÀNH CÔNG (Mờ phía dưới) -->
+                <div id="mobile-popup-success" class="hidden absolute inset-0 bg-black/60 z-50 flex items-center justify-center p-6 backdrop-blur-[2px] transition-opacity duration-300">
                     <div class="bg-white rounded-2xl shadow-2xl p-8 w-full max-w-[320px] flex flex-col items-center text-center">
                         <div class="w-[72px] h-[72px] bg-green-500 rounded-full flex items-center justify-center mb-4 shadow-[0_4px_14px_rgba(34,197,94,0.4)]">
                             <i data-lucide="check-circle-2" class="w-10 h-10 text-white stroke-[3px]"></i>
@@ -400,11 +406,11 @@
 
     </div>
 
-    <!-- Confirm Modal -->
+    <!-- Confirm Modal (Hệ thống CMS) -->
     <div id="confirm-modal" class="hidden fixed inset-0 bg-black bg-opacity-50 flex items-center justify-center z-50 p-4">
-        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden">
+        <div class="bg-white rounded-lg shadow-2xl w-full max-w-md overflow-hidden mx-4">
             <div class="bg-yellow-500 text-white px-4 py-3 flex items-center">
-                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2"></i>
+                <i data-lucide="alert-triangle" class="w-5 h-5 mr-2 shrink-0"></i>
                 <h3 class="font-bold text-lg">Xác nhận thao tác</h3>
             </div>
             <div class="p-5 text-gray-700 text-base leading-relaxed">
@@ -421,13 +427,13 @@
         // --- DATA & FORM GENERATION ---
         function createFormRow(label, required, children) {
             return `
-                <div class="flex flex-col sm:flex-row sm:items-start">
+                <div class="flex flex-col sm:flex-row sm:items-start py-1">
                     <div class="sm:w-1/3 sm:text-right sm:pr-4 pt-1 mb-1 sm:mb-0">
                         <label class="font-bold text-[#104e8b] text-[13px]">
                             ${label}: ${required ? '<span class="text-red-600">*</span>' : ''}
                         </label>
                     </div>
-                    <div class="sm:w-2/3 flex items-center">
+                    <div class="sm:w-2/3 flex items-center w-full">
                         ${children}
                     </div>
                 </div>
@@ -435,72 +441,72 @@
         }
 
         const thayDoiFields = [
-            { l: 'Họ và tên', r: true, c: `<input type="text" class="form-input" value="CÔNG TY VTC CÔNG NGHỆ VÀ NỘI DUNG SỐ" />` },
-            { l: 'Quốc Tịch', r: false, c: `<select class="form-select"><option>Vietnam</option></select>` },
-            { l: 'Ngày sinh', r: true, c: `<input type="date" class="form-input w-48" value="1977-12-30" />` },
-            { l: 'Ngày thiết lập', r: true, c: `<input type="date" class="form-input w-48" />` },
-            { l: 'Email', r: false, c: `<input type="email" class="form-input" value="vtcintecom@gmail.com" />` },
-            { l: 'Loại giấy tờ', r: true, c: `<select class="form-select"><option>Căn cước công dân</option></select>` },
-            { l: 'Số giấy tờ', r: true, c: `<input type="text" class="form-input" value="001077020575" />` },
-            { l: 'Giới tính', r: false, c: `<select class="form-select"><option>Nam</option></select>` },
-            { l: 'Địa Chỉ', r: true, c: `<input type="text" class="form-input" value="T08 1901 Times City, Hà Nội" />` },
-            { l: 'Điện Thoại', r: true, c: `<input type="text" class="form-input" value="02444551530" />` },
-            { l: 'Fax', r: false, c: `<input type="text" class="form-input" />` },
-            { l: 'TT Người đại diện', r: true, c: `<input type="text" class="form-input" value="Đỗ Anh Tú" />` },
-            { l: 'Tên Giao dịch', r: true, c: `<input type="text" class="form-input" value="CÔNG TY VTC CÔNG NGHỆ VÀ NỘI DUNG SỐ" />` },
-            { l: 'TT Người đại diện kế toán', r: false, c: `<input type="text" class="form-input" value="Hoàng Bích Huệ" />` },
-            { l: 'Số CCCD đại diện kế toán', r: false, c: `<input type="text" class="form-input" value="033172003131" />` },
-            { l: 'Địa chỉ ĐK Kinh Doanh', r: true, c: `<input type="text" class="form-input" value="Số 65 phố Lạc Trung, Hà Nội" />` },
-            { l: 'Mã số Thuế', r: false, c: `<input type="text" class="form-input" value="0100110006-028" />` },
-            { l: 'Địa chỉ giao dịch', r: true, c: `<input type="text" class="form-input" value="Số 65 phố Lạc Trung, Hà Nội" />` },
-            { l: 'Giấy chứng nhận ĐKKD', r: false, c: `<input type="text" class="form-input" value="0100110006-028" />` },
-            { l: 'Thời hạn ĐKKD', r: false, c: `<div class="flex flex-col space-y-3 w-full"><input type="date" class="form-input w-48" /><div class="flex flex-col space-y-1"><input type="file" class="text-gray-600 text-sm w-full file:rounded" /><span class="text-gray-500 text-xs">Chưa có chứng nhận ĐKKD</span></div></div>` },
-            { l: 'Lĩnh vực kinh doanh', r: false, c: `<select class="form-select"><option>Công nghệ thông tin</option></select>` }
+            { l: 'Họ và tên', r: true, c: `<input type="text" class="form-input w-full" value="CÔNG TY VTC CÔNG NGHỆ VÀ NỘI DUNG SỐ" />` },
+            { l: 'Quốc Tịch', r: false, c: `<select class="form-select w-full"><option>Vietnam</option></select>` },
+            { l: 'Ngày sinh', r: true, c: `<input type="date" class="form-input w-full sm:w-48" value="1977-12-30" />` },
+            { l: 'Ngày thiết lập', r: true, c: `<input type="date" class="form-input w-full sm:w-48" />` },
+            { l: 'Email', r: false, c: `<input type="email" class="form-input w-full" value="vtcintecom@gmail.com" />` },
+            { l: 'Loại giấy tờ', r: true, c: `<select class="form-select w-full"><option>Căn cước công dân</option></select>` },
+            { l: 'Số giấy tờ', r: true, c: `<input type="text" class="form-input w-full" value="001077020575" />` },
+            { l: 'Giới tính', r: false, c: `<select class="form-select w-full"><option>Nam</option></select>` },
+            { l: 'Địa Chỉ', r: true, c: `<input type="text" class="form-input w-full" value="T08 1901 Times City, Hà Nội" />` },
+            { l: 'Điện Thoại', r: true, c: `<input type="text" class="form-input w-full" value="02444551530" />` },
+            { l: 'Fax', r: false, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'TT Người đại diện', r: true, c: `<input type="text" class="form-input w-full" value="Đỗ Anh Tú" />` },
+            { l: 'Tên Giao dịch', r: true, c: `<input type="text" class="form-input w-full" value="CÔNG TY VTC CÔNG NGHỆ VÀ NỘI DUNG SỐ" />` },
+            { l: 'TT Người đại diện kế toán', r: false, c: `<input type="text" class="form-input w-full" value="Hoàng Bích Huệ" />` },
+            { l: 'Số CCCD đại diện kế toán', r: false, c: `<input type="text" class="form-input w-full" value="033172003131" />` },
+            { l: 'Địa chỉ ĐK Kinh Doanh', r: true, c: `<input type="text" class="form-input w-full" value="Số 65 phố Lạc Trung, Hà Nội" />` },
+            { l: 'Mã số Thuế', r: false, c: `<input type="text" class="form-input w-full" value="0100110006-028" />` },
+            { l: 'Địa chỉ giao dịch', r: true, c: `<input type="text" class="form-input w-full" value="Số 65 phố Lạc Trung, Hà Nội" />` },
+            { l: 'Giấy chứng nhận ĐKKD', r: false, c: `<input type="text" class="form-input w-full" value="0100110006-028" />` },
+            { l: 'Thời hạn ĐKKD', r: false, c: `<div class="flex flex-col space-y-3 w-full"><input type="date" class="form-input w-full sm:w-48" /><div class="flex flex-col space-y-1"><input type="file" class="text-gray-600 text-sm w-full file:rounded" /><span class="text-gray-500 text-xs">Chưa có chứng nhận ĐKKD</span></div></div>` },
+            { l: 'Lĩnh vực kinh doanh', r: false, c: `<select class="form-select w-full"><option>Công nghệ thông tin</option></select>` }
         ];
 
         const taoTkFields = [
-            { l: 'Loại Tài khoản', r: true, c: `<select class="form-select w-64"><option>Tài Khoản Doanh Nghiệp</option><option>Tài Khoản Cá Nhân</option></select>` },
+            { l: 'Loại Tài khoản', r: true, c: `<select class="form-select w-full sm:w-64"><option>Tài Khoản Doanh Nghiệp</option><option>Tài Khoản Cá Nhân</option></select>` },
             { l: 'Loại tài khoản', r: true, c: `<div class="flex items-center space-x-4 pt-1"><label class="flex items-center cursor-pointer"><input type="radio" name="loai_tk_radio" class="mr-1.5" checked />Thông thường</label><label class="flex items-center cursor-pointer"><input type="radio" name="loai_tk_radio" class="mr-1.5" />Chuyển khoản</label></div>` },
-            { l: 'Số Tài Khoản', r: true, c: `<input type="text" class="form-input" placeholder="Số Tài Khoản" />` },
-            { l: 'Password', r: true, c: `<input type="password" class="form-input" placeholder="Nhập mật khẩu" />` },
-            { l: 'Nhập lại Password', r: true, c: `<input type="password" class="form-input" placeholder="Nhập lại mật khẩu" />` },
-            { l: 'Ngân hàng', r: true, c: `<select class="form-select w-48"><option>Chọn ngân hàng</option></select>` },
-            { l: 'Loại tài khoản/thẻ NH', r: true, c: `<select class="form-select w-48"><option>Chọn loại</option></select>` },
-            { l: 'Số tài khoản/thẻ NH', r: true, c: `<input type="text" class="form-input" placeholder="Nhập số tk/thẻ ngân hàng" />` },
-            { l: 'Tên chủ tài khoản/thẻ', r: true, c: `<input type="text" class="form-input" placeholder="Nhập họ tên" />` },
-            { l: 'Tên doanh nghiệp', r: true, c: `<input type="text" class="form-input" placeholder="Tên Doanh Nghiệp" />` },
-            { l: 'Người đại diện', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Loại giấy tờ', r: true, c: `<select class="form-select w-48"><option>Căn cước công dân</option></select>` },
-            { l: 'Ngày sinh', r: true, c: `<input type="date" class="form-input w-48" />` },
-            { l: 'Số giấy tờ', r: true, c: `<input type="text" class="form-input" placeholder="Nhập CMND" />` },
-            { l: 'Ngày Cấp', r: true, c: `<input type="date" class="form-input w-48" />` },
-            { l: 'Nơi cấp', r: true, c: `<input type="text" class="form-input" placeholder="Vui lòng nhập nơi cấp" />` },
-            { l: 'Ảnh CMND 1', r: false, c: `<input type="file" class="text-gray-600 text-sm file:rounded file:border file:border-gray-300" />` },
-            { l: 'Ảnh CMND 2', r: false, c: `<input type="file" class="text-gray-600 text-sm file:rounded file:border file:border-gray-300" />` },
-            { l: 'TT Người đại diện kế toán', r: false, c: `<input type="text" class="form-input" />` },
-            { l: 'Ngày sinh', r: false, c: `<input type="date" class="form-input w-48" />` },
-            { l: 'Số CCCD đại diện kế toán', r: false, c: `<input type="text" class="form-input" />` },
-            { l: 'Ngày cấp', r: false, c: `<input type="date" class="form-input w-48" />` },
-            { l: 'Nơi cấp', r: false, c: `<input type="text" class="form-input" />` },
-            { l: 'Ảnh CMND kế toán 1', r: false, c: `<input type="file" class="text-gray-600 text-sm file:rounded" />` },
-            { l: 'Ảnh CMND kế toán 2', r: false, c: `<input type="file" class="text-gray-600 text-sm file:rounded" />` },
-            { l: 'Giấy chứng nhận ĐKKD', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Mã số Thuế', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Điện Thoại', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Email', r: true, c: `<input type="email" class="form-input" />` },
-            { l: 'Fax', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Địa chỉ giao dịch', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Địa chỉ ĐK Kinh Doanh', r: true, c: `<input type="text" class="form-input" />` },
-            { l: 'Thời hạn ĐKKD', r: false, c: `<div class="flex flex-col space-y-3 w-full"><input type="date" class="form-input w-48" /><input type="file" class="text-gray-600 text-sm file:rounded" /></div>` },
-            { l: 'Lĩnh vực kinh doanh', r: false, c: `<select class="form-select w-48"><option>Lĩnh vực kinh doanh</option></select>` },
-            { l: 'Ngày thiết lập', r: true, c: `<input type="date" class="form-input w-48" />` }
+            { l: 'Số Tài Khoản', r: true, c: `<input type="text" class="form-input w-full" placeholder="Số Tài Khoản" />` },
+            { l: 'Password', r: true, c: `<input type="password" class="form-input w-full" placeholder="Nhập mật khẩu" />` },
+            { l: 'Nhập lại Password', r: true, c: `<input type="password" class="form-input w-full" placeholder="Nhập lại mật khẩu" />` },
+            { l: 'Ngân hàng', r: true, c: `<select class="form-select w-full sm:w-48"><option>Chọn ngân hàng</option></select>` },
+            { l: 'Loại tài khoản/thẻ NH', r: true, c: `<select class="form-select w-full sm:w-48"><option>Chọn loại</option></select>` },
+            { l: 'Số tài khoản/thẻ NH', r: true, c: `<input type="text" class="form-input w-full" placeholder="Nhập số tk/thẻ ngân hàng" />` },
+            { l: 'Tên chủ tài khoản/thẻ', r: true, c: `<input type="text" class="form-input w-full" placeholder="Nhập họ tên" />` },
+            { l: 'Tên doanh nghiệp', r: true, c: `<input type="text" class="form-input w-full" placeholder="Tên Doanh Nghiệp" />` },
+            { l: 'Người đại diện', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Loại giấy tờ', r: true, c: `<select class="form-select w-full sm:w-48"><option>Căn cước công dân</option></select>` },
+            { l: 'Ngày sinh', r: true, c: `<input type="date" class="form-input w-full sm:w-48" />` },
+            { l: 'Số giấy tờ', r: true, c: `<input type="text" class="form-input w-full" placeholder="Nhập CMND" />` },
+            { l: 'Ngày Cấp', r: true, c: `<input type="date" class="form-input w-full sm:w-48" />` },
+            { l: 'Nơi cấp', r: true, c: `<input type="text" class="form-input w-full" placeholder="Vui lòng nhập nơi cấp" />` },
+            { l: 'Ảnh CMND 1', r: false, c: `<input type="file" class="text-gray-600 text-sm w-full file:rounded file:border file:border-gray-300" />` },
+            { l: 'Ảnh CMND 2', r: false, c: `<input type="file" class="text-gray-600 text-sm w-full file:rounded file:border file:border-gray-300" />` },
+            { l: 'TT Người đại diện kế toán', r: false, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Ngày sinh', r: false, c: `<input type="date" class="form-input w-full sm:w-48" />` },
+            { l: 'Số CCCD đại diện kế toán', r: false, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Ngày cấp', r: false, c: `<input type="date" class="form-input w-full sm:w-48" />` },
+            { l: 'Nơi cấp', r: false, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Ảnh CMND kế toán 1', r: false, c: `<input type="file" class="text-gray-600 text-sm w-full file:rounded" />` },
+            { l: 'Ảnh CMND kế toán 2', r: false, c: `<input type="file" class="text-gray-600 text-sm w-full file:rounded" />` },
+            { l: 'Giấy chứng nhận ĐKKD', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Mã số Thuế', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Điện Thoại', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Email', r: true, c: `<input type="email" class="form-input w-full" />` },
+            { l: 'Fax', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Địa chỉ giao dịch', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Địa chỉ ĐK Kinh Doanh', r: true, c: `<input type="text" class="form-input w-full" />` },
+            { l: 'Thời hạn ĐKKD', r: false, c: `<div class="flex flex-col space-y-3 w-full"><input type="date" class="form-input w-full sm:w-48" /><input type="file" class="text-gray-600 text-sm w-full file:rounded" /></div>` },
+            { l: 'Lĩnh vực kinh doanh', r: false, c: `<select class="form-select w-full sm:w-48"><option>Lĩnh vực kinh doanh</option></select>` },
+            { l: 'Ngày thiết lập', r: true, c: `<input type="date" class="form-input w-full sm:w-48" />` }
         ];
 
         function getToggleField() {
             return `
                 <div class="border-t border-gray-200 my-4 pt-4"></div>
                 ${createFormRow('Ngoại lệ Tổ chức mới', false, `
-                    <div class="flex items-center">
+                    <div class="flex items-center mt-2 sm:mt-0">
                         <button type="button" onclick="handleToggleClick(this)" class="toggle-btn relative inline-flex h-6 w-11 flex-shrink-0 cursor-pointer rounded-full border-2 border-transparent transition-colors duration-200 ease-in-out focus:outline-none bg-gray-300">
                             <span class="toggle-circle pointer-events-none inline-block h-5 w-5 transform rounded-full bg-white shadow ring-0 transition duration-200 ease-in-out translate-x-0"></span>
                         </button>
@@ -710,7 +716,7 @@
             
             const formHtml = `
                 ${createFormRow('1. Đối tượng', !isReadOnly, `
-                    <select class="form-select w-64" ${disabledAttr}>
+                    <select class="form-select w-full sm:w-64" ${disabledAttr}>
                         <option>Hệ thống</option>
                         <option>Loại tài khoản</option>
                         <option>Nhóm tài khoản</option>
@@ -718,7 +724,7 @@
                     </select>
                 `)}
                 ${createFormRow('2. Loại xác thực', !isReadOnly, `
-                    <select class="form-select w-64" ${disabledAttr}>
+                    <select class="form-select w-full sm:w-64" ${disabledAttr}>
                         <option ${policy?.loaiXacThuc === 'OTP Liveness và OTP Pay' ? 'selected' : ''}>OTP Liveness và OTP Pay</option>
                         <option ${policy?.loaiXacThuc === 'OTP Liveness và OTP App' ? 'selected' : ''}>OTP Liveness và OTP App</option>
                         <option>OTP Pay</option>
@@ -729,12 +735,12 @@
                 <div class="border-t border-gray-200 my-4 pt-4"></div>
                 ${createFormRow('3. Giá trị giao dịch tối thiểu (phải xác thực)', !isReadOnly, `
                     <div class="flex items-center space-x-2 w-full">
-                        <input type="text" oninput="handleFormatInput(event)" class="form-input w-48 font-bold text-blue-700" placeholder="Nhập số tiền..." value="${policy?.minTx || ''}" ${disabledAttr} />
-                        <span class="text-gray-500 font-bold">VNĐ</span>
+                        <input type="text" oninput="handleFormatInput(event)" class="form-input w-full sm:w-48 font-bold text-blue-700" placeholder="Nhập số tiền..." value="${policy?.minTx || ''}" ${disabledAttr} />
+                        <span class="text-gray-500 font-bold shrink-0">VNĐ</span>
                     </div>
                 `)}
                 ${createFormRow('Nghiệp vụ áp dụng', false, `
-                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                    <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 w-full">
                         ${nghiepVuOptions.map(nv => `<label class="flex items-center ${isReadOnly ? 'cursor-not-allowed' : 'cursor-pointer'} text-gray-700"><input type="checkbox" class="mr-2 h-4 w-4 text-[#337ab7]" ${disabledAttr} />${nv}</label>`).join('')}
                     </div>
                 `)}
@@ -743,27 +749,27 @@
                     <h3 class="font-bold text-[#104e8b]">4. Hạn mức tổng giá trị giao dịch ngày</h3>
                     ${createFormRow('Tổng GD ngày tối thiểu (phải xác thực)', !isReadOnly, `
                         <div class="flex items-center space-x-2 w-full">
-                            <input type="text" oninput="handleFormatInput(event)" class="form-input w-48 font-bold text-red-600" placeholder="Nhập số tiền..." value="${policy?.minDaily || ''}" ${disabledAttr} />
-                            <span class="text-gray-500 font-bold">VNĐ</span>
+                            <input type="text" oninput="handleFormatInput(event)" class="form-input w-full sm:w-48 font-bold text-red-600" placeholder="Nhập số tiền..." value="${policy?.minDaily || ''}" ${disabledAttr} />
+                            <span class="text-gray-500 font-bold shrink-0">VNĐ</span>
                         </div>
                     `)}
                     ${createFormRow('Tổng giá trị GD tối đa ngày', !isReadOnly, `
                         <div class="flex items-center space-x-2 w-full">
-                            <input type="text" oninput="handleFormatInput(event)" class="form-input w-48 font-bold text-purple-600" placeholder="Nhập tối đa..." value="${policy?.maxDaily || ''}" ${disabledAttr} />
-                            <span class="text-gray-500 font-bold">VNĐ</span>
+                            <input type="text" oninput="handleFormatInput(event)" class="form-input w-full sm:w-48 font-bold text-purple-600" placeholder="Nhập tối đa..." value="${policy?.maxDaily || ''}" ${disabledAttr} />
+                            <span class="text-gray-500 font-bold shrink-0">VNĐ</span>
                         </div>
                     `)}
                     ${createFormRow('Nghiệp vụ áp dụng', false, `
-                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1">
+                        <div class="grid grid-cols-1 sm:grid-cols-2 gap-2 mt-1 w-full">
                             ${nghiepVuOptions.map(nv => `<label class="flex items-center ${isReadOnly ? 'cursor-not-allowed' : 'cursor-pointer'} text-gray-700"><input type="checkbox" class="mr-2 h-4 w-4 text-[#337ab7]" ${disabledAttr} />${nv}</label>`).join('')}
                         </div>
                     `)}
                 </div>
                 <div class="border-t border-gray-200 my-4 pt-4"></div>
                 ${createFormRow('5. Thời gian thiết lập', !isReadOnly, `
-                    <div class="flex items-center space-x-4">
-                        <div class="flex flex-col"><span class="text-xs text-gray-500 mb-1">Bắt đầu:</span><input type="text" class="form-input w-40" placeholder="YYYY-MM-DD" value="${policy?.start || ''}" ${disabledAttr} /></div>
-                        <div class="flex flex-col"><span class="text-xs text-gray-500 mb-1">Kết thúc:</span><input type="text" class="form-input w-40" placeholder="YYYY-MM-DD" value="${policy?.end || ''}" ${disabledAttr} /></div>
+                    <div class="flex flex-col sm:flex-row items-start sm:items-center space-y-2 sm:space-y-0 sm:space-x-4 w-full">
+                        <div class="flex flex-col w-full sm:w-auto"><span class="text-xs text-gray-500 mb-1">Bắt đầu:</span><input type="text" class="form-input w-full sm:w-40" placeholder="YYYY-MM-DD" value="${policy?.start || ''}" ${disabledAttr} /></div>
+                        <div class="flex flex-col w-full sm:w-auto"><span class="text-xs text-gray-500 mb-1">Kết thúc:</span><input type="text" class="form-input w-full sm:w-40" placeholder="YYYY-MM-DD" value="${policy?.end || ''}" ${disabledAttr} /></div>
                     </div>
                 `)}
             `;
