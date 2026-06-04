@@ -1,0 +1,432 @@
+<!DOCTYPE html>
+<html lang="vi">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>MyVTC Auth Portal - Prototype</title>
+    
+    <!-- Nạp React & ReactDOM -->
+    <script src="https://unpkg.com/react@18/umd/react.production.min.js" crossorigin></script>
+    <script src="https://unpkg.com/react-dom@18/umd/react-dom.production.min.js" crossorigin></script>
+    
+    <!-- Nạp Babel để đọc JSX -->
+    <script src="https://unpkg.com/@babel/standalone/babel.min.js"></script>
+    
+    <!-- Nạp Tailwind CSS -->
+    <script src="https://cdn.tailwindcss.com"></script>
+    
+    <!-- Nạp Icon (Phosphor Icons - thay thế cho Lucide React) -->
+    <script src="https://unpkg.com/@phosphor-icons/web"></script>
+
+    <style>
+        @import url('https://fonts.googleapis.com/css2?family=Nunito:wght@700;800;900&display=swap');
+
+        .game-container {
+            font-family: 'Nunito', sans-serif;
+            background-image: url('https://images.unsplash.com/photo-1524661135-423995f22d0b?q=80&w=2074&auto=format&fit=crop');
+            background-size: cover;
+            background-position: center;
+        }
+
+        .zynga-modal {
+            box-shadow: 0 10px 25px rgba(0,0,0,0.4), inset 0 4px 0px rgba(255,255,255,0.8);
+            border: 4px solid #fff;
+        }
+
+        .zynga-header-bg { background: linear-gradient(to bottom, #f0fbff 0%, #dcf4ff 100%); border-bottom: 2px solid #bde6ff; }
+        .zynga-body-bg { background: linear-gradient(to bottom, #dcf4ff 0%, #bde6ff 100%); }
+
+        .btn-zynga {
+            position: relative; border-radius: 9999px; font-weight: 800; text-transform: uppercase;
+            letter-spacing: 0.5px; color: white; text-shadow: 0px 2px 2px rgba(0,0,0,0.3);
+            transition: all 0.1s ease-in-out; border: 2px solid white; cursor: pointer;
+            display: flex; align-items: center; justify-content: center; gap: 8px; user-select: none;
+        }
+
+        .btn-green { background: linear-gradient(to bottom, #8ede33 0%, #5cad1a 100%); box-shadow: 0 5px 0px #3f7a11, inset 0 4px 5px rgba(255,255,255,0.6); }
+        .btn-green:active { transform: translateY(5px); box-shadow: 0 0px 0px #3f7a11, inset 0 2px 3px rgba(255,255,255,0.6); }
+
+        .btn-red { background: linear-gradient(to bottom, #ff5e73 0%, #e0243a 100%); box-shadow: 0 5px 0px #9e1423, inset 0 4px 5px rgba(255,255,255,0.6); }
+        .btn-red:active { transform: translateY(5px); box-shadow: 0 0px 0px #9e1423, inset 0 2px 3px rgba(255,255,255,0.6); }
+
+        .btn-blue { background: linear-gradient(to bottom, #4dc9ff 0%, #1a99db 100%); box-shadow: 0 5px 0px #106c9e, inset 0 4px 5px rgba(255,255,255,0.6); }
+        .btn-blue:active { transform: translateY(5px); box-shadow: 0 0px 0px #106c9e, inset 0 2px 3px rgba(255,255,255,0.6); }
+
+        .btn-white { background: linear-gradient(to bottom, #ffffff 0%, #e6e6e6 100%); color: #333; text-shadow: none; box-shadow: 0 5px 0px #a3a3a3, inset 0 4px 5px rgba(255,255,255,0.9); }
+        .btn-white:active { transform: translateY(5px); box-shadow: 0 0px 0px #a3a3a3, inset 0 2px 3px rgba(255,255,255,0.9); }
+
+        .btn-yellow { background: linear-gradient(to bottom, #ffdb4d 0%, #f0a30a 100%); color: #6b4000; text-shadow: 0px 1px 1px rgba(255,255,255,0.5); box-shadow: 0 5px 0px #b87a00, inset 0 4px 5px rgba(255,255,255,0.6); }
+        .btn-yellow:active { transform: translateY(5px); box-shadow: 0 0px 0px #b87a00, inset 0 2px 3px rgba(255,255,255,0.6); }
+
+        .game-input { width: 100%; padding: 12px 16px; border-radius: 999px; border: 3px solid #7bc6eb; box-shadow: inset 0 3px 5px rgba(0,0,0,0.1); font-weight: 700; color: #2b5c7a; outline: none; transition: border-color 0.2s; }
+        .game-input:focus { border-color: #36c0ff; }
+
+        .fade-in { animation: fadeIn 0.3s ease-in-out; }
+        @keyframes fadeIn { from { opacity: 0; transform: translateY(10px); } to { opacity: 1; transform: translateY(0); } }
+    </style>
+</head>
+<body>
+    <div id="root"></div>
+
+    <script type="text/babel">
+        const { useState, useEffect } = React;
+
+        function App() {
+            const [view, setView] = useState('HOME'); 
+            const [action, setAction] = useState(''); 
+            const [method, setMethod] = useState(''); 
+            const [step, setStep] = useState(1);
+            const [inputValue, setInputValue] = useState('');
+            const [displayId, setDisplayId] = useState('');
+            const [isLoading, setIsLoading] = useState(false);
+            const [error, setError] = useState('');
+
+            const resetFlow = () => {
+                setView('HOME'); setAction(''); setMethod(''); setStep(1); setInputValue(''); setError(''); setDisplayId('');
+            };
+
+            const startAuthFlow = (meth) => {
+                setMethod(meth); setStep(1); setInputValue(''); setError(''); setView('AUTH_FLOW');
+            };
+
+            const handleIdentifierSubmit = (e) => {
+                e.preventDefault();
+                setError('');
+                let valid = false;
+                if (method === 'PHONE') valid = /^[0-9]{9,11}$/.test(inputValue);
+                else if (method === 'EMAIL') valid = /^[^\s@]+@[^\s@]+\.[^\s@]+$/.test(inputValue);
+                else if (method === 'USERNAME') valid = inputValue.length >= 3;
+
+                if (!valid) {
+                    setError(`Định dạng ${method === 'PHONE' ? 'SĐT' : method === 'EMAIL' ? 'Email' : 'Tên tài khoản'} không hợp lệ!`);
+                    return;
+                }
+
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    const accountExists = ['0987654321', 'test@vtc.vn', 'admin'].includes(inputValue);
+                    setAction(accountExists ? 'LOGIN' : 'REGISTER');
+                    setStep(2);
+                }, 600);
+            };
+
+            const handleNextStep = (e) => {
+                e.preventDefault();
+                setIsLoading(true);
+                setTimeout(() => { setIsLoading(false); setStep(prev => prev + 1); }, 400);
+            };
+
+            const handleFinish = (e) => {
+                if (e) e.preventDefault();
+                setIsLoading(true);
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setDisplayId(inputValue);
+                    setView('SUCCESS');
+                }, 800);
+            };
+
+            const handleSocialLogin = (provider) => {
+                setMethod(provider);
+                setAction('LOGIN');
+                setView('PROVIDER_MOCK');
+            };
+
+            const handleGuestLogin = () => {
+                setIsLoading(true);
+                setAction('GUEST');
+                setTimeout(() => {
+                    setIsLoading(false);
+                    setDisplayId('Khách (Guest)');
+                    setView('SUCCESS');
+                }, 1000);
+            };
+
+            const renderHome = () => (
+                <div className="flex flex-col items-center justify-center w-full h-full p-2 sm:p-4 fade-in">
+                    <div className="flex flex-col items-center justify-center w-full max-w-sm mx-auto h-full gap-2 sm:gap-3">
+                        <h2 className="text-lg sm:text-xl font-bold text-[#2b5c7a] uppercase tracking-wider text-center mb-1">
+                            Chọn phương thức tiếp tục
+                        </h2>
+
+                        <div className="flex flex-col gap-2 sm:gap-3 w-full">
+                            <button className="btn-zynga btn-green py-2.5 sm:py-3 text-sm sm:text-md w-full" onClick={() => startAuthFlow('PHONE')}>
+                                <i className="ph-bold ph-phone" style={{fontSize: '18px'}}></i> Bằng Số Điện Thoại
+                            </button>
+                            <button className="btn-zynga btn-blue py-2.5 sm:py-3 text-sm sm:text-md w-full" onClick={() => startAuthFlow('EMAIL')}>
+                                <i className="ph-bold ph-envelope-simple" style={{fontSize: '18px'}}></i> Bằng Email
+                            </button>
+                            <button className="btn-zynga btn-red py-2.5 sm:py-3 text-sm sm:text-md w-full" onClick={() => startAuthFlow('USERNAME')}>
+                                <i className="ph-bold ph-user" style={{fontSize: '18px'}}></i> Bằng Tên Tài Khoản
+                            </button>
+                        </div>
+
+                        <div className="w-full flex items-center justify-center opacity-80 my-0 sm:my-1">
+                            <div className="h-[2px] bg-[#7bc6eb] flex-1"></div>
+                            <span className="text-[#2b5c7a] font-bold px-3 text-xs uppercase">Hoặc</span>
+                            <div className="h-[2px] bg-[#7bc6eb] flex-1"></div>
+                        </div>
+
+                        <div className="flex gap-2 w-full justify-center">
+                            <button className="btn-zynga btn-blue py-1.5 sm:py-2 px-4 flex-1" onClick={() => handleSocialLogin('Facebook')}>
+                                <i className="ph-fill ph-facebook-logo" style={{fontSize: '20px'}}></i>
+                            </button>
+                            <button className="btn-zynga btn-white py-1.5 sm:py-2 px-4 flex-1" onClick={() => handleSocialLogin('Apple')}>
+                                <i className="ph-fill ph-apple-logo" style={{fontSize: '20px', color: 'black'}}></i>
+                            </button>
+                            <button className="btn-zynga btn-white py-1.5 sm:py-2 px-4 flex-1" onClick={() => handleSocialLogin('Google')}>
+                                <svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 48 48" width="20px" height="20px">
+                                    <path fill="#FFC107" d="M43.611,20.083H42V20H24v8h11.303c-1.649,4.657-6.08,8-11.303,8c-6.627,0-12-5.373-12-12c0-6.627,5.373-12,12-12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C12.955,4,4,12.955,4,24c0,11.045,8.955,20,20,20c11.045,0,20-8.955,20-20C44,22.659,43.862,21.35,43.611,20.083z"/>
+                                    <path fill="#FF3D00" d="M6.306,14.691l6.571,4.819C14.655,15.108,18.961,12,24,12c3.059,0,5.842,1.154,7.961,3.039l5.657-5.657C34.046,6.053,29.268,4,24,4C16.318,4,9.656,8.337,6.306,14.691z"/>
+                                    <path fill="#4CAF50" d="M24,44c5.166,0,9.86-1.977,13.409-5.192l-6.19-5.238C29.211,35.091,26.715,36,24,36c-5.202,0-9.619-3.317-11.283-7.946l-6.522,5.025C9.505,39.556,16.227,44,24,44z"/>
+                                    <path fill="#1976D2" d="M43.611,20.083H42V20H24v8h11.303c-0.792,2.237-2.231,4.166-4.087,5.571c0.001-0.001,0.002-0.001,0.003-0.002l6.19,5.238C36.971,39.205,44,34,44,24C44,22.659,43.862,21.35,43.611,20.083z"/>
+                                </svg>
+                            </button>
+                        </div>
+
+                        <div className="w-full mt-2 sm:mt-3 text-center">
+                            <button type="button" className={`text-[#106c9e] hover:text-[#e0243a] text-sm sm:text-base font-bold underline decoration-2 underline-offset-4 transition-colors ${isLoading ? 'opacity-50 pointer-events-none' : ''}`} onClick={handleGuestLogin}>
+                                {isLoading ? 'Đang tạo phiên...' : 'Chơi Ngay (Khách)'}
+                            </button>
+                        </div>
+                    </div>
+                </div>
+            );
+
+            const renderAuthFlow = () => {
+                let title = "";
+                if (step === 1) title = `Nhập ${method === 'PHONE' ? 'SĐT' : method === 'EMAIL' ? 'Email' : 'Tên tài khoản'}`;
+                else title = action === 'LOGIN' ? `Đăng Nhập (${method})` : `Đăng Ký (${method})`;
+
+                const handleBack = () => {
+                    if (step === 1) resetFlow();
+                    else setStep(step - 1);
+                };
+
+                const handleFormSubmit = (e) => {
+                    e.preventDefault();
+                    if (step === 1) handleIdentifierSubmit(e);
+                    else if (action === 'LOGIN') handleFinish(e);
+                    else if (action === 'REGISTER') {
+                        if ((method === 'PHONE' || method === 'EMAIL') && step === 4) handleFinish(e);
+                        else if (method === 'USERNAME' && step === 5) handleFinish(e);
+                        else handleNextStep(e);
+                    }
+                };
+
+                return (
+                    <div className="flex flex-col h-full relative fade-in">
+                        <div className="zynga-header-bg p-4 flex items-center justify-between rounded-t-3xl border-b-0 pb-6 relative z-10 flex-shrink-0">
+                            <button onClick={handleBack} type="button" className="text-[#2b5c7a] bg-white rounded-full p-1 shadow-sm hover:scale-110 transition-transform">
+                                <i className="ph-bold ph-caret-left" style={{fontSize: '24px'}}></i>
+                            </button>
+                            <h2 className="text-xl font-black text-[#2b5c7a] uppercase tracking-wider">{title}</h2>
+                            <div className="w-8"></div>
+                        </div>
+
+                        <div className="zynga-body-bg p-6 flex-1 rounded-b-3xl -mt-4 pt-8 overflow-y-auto">
+                            <form onSubmit={handleFormSubmit} className="flex flex-col items-center min-h-[250px] max-w-sm mx-auto">
+                                {step === 1 && (
+                                    <div className="w-full text-center fade-in">
+                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">
+                                            Nhập {method === 'PHONE' ? 'Số điện thoại' : method === 'EMAIL' ? 'Email' : 'Tên đăng nhập'} của bạn
+                                        </p>
+                                        <input required type={method === 'PHONE' ? 'tel' : method === 'EMAIL' ? 'email' : 'text'} 
+                                            value={inputValue} onChange={(e) => setInputValue(e.target.value)}
+                                            placeholder={method === 'PHONE' ? 'VD: 0987654321' : method === 'EMAIL' ? 'VD: abc@vtc.vn' : 'Nhập ít nhất 3 ký tự'} 
+                                            className={`game-input mb-2 text-center ${error ? 'border-red-500' : ''}`} autoFocus />
+                                        {error && <p className="text-red-600 text-xs font-bold mb-2">{error}</p>}
+                                        
+                                        <div className="mt-4 bg-white/50 p-3 rounded-xl border-2 border-white text-xs text-[#2b5c7a] font-bold text-left">
+                                            💡 Hệ thống tự chuyển sang <b>Đăng Nhập</b> nếu ID tồn tại, hoặc <b>Đăng Ký</b> nếu đây là ID mới.<br/><i>(Test thử ID đã tồn tại: 0987654321, test@vtc.vn, admin)</i>
+                                        </div>
+                                        
+                                        <button type="submit" className="btn-zynga btn-blue py-3 px-6 mt-6 w-full">
+                                            {isLoading ? 'Đang kiểm tra...' : 'Tiếp Tục'}
+                                        </button>
+                                    </div>
+                                )}
+
+                                {action === 'LOGIN' && step === 2 && (
+                                    <div className="w-full text-center fade-in flex flex-col h-full">
+                                        <div className="mb-4 text-[#2b5c7a] font-bold text-lg border-b-2 border-white/50 pb-2 inline-block px-4">
+                                            Tài khoản: <span className="text-[#e0243a]">{inputValue}</span>
+                                        </div>
+                                        <input required type="password" placeholder="Nhập Mật khẩu" className="game-input mb-4 text-center" autoFocus/>
+                                        {method === 'PHONE' && (
+                                            <p className="text-[#106c9e] text-sm mb-4 font-bold cursor-pointer underline hover:text-[#e0243a]" onClick={() => alert("Mã OTP đã được gửi!")}>
+                                                Đăng nhập bằng OTP (SMS)
+                                            </p>
+                                        )}
+                                        <button type="submit" className="btn-zynga btn-green py-3 px-6 mt-auto w-full">
+                                            {isLoading ? 'Đang xử lý...' : 'Vào Game'}
+                                        </button>
+                                    </div>
+                                )}
+
+                                {action === 'REGISTER' && (
+                                    <>
+                                        {(method === 'PHONE' || method === 'EMAIL') && (
+                                            <div className="w-full flex flex-col h-full">
+                                                {step === 2 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Mã OTP đã gửi đến <br/><span className="text-[#e0243a] text-base">{inputValue}</span></p>
+                                                        <div className="flex gap-1 sm:gap-2 justify-center mb-4">
+                                                            {[1,2,3,4,5,6].map(i => <input key={i} required maxLength={1} className="game-input w-10 sm:w-12 text-center text-xl p-1 sm:p-2" autoFocus={i===1} />)}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {step === 3 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Thiết lập mật khẩu bảo mật</p>
+                                                        <input required type="password" placeholder="Tạo mật khẩu" className="game-input mb-3 text-center" autoFocus/>
+                                                        <input required type="password" placeholder="Nhập lại mật khẩu" className="game-input mb-3 text-center" />
+                                                        <label className="flex items-center justify-center gap-2 text-sm text-[#2b5c7a] font-bold mt-3 cursor-pointer">
+                                                            <input required type="checkbox" className="w-5 h-5 accent-[#8ede33]" /> Đồng ý Chính sách MyVTC
+                                                        </label>
+                                                    </div>
+                                                )}
+                                                {step === 4 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Thông tin cơ bản (Tùy chọn)</p>
+                                                        <input type="text" placeholder="Họ và Tên" className="game-input mb-3 text-center" autoFocus/>
+                                                        <input type="date" className="game-input mb-3 text-center text-[#2b5c7a]" />
+                                                    </div>
+                                                )}
+                                                {step > 1 && (
+                                                    <div className="w-full mt-auto pt-6 flex flex-col gap-3">
+                                                        <button type="submit" className="btn-zynga btn-green py-3 px-6 w-full">{isLoading ? 'Đang xử lý...' : (step === 4 ? 'Hoàn Tất' : 'Tiếp Tục')}</button>
+                                                        {step === 4 && <button type="button" onClick={handleFinish} className="btn-zynga btn-white py-3 px-6 w-full">Bỏ Qua</button>}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+
+                                        {method === 'USERNAME' && (
+                                            <div className="w-full flex flex-col h-full">
+                                                {step === 2 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Mật khẩu cho: <span className="text-[#e0243a] text-lg">{inputValue}</span></p>
+                                                        <input required type="password" placeholder="Tạo mật khẩu" className="game-input mb-3 text-center" autoFocus/>
+                                                        <input required type="password" placeholder="Nhập lại mật khẩu" className="game-input mb-3 text-center" />
+                                                        <label className="flex items-center justify-center gap-2 text-sm text-[#2b5c7a] font-bold mt-3 cursor-pointer">
+                                                            <input required type="checkbox" className="w-5 h-5 accent-[#8ede33]" /> Đồng ý Chính sách MyVTC
+                                                        </label>
+                                                    </div>
+                                                )}
+                                                {step === 3 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <i className="ph-fill ph-shield-warning" style={{fontSize: '32px', color: '#f0a30a'}}></i>
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Bảo vệ tài khoản (Bắt buộc)<br/><span className="text-xs font-normal">Dùng để khôi phục mật khẩu</span></p>
+                                                        <input required type="text" placeholder="Nhập SĐT/Email dự phòng" className="game-input mb-3 text-center" autoFocus/>
+                                                    </div>
+                                                )}
+                                                {step === 4 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Nhập mã OTP xác thực</p>
+                                                        <div className="flex gap-1 sm:gap-2 justify-center mb-4">
+                                                            {[1,2,3,4,5,6].map(i => <input key={i} required maxLength={1} className="game-input w-10 sm:w-12 text-center text-xl p-1 sm:p-2" autoFocus={i===1} />)}
+                                                        </div>
+                                                    </div>
+                                                )}
+                                                {step === 5 && (
+                                                    <div className="w-full text-center fade-in">
+                                                        <p className="text-[#2b5c7a] font-bold mb-4 text-sm">Thông tin cơ bản (Tùy chọn)</p>
+                                                        <input type="text" placeholder="Họ và Tên" className="game-input mb-3 text-center" autoFocus/>
+                                                        <input type="date" className="game-input mb-3 text-center text-[#2b5c7a]" />
+                                                    </div>
+                                                )}
+                                                {step > 1 && (
+                                                    <div className="w-full mt-auto pt-6 flex flex-col gap-3">
+                                                        <button type="submit" className="btn-zynga btn-green py-3 px-6 w-full">{isLoading ? 'Đang xử lý...' : (step === 5 ? 'Hoàn Tất' : 'Tiếp Tục')}</button>
+                                                        {step === 5 && <button type="button" onClick={handleFinish} className="btn-zynga btn-white py-3 px-6 w-full">Bỏ Qua</button>}
+                                                    </div>
+                                                )}
+                                            </div>
+                                        )}
+                                    </>
+                                )}
+                            </form>
+                        </div>
+                    </div>
+                );
+            };
+
+            const renderProviderMock = () => (
+                <div className="flex flex-col h-full bg-white rounded-[2rem] overflow-hidden fade-in relative">
+                    <div className="bg-gray-100 p-4 border-b flex items-center justify-between">
+                        <span className="font-bold text-gray-800 flex items-center gap-2">
+                            {method === 'Apple' ? <i className="ph-fill ph-apple-logo"></i> : method === 'Facebook' ? <i className="ph-fill ph-facebook-logo text-blue-600"></i> : <span className="font-black text-red-500">G</span>}
+                            Xác thực bằng {method}
+                        </span>
+                        <button onClick={resetFlow} className="text-gray-500 hover:text-black"><i className="ph-bold ph-x" style={{fontSize: '20px'}}></i></button>
+                    </div>
+                    <div className="flex-1 flex flex-col items-center justify-center p-8 text-center">
+                        <div className="w-20 h-20 bg-gray-200 rounded-full flex items-center justify-center mb-6">
+                            <i className="ph-bold ph-user" style={{fontSize: '40px', color: '#6b7280'}}></i>
+                        </div>
+                        <h3 className="text-xl font-bold text-gray-800 mb-2">Đăng nhập vào MyVTC</h3>
+                        <p className="text-gray-600 mb-8 text-sm">
+                            "MyVTC Portal" muốn truy cập tên, ảnh đại diện và địa chỉ email từ tài khoản {method} của bạn.
+                        </p>
+                        <button className="bg-blue-600 text-white font-bold py-3 px-8 rounded-full w-full mb-3" onClick={() => { setInputValue(`${method} User`); handleFinish(); }}>
+                            {isLoading ? 'Đang xác thực...' : `Tiếp tục dưới tên ${method} User`}
+                        </button>
+                        <button className="text-gray-500 font-bold py-2" onClick={resetFlow}>Hủy</button>
+                    </div>
+                </div>
+            );
+
+            const renderSuccess = () => (
+                <div className="flex flex-col items-center justify-center h-full p-6 text-center fade-in">
+                    <i className="ph-fill ph-check-circle" style={{fontSize: '80px', color: '#8ede33', marginBottom: '16px'}}></i>
+                    <h2 className="text-3xl font-black text-[#2b5c7a] uppercase mb-4">Thành Công!</h2>
+                    
+                    <div className="bg-white/60 border-2 border-white p-4 rounded-2xl w-full max-w-xs shadow-inner mb-8">
+                        <p className="text-sm text-[#2b5c7a] font-bold mb-1">Đang đăng nhập bằng:</p>
+                        <p className="text-xl text-[#e0243a] font-black break-all">{displayId}</p>
+                    </div>
+
+                    <button className="btn-zynga btn-red py-3 px-8 w-full max-w-xs" onClick={resetFlow}>
+                        Về Màn Hình Chính
+                    </button>
+                </div>
+            );
+
+            return (
+                <div className="min-h-screen bg-gray-900 flex items-center justify-center p-2 sm:p-4">
+                    <div className="game-container relative w-full max-w-[850px] min-h-[520px] md:min-h-0 md:aspect-[16/9] rounded-[2.5rem] overflow-hidden shadow-2xl flex items-center justify-center border-[6px] md:border-[8px] border-gray-800">
+                        <div className="absolute inset-0 bg-black/40 backdrop-blur-[2px] pointer-events-none z-0"></div>
+
+                        <div className="zynga-modal bg-[#e8f7ff] w-[92%] h-[92%] md:w-[90%] md:h-[85%] rounded-[2rem] relative z-10 flex flex-col overflow-hidden">
+                            {view === 'HOME' && (
+                                <button onClick={() => alert('Đóng ứng dụng')} className="absolute top-3 right-3 bg-[#36c0ff] hover:bg-[#1690db] text-white rounded-full p-2 border-2 border-white shadow-md z-20 transition-transform hover:scale-105">
+                                    <i className="ph-bold ph-x" style={{fontSize: '20px'}}></i>
+                                </button>
+                            )}
+
+                            <div className="w-full h-full relative z-10">
+                                {view === 'HOME' && renderHome()}
+                                {view === 'AUTH_FLOW' && renderAuthFlow()}
+                                {view === 'PROVIDER_MOCK' && renderProviderMock()}
+                                {view === 'SUCCESS' && renderSuccess()}
+                            </div>
+
+                            {view === 'HOME' && (
+                                <div className="absolute bottom-2 left-4 text-[#2b5c7a] text-[10px] sm:text-xs font-bold opacity-60 pointer-events-none">
+                                    Version: 2.0.4 (Build 8901) <br/>
+                                    Player ID: VTC-GUEST-001
+                                </div>
+                            )}
+                        </div>
+                    </div>
+                </div>
+            );
+        }
+
+        const root = ReactDOM.createRoot(document.getElementById('root'));
+        root.render(<App />);
+    </script>
+</body>
+</html>
